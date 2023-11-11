@@ -1,0 +1,2 @@
+Only the code to train the NN not the Data itself for to get the Data see: 
+https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data?select=GlobalLandTemperaturesByCity.csv
