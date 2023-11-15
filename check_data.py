@@ -11,8 +11,9 @@ TEMPERATURE = "Temperatur"
 YEAR = "Years"
 UNCERTAINTY = "Uncertainty"
 UNCERTAINTY_PER_YEAR = "Uncertainty_per_year"
+DATA_GAPS = "Data_gaps"
 
-##TODO uncertainty per year and inconsistant data per year
+##TODO inconsistant data per year
 
 country_to_continent = {
     'Denmark': 'Europe',
@@ -209,7 +210,7 @@ def create_latitude_histogram(data_path,cities):
 
     plt.show()
 
-def create_continent_histogram(data_path,cities):
+def create_continent_barchar(data_path,cities):
 
     df = pd.read_csv(data_path+cities)
     country_dict = {}
@@ -282,7 +283,7 @@ def create_year_histogram(data_path,cities):
     plt.xticks(rotation=90)
     plt.title('Histogramm of Temperatur')
     plt.xlabel('Temperatur')
-    plt.ylabel('Anzahl')
+    plt.ylabel('Amount of data')
     plt.tight_layout()
 
     if HISTOGRAM_PATH+YEAR:
@@ -296,14 +297,64 @@ def create_uncertainty_histogram(data_path,cities):
     plt.hist(df['AverageTemperatureUncertainty'], bins=100, color='blue', edgecolor='black')
     plt.xticks(rotation=90)
     plt.title('Histogramm of Temperatur')
-    plt.xlabel('Temperatur')
-    plt.ylabel('Anzahl')
+    plt.xlabel('Uncetainty')
+    plt.ylabel('Amount of data')
     plt.tight_layout()
 
     if HISTOGRAM_PATH+UNCERTAINTY:
         plt.savefig(HISTOGRAM_PATH+UNCERTAINTY)  
     
     plt.show()
+
+def create_uncertainty_and_nans_per_year_barchar(data_path,cities):
+    df = pd.read_csv(data_path+cities) 
+    df['Year'] = pd.to_datetime(df['dt']).dt.year
+    year_dict = {}
+    nan_per_year_dict = {}
+
+    for index, row in df.iterrows():
+        year = row['Year']
+        avg_temp_uncertainty = row['AverageTemperatureUncertainty']
+        
+        if not math.isnan(avg_temp_uncertainty):
+            if year in year_dict:
+                year_dict[year].append(avg_temp_uncertainty)
+            else:
+                year_dict[year] = [avg_temp_uncertainty]
+        else: 
+            if year in nan_per_year_dict:
+                nan_per_year_dict[year] += 1
+            else:
+                nan_per_year_dict[year] = 1
+
+    for year in year_dict:
+        year_dict[year] = sum(year_dict[year]) / len(year_dict[year])
+
+    print(year_dict)
+    plt.bar(year_dict.keys(), year_dict.values(), color='blue')
+    plt.xlabel('Year')
+    plt.ylabel('AverageTemperatureUncertainty')
+    plt.title('AverageTemperatureUncertainty per year')
+    plt.tight_layout()
+
+    if HISTOGRAM_PATH+UNCERTAINTY_PER_YEAR:
+        plt.savefig(HISTOGRAM_PATH+UNCERTAINTY_PER_YEAR)
+
+    plt.show()
+
+    plt.bar(nan_per_year_dict.keys(),nan_per_year_dict.values(), color='blue')
+    plt.xlabel('Year')
+    plt.ylabel('Data gaps')
+    plt.title('Data gaps per year')
+    plt.tight_layout()
+
+    if HISTOGRAM_PATH+DATA_GAPS:
+        plt.savefig(HISTOGRAM_PATH+DATA_GAPS)
+
+    plt.show()
+
+
+
 
 def run():
     data_path = "C:\\Users\\Torge\\Desktop\\Uni\\5Semester\\Bachelor Seminar\\Datensatz_Erderwärmung\\dataToProcess\\"    
@@ -314,6 +365,6 @@ def run():
     # create_continent_histogram(data_path,cities)
     # create_temperature_histogram(data_path,cities)
     # create_year_histogram(data_path,cities)
-    create_uncertainty_histogram(data_path,cities)
-
+    #create_uncertainty_histogram(data_path,cities)
+    create_uncertainty_and_nans_per_year_barchar(data_path,cities)
 run()
