@@ -7,6 +7,7 @@ import glob
 from matplotlib import pyplot as plt
 import matplotlib
 from tensorflow.python.client import device_lib 
+from PathVariables_laptop import IS_PC
 
 GPU_STRING = '/gpu:0'
 BATCH_SIZE = 100
@@ -20,6 +21,15 @@ NUM_INPUT_PARAMETERS = 1
 NUM_OUTPUT_PARAMETERS = 1
 VALIDATION_PERCENTAGE = 0.3
 MAX_LOSS = 30
+
+if IS_PC:
+    PATH = 'C:\\Users\\Torge\\Desktop\\Uni\\5Semester\\Bachelor Seminar\\Datensatz_Erderwärmung\\'
+    DATA_PATH = PATH + 'processed_data\\'
+    MODEL_PATH = PATH + 'models\\' + MODEL_NAME + '\\'
+else:
+    PATH = 'C/home/torge/Schreibtisch/Git Repos/BS-Temperature/'
+    DATA_PATH = PATH + 'processed_data/'
+    MODEL_PATH = PATH + 'models/' + MODEL_NAME + '/'
 
 class ModelHistory(tf.keras.callbacks.Callback):
   def __init__(self, model_path):
@@ -79,7 +89,6 @@ def setup_model_lstm():
   model = tf.keras.models.Model(input, x)
   return model  
  
-
 def setup_model_conv_1d():
   input = tf.keras.layers.Input(shape=(SEQ_LEN_PAST, NUM_INPUT_PARAMETERS), name='input')
 
@@ -105,7 +114,6 @@ def setup_model_conv_1d():
 
   model = tf.keras.models.Model(input, x)
   return model  
-
 #architecture := [[layer_size,kernal_size],[layer_size,kernel_size]...]
 def setup_variable_conv_1d(architcture):
    hello = 1

@@ -1,16 +1,21 @@
 import os
 import random
 import numpy as np
-import tensorflow as tf
 import glob
 from matplotlib import pyplot as plt
 import matplotlib
-from tensorflow.python.client import device_lib 
 import pandas as pd
 
+PC = False
+
 VAL_TO_LEARN_RATION = 0.5
-DATA_PATH = 'C:\\Users\\Torge\\Desktop\\Uni\\5Semester\\Bachelor Seminar\\Datensatz_Erderwärmung\\dataToProcess\\'
-DATA_PATH_TO = 'C:\\Users\\Torge\\Desktop\\Uni\\5Semester\\Bachelor Seminar\\Datensatz_Erderwärmung\\processed_data\\'
+
+if PC == True:
+    DATA_PATH = 'C:\\Users\\Torge\\Desktop\\Uni\\5Semester\\Bachelor Seminar\\Datensatz_Erderwärmung\\dataToProcess\\'
+    DATA_PATH_TO = 'C:\\Users\\Torge\\Desktop\\Uni\\5Semester\\Bachelor Seminar\\Datensatz_Erderwärmung\\processed_data\\'
+else: 
+    DATA_PATH_TO = '/home/torge/Schreibtisch/Git Repos/BS-Temperature/processed_data/'
+    DATA_PATH = '/home/torge/Schreibtisch/Git Repos/BS-Temperature/dataToProcess/'
 
 CITYS ='GlobalLandTemperaturesByCity.csv'
 COUNTRYS = 'GlobalLandTemperaturesByCountry.csv'
@@ -24,7 +29,6 @@ def run():
     process_citys(DATA_PATH + MAJORCITYS)
     
     
-
 def process_countrys(file_to_read):
     df = pd.read_csv(file_to_read)
     old_file_name = ''
@@ -37,7 +41,6 @@ def process_countrys(file_to_read):
 
         if file_name != old_file_name:
             old_file_name = file_name
-            
             with open(DATA_PATH_TO + file_name + '.txt', 'w') as file:
                 file.write('')
                 
