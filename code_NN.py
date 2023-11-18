@@ -20,6 +20,15 @@ else:
     DATA_PATH = PATH + 'processed_data/'
     MODEL_PATH = PATH + 'models/' + MODEL_NAME + '/'
 
+if IS_PC:
+    PATH = 'C:\\Users\\Torge\\Desktop\\Uni\\5Semester\\Bachelor Seminar\\Datensatz_Erderwärmung\\'
+    DATA_PATH = PATH + 'processed_data\\'
+    MODEL_PATH = PATH + 'models\\' + MODEL_NAME + '\\'
+else:
+    PATH = 'C/home/torge/Schreibtisch/Git Repos/BS-Temperature/'
+    DATA_PATH = PATH + 'processed_data/'
+    MODEL_PATH = PATH + 'models/' + MODEL_NAME + '/'
+
 class ModelHistory(tf.keras.callbacks.Callback):
   def __init__(self, model_path):
     self.model_path = model_path
