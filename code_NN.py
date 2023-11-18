@@ -5,21 +5,20 @@ import numpy as np
 import tensorflow as tf
 import glob
 from matplotlib import pyplot as plt
+from data_parser import data_generator
 import matplotlib
 from tensorflow.python.client import device_lib 
+from global_variables import *
+ 
 
-GPU_STRING = '/gpu:0'
-BATCH_SIZE = 100
-MODEL_NAME = "Tests"
-EPOCHS = 100
-STEPS_PER_EPOCH = 50
-VALIDATION_STEPS = 32
-SEQ_LEN_PAST = 1000
-SEQ_LEN_FUTURE = 360
-NUM_INPUT_PARAMETERS = 1
-NUM_OUTPUT_PARAMETERS = 1
-VALIDATION_PERCENTAGE = 0.3
-MAX_LOSS = 30
+if IS_PC:
+    PATH = 'C:\\Users\\Torge\\Desktop\\Uni\\5Semester\\Bachelor Seminar\\Datensatz_Erderwärmung\\'
+    DATA_PATH = PATH + 'processed_data\\'
+    MODEL_PATH = PATH + 'models\\' + MODEL_NAME + '\\'
+else:
+    PATH = 'C/home/torge/Schreibtisch/Git Repos/BS-Temperature/'
+    DATA_PATH = PATH + 'processed_data/'
+    MODEL_PATH = PATH + 'models/' + MODEL_NAME + '/'
 
 class ModelHistory(tf.keras.callbacks.Callback):
   def __init__(self, model_path):
@@ -79,7 +78,6 @@ def setup_model_lstm():
   model = tf.keras.models.Model(input, x)
   return model  
  
-
 def setup_model_conv_1d():
   input = tf.keras.layers.Input(shape=(SEQ_LEN_PAST, NUM_INPUT_PARAMETERS), name='input')
 
@@ -105,7 +103,6 @@ def setup_model_conv_1d():
 
   model = tf.keras.models.Model(input, x)
   return model  
-
 #architecture := [[layer_size,kernal_size],[layer_size,kernel_size]...]
 def setup_variable_conv_1d(architcture):
    hello = 1
@@ -154,6 +151,7 @@ def setup_model_mlp():
   model = tf.keras.models.Model(input, x)
   return model
 
+#Sets up mlp with different variable architecture and dropout
 def setup_variable_mlp(architecture,dropout):
 
     input = tf.keras.layers.Input(shape=(SEQ_LEN_PAST, NUM_INPUT_PARAMETERS), name='input')
@@ -168,69 +166,6 @@ def setup_variable_mlp(architecture,dropout):
 
     model = tf.keras.models.Model(input, x)
     return model
-
-def parse_file(file_name):
-    file = open(file_name,"r")
-    lines = file.readlines()
-
-    samples = []
-    count = 0
-    for line in lines:
-        x, y = line.strip().split(' ')
-        samples.append((float(y),))
-    return samples
-
-def find_starting_idices(samples):
-    count = 0
-    valid_ind = []
-    for ind_y in range(len(samples)):
-        count += 1
-        if math.isnan(samples[ind_y][0]):
-            count = 0
-        if(count >= SEQ_LEN_PAST+SEQ_LEN_FUTURE):
-            valid_ind.append(ind_y)
-    return valid_ind
-    
-def select_data(batch_size, all_files, is_train):
-    selected_inputs = []
-    selected_labels = []
-
-    num = 0
-    while num < batch_size:
-        if(is_train): 
-            idx_file = random.randint(int((len(all_files)-1)*VALIDATION_PERCENTAGE),int(len(all_files)-1))
-        else:
-            idx_file = random.randint(0,(int((len(all_files)-1)*VALIDATION_PERCENTAGE)))
-
-        samples = parse_file(all_files[idx_file])
-        valid_ind = find_starting_idices(samples)
-
-        if(len(valid_ind) != 0):
-
-            idx_seq = random.randint(0,len(valid_ind)-1)
-            sub_seq_input = samples[(valid_ind[idx_seq]-SEQ_LEN_FUTURE-SEQ_LEN_PAST+1):(valid_ind[idx_seq]-SEQ_LEN_FUTURE+1)]
-            sub_seq_label = samples[valid_ind[idx_seq]-SEQ_LEN_FUTURE+1:valid_ind[idx_seq]+1]
-
-            selected_inputs.append(sub_seq_input)
-            selected_labels.append(sub_seq_label)
-
-            num += 1
-
-    return np.asarray(selected_inputs), np.asarray(selected_labels)
-
-def data_generator(path, batch_size, is_train):
-    all_files = sorted(glob.glob(path + '*.txt'))
-
-    while True:
-        inputs, labels = select_data(batch_size, all_files, is_train)
-       
-        #Data Augmentation
-        mu = 0
-        sigma = 0.0
-        rnd = np.random.normal(mu, sigma, size=inputs.shape)
-        inputs += rnd
-
-        yield inputs, labels
 
 def plot_data_partial(sub_seq_input, sub_seq_label, sub_seq_pred, model_path, epoch, count):
     
@@ -288,26 +223,7 @@ def val_func(data_path, model_path, model, epoch):
 
         plot_data_partial(sub_seq_input, sub_seq_label, preds, model_path, epoch, i)
 
-def train(data_path, model_path, model, from_checkpoint=False):
-
-    train_gen = data_generator(data_path, BATCH_SIZE, True) 
-    val_gen = data_generator(data_path, BATCH_SIZE, False)
-
-    opt = tf.keras.optimizers.Adam(learning_rate=0.0001)
-
-    checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(model_path + 'model-{epoch:03d}.h5', verbose=1, monitor='val_mae', save_best_only=True, mode='auto')
-    model_history_callback = ModelHistory(model_path)
-
-    model.compile(loss='mse', optimizer=opt, metrics=["mse", "mae"])
-    model.summary()
-    
-    history = model.fit(train_gen, steps_per_epoch=STEPS_PER_EPOCH, validation_steps=VALIDATION_STEPS, epochs=EPOCHS, 
-                      validation_data=val_gen, callbacks=[checkpoint_callback,model_history_callback],#,checkpoint_callback, val_callback], 
-                      shuffle=True, verbose='auto')
-
-    val_func(data_path, model_path, model, EPOCHS)
-
-def train_with_loop(data_path, model_path, model, batch_size, lr, from_checkpoint=False):
+def train(data_path, model_path, model, batch_size, lr, from_checkpoint=False):
 
     train_gen = data_generator(data_path, batch_size, True) 
     val_gen = data_generator(data_path, batch_size, False)
@@ -326,6 +242,7 @@ def train_with_loop(data_path, model_path, model, batch_size, lr, from_checkpoin
 
     val_func(data_path, model_path, model, EPOCHS)
 
+#Like normal setup just with Training parameter loop
 def lopp_setup():
    
    batch_sizes = [100,200]
@@ -333,22 +250,20 @@ def lopp_setup():
    Architectures = [[1500,1500,1500,1500,1500],[1500,1500,1500,2000,5000,2000,1000,1000,500],[2000,2000,2000,2000,2000,2000,2000,2000,2000]]
    dropouts = [0]
 
-
    with tf.device(GPU_STRING):
-        path = 'C:\\Users\\Torge\\Desktop\\Uni\\5Semester\\Bachelor Seminar\\Datensatz_Erderwärmung\\'
-        data_path = path + 'processed_data\\'
+        data_path = DATA_PATH
 
         for batch_size in batch_sizes:
            for learning_rate in learning_rates:
               for architecture in Architectures:
                 for dropout in dropouts:
-                    model_path = path +  'models\\' + 'models_mlp_spe30_ep25_slp1000_slf360\\' + str(dropout) + str(batch_size) + str(learning_rate) + str(architecture) + '\\'
+                    model_path =  'models\\' + 'models_mlp_spe30_ep25_slp1000_slf360\\' + str(dropout) + str(batch_size) + str(learning_rate) + str(architecture) + '\\'
                     if not os.path.exists(model_path):
                         os.makedirs(model_path)
                     
                     model = setup_variable_mlp(architecture,dropout)
                     mode = 'train'
-                    train_with_loop(data_path, model_path, model, batch_size, learning_rate)
+                    train(data_path, model_path, model, batch_size, learning_rate)
 
 def normal_setup():
     physical_devices = tf.config.list_physical_devices('GPU')
@@ -357,9 +272,9 @@ def normal_setup():
     print("\n")
     
     with tf.device(GPU_STRING):
-        path = 'C:\\Users\\Torge\\Desktop\\Uni\\5Semester\\Bachelor Seminar\\Datensatz_Erderwärmung\\'
-        data_path = path + 'processed_data\\'
-        model_path = path + 'models\\' + MODEL_NAME + '\\'
+       
+        data_path = DATA_PATH_PROCESSED
+        model_path = 'models\\' + MODEL_NAME + '\\'
         
         if not os.path.exists(model_path):
             os.makedirs(model_path)
@@ -368,7 +283,7 @@ def normal_setup():
 
         mode = 'train'
 
-        train(data_path, model_path, model)
+        train(data_path, model_path, model, BATCH_SIZE, 0.001)
 
 def run():
     physical_devices = tf.config.list_physical_devices('GPU')
@@ -377,7 +292,6 @@ def run():
     print("\n")
     
     normal_setup()
-
 
 if __name__== "__main__":
   run()
