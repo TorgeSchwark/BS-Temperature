@@ -5,7 +5,7 @@ import numpy as np
 import tensorflow as tf
 import glob
 from matplotlib import pyplot as plt
-from data_parser import data_generator
+from data_parser import data_generator #, find_starting_idices, parse_file # TODO: not necessary?
 import matplotlib
 from tensorflow.python.client import device_lib 
 from global_variables import *
@@ -37,8 +37,6 @@ class ModelHistory(tf.keras.callbacks.Callback):
         self.mae_val.append(MAX_LOSS)
         self.mse_val.append(MAX_LOSS)
         self.plot_data()
-
-
        
   def plot_data(self):
     vis_path = os.path.join(self.model_path, 'vis')
@@ -48,7 +46,7 @@ class ModelHistory(tf.keras.callbacks.Callback):
 
     model_name = self.model_path.split('/')[-1]
 
-    plt.clf()
+    plt.clf() # clear figure
     plt.plot(self.loss)
     plt.plot(self.loss_val)
     plt.title('Model Loss')
@@ -56,6 +54,9 @@ class ModelHistory(tf.keras.callbacks.Callback):
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Val'], loc='upper left')
     plt.savefig(os.path.join(vis_path, 'loss.png'))
+
+# TODO: (later optional): try a binary model (so only binary weights, inputs, outputs, etc.)
+# -> e.g. for tf dataset can be casted (normalized) to specific values (float32, int, bool?)
 
 def setup_model_lstm():
   input = tf.keras.layers.Input(shape=(SEQ_LEN_PAST, NUM_INPUT_PARAMETERS), name='input')
@@ -190,6 +191,7 @@ def plot_data_partial(sub_seq_input, sub_seq_label, sub_seq_pred, model_path, ep
     plt.legend(['Inputs', 'Pred', 'Label'], loc='upper left')
     plt.savefig(vis_path + '\\' + str(epoch).zfill(4) + '_' + str(count).zfill(4) + '_p.png')    
 
+# validate model via random chosen samples (depending on validation percentage)
 def val_func(data_path, model_path, model, epoch):
     all_files = sorted(glob.glob(data_path + '*.txt'))
     num_plots = 10
@@ -207,7 +209,7 @@ def val_func(data_path, model_path, model, epoch):
         
         sub_seq_input = np.asarray(sub_seq_input) 
         sub_seq_label = np.asarray(sub_seq_label)
-        sub_seq_input = np.expand_dims(sub_seq_input, axis=0)
+        sub_seq_input = np.expand_dims(sub_seq_input, axis=0) # add new dimension on axis (index) = 0
 
         preds = model.predict(sub_seq_input)[0]
 
@@ -218,8 +220,10 @@ def train(data_path, model_path, model, batch_size, lr, from_checkpoint=False):
     train_gen = data_generator(data_path, batch_size, True) 
     val_gen = data_generator(data_path, batch_size, False)
 
+    # TODO: ggf. vary on optimizer
     opt = tf.keras.optimizers.Adam(learning_rate=lr)
 
+    # placeholders: {epoch:03d} -> current epoch number, {val_mae:.4f} -> current validation mean absolute error
     checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(model_path + 'model-{epoch:03d}-mae{val_mae:.4f}.h5', verbose=1, monitor='val_mae', save_best_only=True, mode='auto')
     model_history_callback = ModelHistory(model_path)
 
@@ -232,7 +236,7 @@ def train(data_path, model_path, model, batch_size, lr, from_checkpoint=False):
 
     val_func(data_path, model_path, model, EPOCHS)
 
-#Like normal setup just with Training parameter loop
+# Like normal setup just with Training parameter loop
 def lopp_setup():
    
    batch_sizes = [100,200]
@@ -243,6 +247,7 @@ def lopp_setup():
    with tf.device(GPU_STRING):
         data_path = DATA_PATH
 
+        # iterate through multiple hyper parameter configs and train models
         for batch_size in batch_sizes:
            for learning_rate in learning_rates:
               for architecture in Architectures:
@@ -257,9 +262,7 @@ def lopp_setup():
 
 def normal_setup():
     physical_devices = tf.config.list_physical_devices('GPU')
-    print("\n")
-    print("GPUs:", physical_devices)
-    print("\n")
+    print("\nGPUs: {}\n".format(physical_devices))
     
     with tf.device(GPU_STRING):
        
@@ -277,9 +280,7 @@ def normal_setup():
 
 def run():
     physical_devices = tf.config.list_physical_devices('GPU')
-    print("\n")
-    print("GPUs:", physical_devices)
-    print("\n")
+    print("\nGPUs: {}\n".format(physical_devices))
     
     normal_setup()
 

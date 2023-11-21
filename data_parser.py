@@ -3,8 +3,36 @@ import random
 from global_variables import *
 import numpy as np
 import glob
+
+import tensorflow as tf
  
-#--- This should be optimized ---
+# TODO: maybe consider random variance in data to analyse the "robustness" of the model (maybe also augmentation?)
+
+# TODO: --- This should be optimized ---
+# helpfull links:
+# https://www.tensorflow.org/guide/data
+
+def to_tensor_dataset(x_train: np.ArrayLike, y_train: np.ArrayLike):
+    # converting data to tensors
+    my_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
+    # <TensorSliceDataset element_spec=(TensorSec(shape=(TODO, TODO), dtype=tf.TODO, name=None), 
+    # TensorSpec(shape=(), dtype=tf.TODO, name=None))>
+    # ! shape does not contain the amount of data (labels) -> len(my_dataset) = amout of data dimension (e.g. for (28, 28, 6000) it is 6000)
+    
+    # could be cached: my_dataset = my_dataset.cache() when e.g. maped before
+    my_dataset = my_dataset.cache() # can be also done after batching
+    for (value, label) in my_dataset:
+        # value, labels are tensors
+        pass
+
+    my_dataset = my_dataset.shuffle(len(my_dataset)) # maybe not that usefull when getting time/order related data
+    my_dataset = my_dataset.batch(32)
+
+    my_dataset = my_dataset.prefetch(tf.data.AUTOTUNE) # run this after all tensor stuff is done to some how speed things up
+
+    # data_generator would simply return yield my_test_dataset my_val_dataset
+    # as before where these are tensorflow datasets
+
 
 def parse_file(file_name):
     file = open(file_name,"r")
@@ -55,7 +83,7 @@ def select_data(batch_size, all_files, is_train):
 
     return np.asarray(selected_inputs), np.asarray(selected_labels)
 
-def data_generator(path, batch_size, is_train):
+def data_generator(path: str, batch_size: int, is_train: bool) -> yield:
     all_files = sorted(glob.glob(path + '*.txt'))
 
     while True:
