@@ -5,6 +5,8 @@ import os
 import numpy as np
 from global_variables import *
 
+import seaborn as sns
+
 LONGITUDE = "Longitude"
 LATITUDE = "Latitude"
 CONTINENTS = "Continents"
@@ -216,6 +218,7 @@ def create_continent_barchar(data_path,cities):
     country_dict = {}
     continent_dict = {}
     #initation of Countrys
+    # dict([country_dict[country] = 0 for country in df['Country']]) # also possible as list-dict comprehension :P
     for country in df['Country']:
         country_dict[country] = 0
     #counting datapoints per Country
@@ -247,8 +250,10 @@ def create_continent_barchar(data_path,cities):
 
     plt.show()
 
+# TODO: colour the bins (left = cold -> dark blue, right = hot -> dark red)
 def create_temperature_histogram(data_path,cities):
     df = pd.read_csv(data_path+cities)
+    # count temperatures
     temp_dict = {}
     for temp in df['AverageTemperature']:
         if not math.isnan(temp):
@@ -263,6 +268,7 @@ def create_temperature_histogram(data_path,cities):
     labels = list(sorted_data.keys())
 
     plt.hist(df['AverageTemperature'], bins=90, color='blue', edgecolor='black')
+
     plt.xticks(rotation=90)
     plt.title('Histogramm of Temperatur')
     plt.xlabel('Temperatur')
@@ -273,6 +279,51 @@ def create_temperature_histogram(data_path,cities):
         plt.savefig(HISTOGRAMS+TEMPERATURE)  
     
     plt.show()
+
+# def create_temperature_histogram(data_path, cities):
+#     df = pd.read_csv(data_path + cities)
+
+#     # Count temperatures
+#     temp_dict = {}
+#     for temp in df['AverageTemperature']:
+#         if not math.isnan(temp):
+#             temp_dict[str(int(temp))] = 0
+#     for temp in df['AverageTemperature']:
+#         if not math.isnan(temp):
+#             temp_dict[str(int(temp))] += 1
+
+#     sorted_data = dict(sorted(temp_dict.items(), key=lambda item: int(item[0])))
+
+#     values = list(sorted_data.values())
+#     labels = list(sorted_data.keys())
+
+#     # Normalize temperature values to range [0, 1]
+#     normalized_temps = (df['AverageTemperature'] - df['AverageTemperature'].min()) / (df['AverageTemperature'].max() - df['AverageTemperature'].min())
+
+#     # Create a color gradient from dark blue to dark red
+#     color_gradient = sns.color_palette("RdYlBu_r", as_cmap=True)(normalized_temps)
+
+#     # Create a histogram using Seaborn with manually set colors for each bar
+#     plt.figure(figsize=(12, 6))
+#     bars = plt.bar(df['AverageTemperature'], height=1, color=color_gradient, edgecolor='black')
+
+#     plt.xticks(rotation=90)
+#     plt.title('Histogram of Temperatur')
+#     plt.xlabel('Temperatur')
+#     plt.ylabel('Anzahl')
+#     plt.tight_layout()
+
+#     # Create a colorbar for reference
+#     sm = plt.cm.ScalarMappable(cmap="RdYlBu_r", norm=plt.Normalize(vmin=df['AverageTemperature'].min(), vmax=df['AverageTemperature'].max()))
+#     sm.set_array([])  # You need to set a dummy array for the scalar mappable
+#     cbar = plt.colorbar(sm)
+#     cbar.set_label('Temperatur')
+
+#     # Save or show the plot
+#     if HISTOGRAMS + TEMPERATURE:
+#         plt.savefig(HISTOGRAMS + TEMPERATURE)
+#     else:
+#         plt.show()
 
 def create_year_histogram(data_path,cities):
     df = pd.read_csv(data_path+cities)
