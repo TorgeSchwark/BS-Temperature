@@ -2,3 +2,11 @@
 /processed_Data
 /histograms
 /data_To_Process
+
+# IDE specific:
+
+# VS-Code:
+*/settings.json
+
+# py cache?
+*/*.pyc
