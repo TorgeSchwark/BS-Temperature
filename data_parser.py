@@ -3,8 +3,43 @@ import random
 from global_variables import *
 import numpy as np
 import glob
- 
-#--- This should be optimized ---
+
+# gerne einmal anschauen, dass sollte so funktionieren.
+# count zählt wie viele valid daten nacheinander gefunden wurden
+# ind_in_file und ind_in_files_list sind einfach die indizes 
+
+def get_all_files_as_list(path):
+    # files_list contains all files as lists eg: [[1,2,3,4,5,5],[1,2,3,4,5,5],[1,2,3,4,5,5]]
+    # valid_ind_dict contains valid indices in file considering Input_seq_len and output_seq_len
+    # in (float(temperature),) format for data parsing 
+    files_list = []
+    ind_in_files_list = 0
+    ind_in_file = 0
+    file_list = []
+    valid_ind_dict = {}
+    all_files = sorted(glob.glob(path + '*.txt'))
+    for file_name in all_files:
+        file_list = []
+        count = 0
+        ind_in_file = 0
+        valid_ind_dict[ind_in_files_list] = []
+
+        file = open(file_name,"r")
+        lines = file.readlines()
+        for line in lines:
+            ind_in_file += 1
+            count += 1
+
+            temperature = float(line.strip().split(' ')[1])
+            file_list.append((float(temperature),))
+            if math.isnan(temperature):
+                count = 0
+            if count >= SEQ_LEN_FUTURE+SEQ_LEN_PAST:
+                valid_ind_dict[ind_in_files_list].append(ind_in_file)
+        ind_in_files_list += 1
+        files_list.append(file_list)
+    return files_list, valid_ind_dict
+
 
 def parse_file(file_name):
     file = open(file_name,"r")
@@ -69,3 +104,11 @@ def data_generator(path, batch_size, is_train):
 
         yield inputs, labels
 
+
+
+def test():
+    data, dict = get_all_files_as_list(DATA_PATH_PROCESSED)
+    print(data[0])
+    print(dict[0])
+
+test()
