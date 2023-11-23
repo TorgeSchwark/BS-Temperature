@@ -215,8 +215,8 @@ def val_func(data_path, model_path, model, epoch):
 
 def train(data_path, model_path, model, batch_size, lr, from_checkpoint=False):
 
-    train_gen = fast_data_generator(batch_size, True) 
-    val_gen = fast_data_generator(batch_size, False)
+    train_gen = data_generator(batch_size, True) 
+    val_gen = data_generator(batch_size, False)
 
     opt = tf.keras.optimizers.Adam(learning_rate=lr)
 

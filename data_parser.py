@@ -98,12 +98,12 @@ def fast_select_data(data, ind_dict, batch_size, is_train):
     num = 0
     while num < batch_size:
         if is_train:
-            indx_file = random.randint(int((len(data)-1)*VALIDATION_PERCENTAGE),len(data)-1)
+            indx_file = random.randint(int((len(data)-1)*VALIDATION_PERCENTAGE),len(data)-2)
         else:
-            indx_file = random.randint(0,int((len(data)-1)*VALIDATION_PERCENTAGE))
+            indx_file = random.randint(0,int((len(data)-1)*VALIDATION_PERCENTAGE)-1)
         
         if len(ind_dict[indx_file]) != 0:
-            indx_seq = random.randint(0,len(ind_dict[indx_file])-1)
+            indx_seq = random.randint(0,len(ind_dict[indx_file])-2)
             sub_seq_input = data[indx_file][(ind_dict[indx_file][indx_seq]-SEQ_LEN_FUTURE-SEQ_LEN_PAST+1):(ind_dict[indx_file][indx_seq]-SEQ_LEN_FUTURE+1)]
             sub_seq_label = data[indx_file][ind_dict[indx_file][indx_seq]-SEQ_LEN_FUTURE+1:ind_dict[indx_file][indx_seq]+1]
 
@@ -144,13 +144,4 @@ def fast_data_generator(batch_size, is_train):
 
 
 
-def test():
-    all_files = sorted(glob.glob(DATA_PATH_PROCESSED + '*.txt'))
-    data, dict = get_all_files_as_list()
-    samples = parse_file(all_files[0])
 
-    print(data[0])
-    print("haaaaaloooooooooooooooooooooooooooooo \n")
-    print(samples)
-
-test()
