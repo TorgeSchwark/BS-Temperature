@@ -10,3 +10,5 @@ And the Code for training the Neural Networks in code_NN.py
 
 REQUIREMENTS:
 -To use Pandas with Numpy use version pandas==1.3.3
+
+https://prod.liveshare.vsengsaas.visualstudio.com/join?78BB3555ED6DE735AEC0B93BD8B287088D82
