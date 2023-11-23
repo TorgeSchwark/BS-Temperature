@@ -8,7 +8,7 @@ import glob
 # count zählt wie viele valid daten nacheinander gefunden wurden
 # ind_in_file und ind_in_files_list sind einfach die indizes 
 
-def get_all_files_as_list(path):
+def get_all_files_as_list():
     # files_list contains all files as lists eg: [[1,2,3,4,5,5],[1,2,3,4,5,5],[1,2,3,4,5,5]]
     # valid_ind_dict contains valid indices in file considering Input_seq_len and output_seq_len
     # in (float(temperature),) format for data parsing 
@@ -17,7 +17,7 @@ def get_all_files_as_list(path):
     ind_in_file = 0
     file_list = []
     valid_ind_dict = {}
-    all_files = sorted(glob.glob(path + '*.txt'))
+    all_files = sorted(glob.glob(DATA_PATH_PROCESSED + '*.txt'))
     for file_name in all_files:
         file_list = []
         count = 0
@@ -39,6 +39,7 @@ def get_all_files_as_list(path):
         ind_in_files_list += 1
         files_list.append(file_list)
     return files_list, valid_ind_dict
+
 
 
 def parse_file(file_name):
@@ -90,12 +91,49 @@ def select_data(batch_size, all_files, is_train):
 
     return np.asarray(selected_inputs), np.asarray(selected_labels)
 
-def data_generator(path, batch_size, is_train):
+def fast_select_data(data, ind_dict, batch_size, is_train):
+    selected_inputs = []
+    selected_labels = []
+
+    num = 0
+    while num < batch_size:
+        if is_train:
+            indx_file = random.randint(int((len(data)-1)*VALIDATION_PERCENTAGE),len(data)-1)
+        else:
+            indx_file = random.randint(0,int((len(data)-1)*VALIDATION_PERCENTAGE))
+        
+        if len(ind_dict[indx_file]) != 0:
+            indx_seq = random.randint(0,len(ind_dict[indx_file])-1)
+            sub_seq_input = data[indx_file][(ind_dict[indx_file][indx_seq]-SEQ_LEN_FUTURE-SEQ_LEN_PAST+1):(ind_dict[indx_file][indx_seq]-SEQ_LEN_FUTURE+1)]
+            sub_seq_label = data[indx_file][ind_dict[indx_file][indx_seq]-SEQ_LEN_FUTURE+1:ind_dict[indx_file][indx_seq]+1]
+
+            selected_inputs.append(sub_seq_input)
+            selected_labels.append(sub_seq_label)
+
+            num += 1
+
+    return np.asarray(selected_inputs), np.asarray(selected_labels)
+
+def data_generator( batch_size, is_train):
+    path = DATA_PATH_PROCESSED
     all_files = sorted(glob.glob(path + '*.txt'))
 
     while True:
         inputs, labels = select_data(batch_size, all_files, is_train)
        
+        #Data Augmentation
+        mu = 0
+        sigma = 0.0
+        rnd = np.random.normal(mu, sigma, size=inputs.shape)
+        inputs += rnd
+        yield inputs, labels
+
+def fast_data_generator(batch_size, is_train):
+    data, ind_dict = get_all_files_as_list()
+    
+    while True:
+        inputs, labels = fast_select_data(data, ind_dict, batch_size, is_train)
+
         #Data Augmentation
         mu = 0
         sigma = 0.0
@@ -107,8 +145,12 @@ def data_generator(path, batch_size, is_train):
 
 
 def test():
-    data, dict = get_all_files_as_list(DATA_PATH_PROCESSED)
+    all_files = sorted(glob.glob(DATA_PATH_PROCESSED + '*.txt'))
+    data, dict = get_all_files_as_list()
+    samples = parse_file(all_files[0])
+
     print(data[0])
-    print(dict[0])
+    print("haaaaaloooooooooooooooooooooooooooooo \n")
+    print(samples)
 
 test()
