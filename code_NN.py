@@ -5,7 +5,7 @@ import numpy as np
 import tensorflow as tf
 import glob
 from matplotlib import pyplot as plt
-from data_parser import data_generator #, find_starting_idices, parse_file # TODO: not necessary?
+from data_parser import data_generator, fast_data_generator
 import matplotlib
 from tensorflow.python.client import device_lib 
 from global_variables import *
@@ -217,8 +217,8 @@ def val_func(data_path, model_path, model, epoch):
 
 def train(data_path, model_path, model, batch_size, lr, from_checkpoint=False):
 
-    train_gen = data_generator(data_path, batch_size, True) 
-    val_gen = data_generator(data_path, batch_size, False)
+    train_gen = data_generator(batch_size, True) 
+    val_gen = data_generator(batch_size, False)
 
     # TODO: ggf. vary on optimizer
     opt = tf.keras.optimizers.Adam(learning_rate=lr)
