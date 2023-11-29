@@ -40,4 +40,14 @@
     -> e.g. for tf dataset can be casted (normalized) to specific values (float32, int, bool?)
 
 ## Some Data Collection
-- 
+
+
+# Phase 3
+> Dokumentation von Herangehensweise, Aufgaben und Expirimenten
+> Wissenschaftliches Vorgehen und Schreiben
+
+
+
+
+
+Paper: https://www.overleaf.com/project/656739453dc04ca9c1e95e41
