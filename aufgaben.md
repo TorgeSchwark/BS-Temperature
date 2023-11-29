@@ -3,6 +3,7 @@
 ## Anmerkung Datenverarbeitung (nicht explizit gefordert):
 - Temperatur Daten werden auf einen Float mit 2 Nachkommastellen gerundet
 - diese Daten werden wiederum durch das data_processing.py pro Land, Staat, Stadt, Hauptstadt in separate txt Dateien geladen, sortiert nach Datum
+  - Idee zur Verbesserung: Daten einlesen und in einem Array speichern, somit müssen bei jedem aufruf des Data generators keine Dateien eingelesen werden sondern nur auf das Array im RAM zugegriffen werden
 
 ## Fragestellungen:
 
@@ -33,3 +34,10 @@
 - 16:
 - 32:
 - 64:
+
+## Weitere Ideen:
+- (later optional): try a binary model (so only binary weights, inputs, outputs, etc.)  
+    -> e.g. for tf dataset can be casted (normalized) to specific values (float32, int, bool?)
+
+## Some Data Collection
+- 
