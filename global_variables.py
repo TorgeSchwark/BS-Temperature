@@ -2,6 +2,7 @@ VALIDATION_PERCENTAGE = 0.5
 DATA_PATH = 'data_To_Process\\'
 DATA_PATH_PROCESSED = 'processed_Data\\'
 HISTOGRAMS = 'histograms\\'
+UMFRAGE_PATH = 'human_prediction'
 
 CITYS ='GlobalLandTemperaturesByCity.csv'
 COUNTRYS = 'GlobalLandTemperaturesByCountry.csv'
