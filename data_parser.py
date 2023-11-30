@@ -106,9 +106,3 @@ def data_generator(path, batch_size, is_train):
 
 
 
-def test():
-    data, dict = get_all_files_as_list(DATA_PATH_PROCESSED)
-    print(data[0])
-    print(dict[0])
-
-test()
