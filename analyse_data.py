@@ -5,7 +5,6 @@ import os
 import numpy as np
 from global_variables import *
 
-import seaborn as sns
 
 LONGITUDE = "Longitude"
 LATITUDE = "Latitude"

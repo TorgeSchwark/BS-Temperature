@@ -9,6 +9,7 @@
 
 **Implementierung Data-Loader Pipeline:**
 - siehe code TODO: (optimieren)
+- Erster Verbesserungsversuch durch Einmaliges Einlesen aller Daten hat keine erkennbare Verbesserung gebracht
 
 **Visualisierungen:**
 
@@ -16,8 +17,10 @@
 
 | longitude | latitude |
 | -- | -- |
-| ![longitude histogramm](.\\histograms\\Longitude) | ![latitude histogramm](.\\histograms\\Latitude) |
-
+| ![longitude histogramm](.\\histograms\\Longitude.png) | ![latitude histogramm](.\\histograms\\Latitude.png) |
+| ![Continents](.\\histograms\\Continents.png) | ![Gaps in Data](.\\histograms\\Data_gaps.png) |
+| ![Temperatur](.\\histograms\\Temperatur.png) | ![Uncertainty over years](.\\histograms\\Uncertainty_per_year.png) |
+| ![Uncertainty](.\\histograms\\Uncertainty.png) | ![Years](.\\histograms\\Years.png) |
 ... TODO:
 
 **Analyse von Architekturen (qualitativ, quantitativ):**
@@ -35,11 +38,14 @@
 - 32:
 - 64:
 
+
+
 ## Weitere Ideen:
 - (later optional): try a binary model (so only binary weights, inputs, outputs, etc.)  
     -> e.g. for tf dataset can be casted (normalized) to specific values (float32, int, bool?)
 
 ## Some Data Collection
+- Eigene predictions machen um eine Menschliche Vorhersage mit der eines NN zu vergleichen
 
 
 # Phase 3
