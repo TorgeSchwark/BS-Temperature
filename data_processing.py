@@ -2,8 +2,8 @@ from global_variables import *
 import pandas as pd
 import os
 
-#This Takes a while ! about 20 min 
-#necesary for fair data collection
+# This Takes a while ! about 20 min 
+# necesary for fair data collection
 
 def run_data():
     if not os.path.exists(DATA_PATH_PROCESSED):
@@ -14,6 +14,7 @@ def run_data():
     process_citys(DATA_PATH + CITYS)
     process_citys(DATA_PATH + MAJORCITYS)
     
+# for each country / state, create own txt with data sorted by date
 def process_countrys(file_to_read):
     df = pd.read_csv(file_to_read)
     old_file_name = ''
@@ -36,6 +37,7 @@ def process_countrys(file_to_read):
             file.write(datum + " ")
             file.write(f'{temperature}\n')
 
+# for each city / majorcity, create own txt with data sorted by date
 def process_citys(file_to_read):
     df = pd.read_csv(file_to_read)
     old_file_name = ''
