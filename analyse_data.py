@@ -3,6 +3,7 @@ import pandas as pd
 import math
 import os
 import numpy as np
+import pygal
 from global_variables import *
 
 
@@ -178,6 +179,196 @@ country_to_continent = {
     'Croatia': 'Europe'
 }
 
+def country_to_shortcut(country_name):
+    country_mapping = {
+        "Andorra": "ad",
+        "United Arab Emirates": "ae",
+        "Afghanistan": "af",
+        "Albania": "al",
+        "Armenia": "am",
+        "Angola": "ao",
+        "Antarctica": "aq",
+        "Argentina": "ar",
+        "Austria": "at",
+        "Australia": "au",
+        "Azerbaijan": "az",
+        "Bosnia and Herzegovina": "ba",
+        "Bangladesh": "bd",
+        "Belgium": "be",
+        "Burkina Faso": "bf",
+        "Bulgaria": "bg",
+        "Bahrain": "bh",
+        "Burundi": "bi",
+        "Benin": "bj",
+        "Brunei Darussalam": "bn",
+        "Bolivia, Plurinational State of": "bo",
+        "Brazil": "br",
+        "Bhutan": "bt",
+        "Botswana": "bw",
+        "Belarus": "by",
+        "Belize": "bz",
+        "Canada": "ca",
+        "Congo, the Democratic Republic of the": "cd",
+        "Central African Republic": "cf",
+        "Congo": "cg",
+        "Switzerland": "ch",
+        "Cote d’Ivoire": "ci",
+        "Chile": "cl",
+        "Cameroon": "cm",
+        "China": "cn",
+        "Colombia": "co",
+        "Costa Rica": "cr",
+        "Cuba": "cu",
+        "Cape Verde": "cv",
+        "Cyprus": "cy",
+        "Czech Republic": "cz",
+        "Germany": "de",
+        "Djibouti": "dj",
+        "Denmark": "dk",
+        "Dominican Republic": "do",
+        "Algeria": "dz",
+        "Ecuador": "ec",
+        "Estonia": "ee",
+        "Egypt": "eg",
+        "Western Sahara": "eh",
+        "Eritrea": "er",
+        "Spain": "es",
+        "Ethiopia": "et",
+        "Finland": "fi",
+        "France": "fr",
+        "Gabon": "ga",
+        "United Kingdom": "gb",
+        "Georgia": "ge",
+        "French Guiana": "gf",
+        "Ghana": "gh",
+        "Greenland": "gl",
+        "Gambia": "gm",
+        "Guinea": "gn",
+        "Equatorial Guinea": "gq",
+        "Greece": "gr",
+        "Guatemala": "gt",
+        "Guam": "gu",
+        "Guinea-Bissau": "gw",
+        "Guyana": "gy",
+        "Hong Kong": "hk",
+        "Honduras": "hn",
+        "Croatia": "hr",
+        "Haiti": "ht",
+        "Hungary": "hu",
+        "Indonesia": "id",
+        "Ireland": "ie",
+        "Israel": "il",
+        "India": "in",
+        "Iraq": "iq",
+        "Iran, Islamic Republic of": "ir",
+        "Iceland": "is",
+        "Italy": "it",
+        "Jamaica": "jm",
+        "Jordan": "jo",
+        "Japan": "jp",
+        "Kenya": "ke",
+        "Kyrgyzstan": "kg",
+        "Cambodia": "kh",
+        "Korea, Democratic People’s Republic of": "kp",
+        "Korea, Republic of": "kr",
+        "Kuwait": "kw",
+        "Kazakhstan": "kz",
+        "Lao People’s Democratic Republic": "la",
+        "Lebanon": "lb",
+        "Liechtenstein": "li",
+        "Sri Lanka": "lk",
+        "Liberia": "lr",
+        "Lesotho": "ls",
+        "Lithuania": "lt",
+        "Luxembourg": "lu",
+        "Latvia": "lv",
+        "Libyan Arab Jamahiriya": "ly",
+        "Morocco": "ma",
+        "Monaco": "mc",
+        "Moldova, Republic of": "md",
+        "Montenegro": "me",
+        "Madagascar": "mg",
+        "Macedonia, the former Yugoslav Republic of": "mk",
+        "Mali": "ml",
+        "Myanmar": "mm",
+        "Mongolia": "mn",
+        "Macao": "mo",
+        "Mauritania": "mr",
+        "Malta": "mt",
+        "Mauritius": "mu",
+        "Maldives": "mv",
+        "Malawi": "mw",
+        "Mexico": "mx",
+        "Malaysia": "my",
+        "Mozambique": "mz",
+        "Namibia": "na",
+        "Niger": "ne",
+        "Nigeria": "ng",
+        "Nicaragua": "ni",
+        "Netherlands": "nl",
+        "Norway": "no",
+        "Nepal": "np",
+        "New Zealand": "nz",
+        "Oman": "om",
+        "Panama": "pa",
+        "Peru": "pe",
+        "Papua New Guinea": "pg",
+        "Philippines": "ph",
+        "Pakistan": "pk",
+        "Poland": "pl",
+        "Puerto Rico": "pr",
+        "Palestine, State of": "ps",
+        "Portugal": "pt",
+        "Paraguay": "py",
+        "Reunion": "re",
+        "Romania": "ro",
+        "Serbia": "rs",
+        "Russian Federation": "ru",
+        "Rwanda": "rw",
+        "Saudi Arabia": "sa",
+        "Seychelles": "sc",
+        "Sudan": "sd",
+        "Sweden": "se",
+        "Singapore": "sg",
+        "Saint Helena, Ascension and Tristan da Cunha": "sh",
+        "Slovenia": "si",
+        "Slovakia": "sk",
+        "Sierra Leone": "sl",
+        "San Marino": "sm",
+        "Senegal": "sn",
+        "Somalia": "so",
+        "Suriname": "sr",
+        "Sao Tome and Principe": "st",
+        "El Salvador": "sv",
+        "Syrian Arab Republic": "sy",
+        "Swaziland": "sz",
+        "Chad": "td",
+        "Togo": "tg",
+        "Thailand": "th",
+        "Tajikistan": "tj",
+        "Timor-Leste": "tl",
+        "Turkmenistan": "tm",
+        "Tunisia": "tn",
+        "Turkey": "tr",
+        "Taiwan (Republic of China)": "tw",
+        "Tanzania, United Republic of": "tz",
+        "Ukraine": "ua",
+        "Uganda": "ug",
+        "United States": "us",
+        "Uruguay": "uy",
+        "Uzbekistan": "uz",
+        "Holy See (Vatican City State)": "va",
+        "Venezuela, Bolivarian Republic of": "ve",
+        "Viet Nam": "vn",
+        "Yemen": "ye",
+        "Mayotte": "yt",
+        "South Africa": "za",
+        "Zambia": "zm",
+        "Zimbabwe": "zw"
+    }
+
+    return country_mapping.get(country_name, None)
+
 def create_longitute_histogram(data_path,cities):
     df = pd.read_csv(data_path+cities)
     df['Longitude'] = df['Longitude'].str.extract('(\d+\.\d+)').astype(float)*(-1+ (df['Longitude'].str.extract('([A-Z]+)')=="E")*2)
@@ -247,6 +438,48 @@ def create_continent_barchar(data_path,cities):
         plt.savefig(HISTOGRAMS+CONTINENTS)  
 
     plt.show()
+
+def create_country_map(data_path,cities):
+    df = pd.read_csv(data_path+cities)
+    country_dict = {}
+    continent_dict = {}
+    #initation of Countrys
+    # dict([country_dict[country] = 0 for country in df['Country']]) # also possible as list-dict comprehension :P
+    for country in df['Country']:
+        country_dict[country] = 0
+    #counting datapoints per Country
+    for country in df['Country']:
+        country_dict[country] += 1
+    #initiation of continents
+    for country in country_to_continent:
+        continent_dict[country_to_continent[country]] = 0
+    #summing up the datapoints per countinent
+    for country in country_dict:
+        continent_dict[country_to_continent[country]] += country_dict[country]
+
+    sum = 0
+    for continent in continent_dict:
+        sum += continent_dict[continent]
+    
+    continents = list(continent_dict.keys())
+    values = list(continent_dict.values())
+    print("Count countries:", len(country_dict))
+    print("Count continents:", len(continent_dict))
+
+    # create a world map 
+    worldmap =  pygal.maps.world.World()
+    
+    # set the title of the map 
+    worldmap.title = 'Countries'
+    
+    country_counts: dict = {country_to_shortcut(country): value for country, value in country_dict.items()}
+
+    # adding the countries 
+    worldmap.add('My Data', country_counts) 
+    
+    # save into the file 
+    worldmap.render_to_file('abc.svg') 
+    print("Success") 
 
 # TODO: colour the bins (left = cold -> dark blue, right = hot -> dark red)
 def create_temperature_histogram(data_path,cities):
@@ -461,7 +694,8 @@ def run():
     if not os.path.exists(HISTOGRAMS):
             os.makedirs(HISTOGRAMS)
     
-    # analyse_same_val_cities()
+    # analyse_same_val_cities() # TODO: runs tooooooooo long
+    # create_country_map(data_path,cities) # TODO: not working yet
     create_latitude_histogram(data_path,cities)
     create_longitute_histogram(data_path,cities)
     create_continent_barchar(data_path,cities)

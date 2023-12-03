@@ -285,7 +285,7 @@ def lopp_setup():
                     train(data_path, model_path, model, batch_size, learning_rate)
           
 
-def loop_setup2():
+def loop_setup_conv():
   batch_sizes = [100,200]
   learning_rates = [0.01,0.001,0.0005]
   # Architectures = [[1500,1500,1500,1500,1500],[1500,1500,1500,2000,5000,2000,1000,1000,500],[2000,2000,2000,2000,2000,2000,2000,2000,2000]]
@@ -339,7 +339,7 @@ def run():
     
     start = time.time()
     # normal_setup()
-    loop_setup2()
+    loop_setup_conv()
     end = time.time()
     print(f"\n Compute time:{end - start}")
 
