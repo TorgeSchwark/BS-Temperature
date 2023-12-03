@@ -23,6 +23,10 @@
 | ![Uncertainty](.\\histograms\\Uncertainty.png) | ![Years](.\\histograms\\Years.png) |
 ... TODO:
 
+Datenanalyse:
+- Städte haben teilweise exakt die gleichen Werte (in mehreren locations??)
+- siehe ```analyse_data.py``` function (```analyse_same_val_cities()```)
+
 **Analyse von Architekturen (qualitativ, quantitativ):**
 - MLP
 - CNN

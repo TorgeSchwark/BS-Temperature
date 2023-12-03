@@ -212,7 +212,6 @@ def create_latitude_histogram(data_path,cities):
     plt.show()
 
 def create_continent_barchar(data_path,cities):
-
     df = pd.read_csv(data_path+cities)
     country_dict = {}
     continent_dict = {}
@@ -403,12 +402,66 @@ def create_uncertainty_and_nans_per_year_barchar(data_path,cities):
 
     plt.show()
 
+# TODO: analysing duplicate / copyed values of different cities (maybe naghbouring)
+def analyse_same_val_cities():
+    # returns the entries that are suspiciously near to each other and have the exact same avgTemperature
+    def distance(same_temp_entries: list) -> list: # (bool, list)
+        def parse_coordinates(coord_str: str) -> float:
+            """ Parse coordinates from a string with letters indicating cardinal directions.
+            Parameters:
+                coord_str (str): String representation of coordinates with letters (e.g., '57.05N', '10.33E').
+            Returns:
+                float: Numerical value of the coordinate."""
+            numerical_value, direction = float(coord_str[:-1]), coord_str[-1]
+            return numerical_value if direction in ['N', 'E'] else -numerical_value
+        # allowed distance between two cities before no sus factor possible (in km)
+        TOLERANCE_DIS: int = 50
+        # Radius of the Earth in kilometers
+        R = 6371.0    
+        sus_list: list = []
+        for index, dt, city, country, lat, long in same_temp_entries:
+            for index2, dt2, city2, country2, lat2, long2 in same_temp_entries:
+                if city != city2:                 
+                    # Haversine formula
+                    lat_val, long_val = parse_coordinates(lat), parse_coordinates(long)
+                    lat_val2, long_val2 = parse_coordinates(lat2), parse_coordinates(long2)
+
+                    dlat = lat_val2 - lat_val
+                    dlon = long_val2 - long_val
+                    
+                    a = math.sin(dlat / 2)**2 + math.cos(lat_val) * math.cos(lat_val2) * math.sin(dlon / 2)**2
+                    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+                    # distance in km
+                    distance = R * c
+                    if distance <= TOLERANCE_DIS:
+                        sus_list.append((index, dt, city, country, lat, long, index2, dt2, city2, country2, lat2, long2))
+        return sus_list
+    
+    data_path = DATA_PATH + CITYS
+    df = pd.read_csv(data_path)
+    same_temp_values: dict = {} # key = temperature, value = [city1, city2, ...]
+    # i = 5000
+    for index, dt, avgTemp, avgTempunc, city, country, lat, long in df.itertuples():
+        # if i <= 0: break
+        if avgTemp in same_temp_values:
+            same_temp_values[avgTemp].append((index, dt, city, country, lat, long))
+        else:
+            same_temp_values[avgTemp] = [(index, dt, city, country, lat, long)]
+        # i -= 1
+    for k, v in same_temp_values.items():
+        if len(v) > 1:
+            sus_list: list = distance(v)
+            if sus_list:
+                print("avgTemp:" + str(k) + " sus entries: \n" + str(sus_list))
+    pass
+
 def run():
     data_path = DATA_PATH  
     cities = "GlobalLandTemperaturesByCity.csv"
     if not os.path.exists(HISTOGRAMS):
             os.makedirs(HISTOGRAMS)
     
+    # analyse_same_val_cities()
     create_latitude_histogram(data_path,cities)
     create_longitute_histogram(data_path,cities)
     create_continent_barchar(data_path,cities)
