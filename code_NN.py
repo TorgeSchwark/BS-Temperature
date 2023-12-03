@@ -258,7 +258,6 @@ def train(data_path, model_path, model, batch_size, lr, from_checkpoint=False):
     history = model.fit(train_gen, steps_per_epoch=STEPS_PER_EPOCH, validation_steps=VALIDATION_STEPS, epochs=EPOCHS, 
                       validation_data=val_gen, callbacks=[checkpoint_callback,model_history_callback], #,checkpoint_callback, val_callback, early_stopping_callback],
                       shuffle=True, verbose='auto')
-
     val_func(data_path, model_path, model, EPOCHS)
 
 # Like normal setup just with Training parameter loop
@@ -270,7 +269,7 @@ def lopp_setup():
    dropouts = [0]
 
    with tf.device(GPU_STRING):
-        data_path = DATA_PATH
+        data_path = DATA_PATH # DATA_PATH_PROCESSED ?
 
         # iterate through multiple hyper parameter configs and train mlp models
         for batch_size in batch_sizes:
@@ -295,7 +294,7 @@ def loop_setup2():
   dropouts = [0]
 
   with tf.device(GPU_STRING):
-        data_path = DATA_PATH
+        data_path = DATA_PATH_PROCESSED
 
         # iterate through multiple hyper parameter configs and train models
         for batch_size in batch_sizes:
@@ -322,6 +321,7 @@ def normal_setup():
     with tf.device(GPU_STRING):
        
         data_path = DATA_PATH_PROCESSED
+        # model_path = 'models\\' + MODEL_NAME + '\\'
         model_path = 'models\\' + MODEL_NAME + '\\'
         
         if not os.path.exists(model_path):
@@ -339,7 +339,7 @@ def run():
     
     start = time.time()
     # normal_setup()
-    # loop_setup2()
+    loop_setup2()
     end = time.time()
     print(f"\n Compute time:{end - start}")
 
