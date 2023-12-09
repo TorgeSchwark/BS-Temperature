@@ -23,9 +23,16 @@
 | ![Uncertainty](.\\histograms\\Uncertainty.png) | ![Years](.\\histograms\\Years.png) |
 ... TODO:
 
+Datenanalyse:
+- Städte haben teilweise exakt die gleichen Werte (in mehreren locations??)
+- siehe ```analyse_data.py``` function (```analyse_same_val_cities()```)
+
 **Analyse von Architekturen (qualitativ, quantitativ):**
 - MLP
-- CNN
+- CNN (1D)
+  - mit Learning rate bei 0.1 sah man solche Werte wie:
+    - Epoch 24: val_mae did not improve from 25.38875
+      30/30 [==============================] - 16s 555ms/step - loss: 2934.5496 - mse: 2934.5491 - mae: 42.1311 - val_loss: 1541.8851 - val_mse: 1541.8850 - val_mae: 32.9383
 - RNN
 - ...
 

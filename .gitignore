@@ -11,3 +11,7 @@
 
 # py cache?
 */*.pyc
+
+# model stuff
+*.h5
+*.png

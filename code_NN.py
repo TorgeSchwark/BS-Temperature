@@ -67,15 +67,15 @@ def setup_model_lstm():
   model = tf.keras.models.Model(input, x)
   return model  
  
-def setup_model_conv_1d(filters: list = [100], dropout: list = []):
+def setup_model_conv_1d(filters: list = [100], dropout: list = [], kernel_sizes: list = []):
   input = tf.keras.layers.Input(shape=(SEQ_LEN_PAST, NUM_INPUT_PARAMETERS), name='input')
 
   dp = 0
-  if dropout and len(filters) == len(dropout): # list is not empty
-    x = tf.keras.layers.Conv1D(filters=filters[0], kernel_size=5, activation='relu', padding='same')(input)
+  if dropout and (len(filters) == len(dropout)) and (len(filters) == len(kernel_sizes)): # if dropout -> list is not empty
+    x = tf.keras.layers.Conv1D(filters=filters[0], kernel_size=kernel_sizes[0], activation='relu', padding='same')(input)
     x = tf.keras.layers.Dropout(dropout[0])(x)
     for i in range(1, len(filters)):
-        x = tf.keras.layers.Conv1D(filters=filters[i], kernel_size=5, activation='relu', padding='same')(input)
+        x = tf.keras.layers.Conv1D(filters=filters[i], kernel_size=kernel_sizes[i], activation='relu', padding='same')(input)
         x = tf.keras.layers.Dropout(dropout[i])(x)
   else:
     x = tf.keras.layers.Conv1D(filters=filters[0], kernel_size=5, activation='relu', padding='same')(input)
@@ -236,29 +236,32 @@ def train(data_path, model_path, model, batch_size, lr, from_checkpoint=False):
     checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(model_path + 'model-{epoch:03d}-mae{val_mae:.4f}.h5', verbose=1, monitor='val_mae', save_best_only=True, mode='auto')
     model_history_callback = ModelHistory(model_path)
 
-    # early_stopping_callback = tf.keras.callbacks.EarlyStopping(
-    #   monitor='val_loss',
-    #   min_delta=0.5,
-    #   patience=5,
-    #   verbose=1,
-    #   mode='auto',
-    #   baseline=None,
-    #   restore_best_weights=False,
-    #   # start_from_epoch=0
-    # )
+    early_stopping_callback = tf.keras.callbacks.EarlyStopping(
+      monitor='val_loss',
+      min_delta=2.0,
+      patience=3,
+      verbose=1,
+      mode='auto',
+      baseline=None,
+      restore_best_weights=True,
+      # start_from_epoch=0
+    )
     # needed for Adam optimizer?
-    def adapt_learning_rate(epoch):
-      return 0.001 * epoch
+    def adapt_learning_rate(epoch, learning_rate):
+      # return 0.001 * epoch
+      if epoch < 10:
+        return lr
+      else:
+        print("DEBUG: new learning rate:", lr * tf.math.exp(-0.1))
+        return lr * tf.math.exp(-0.1)
     lr_scheduler = tf.keras.callbacks.LearningRateScheduler(adapt_learning_rate)
-
 
     model.compile(loss='mse', optimizer=opt, metrics=["mse", "mae"])
     model.summary()
     
     history = model.fit(train_gen, steps_per_epoch=STEPS_PER_EPOCH, validation_steps=VALIDATION_STEPS, epochs=EPOCHS, 
-                      validation_data=val_gen, callbacks=[checkpoint_callback,model_history_callback], #,checkpoint_callback, val_callback, early_stopping_callback],
+                      validation_data=val_gen, callbacks=[checkpoint_callback,model_history_callback, early_stopping_callback], #,checkpoint_callback, val_callback, early_stopping_callback],
                       shuffle=True, verbose='auto')
-
     val_func(data_path, model_path, model, EPOCHS)
 
 # Like normal setup just with Training parameter loop
@@ -270,7 +273,7 @@ def lopp_setup():
    dropouts = [0]
 
    with tf.device(GPU_STRING):
-        data_path = DATA_PATH
+        data_path = DATA_PATH # DATA_PATH_PROCESSED ?
 
         # iterate through multiple hyper parameter configs and train mlp models
         for batch_size in batch_sizes:
@@ -285,33 +288,34 @@ def lopp_setup():
                     mode = 'train'
                     train(data_path, model_path, model, batch_size, learning_rate)
           
-
-def loop_setup2():
+def loop_setup_conv():
   batch_sizes = [100,200]
-  learning_rates = [0.01,0.001,0.0005]
-  # Architectures = [[1500,1500,1500,1500,1500],[1500,1500,1500,2000,5000,2000,1000,1000,500],[2000,2000,2000,2000,2000,2000,2000,2000,2000]]
-  Con_Architecture: list = [[100, 100, 100, 100, 100], [100, 100, 100, 100, 100], [50, 50, 50, 50, 50], [50, 100, 150, 200, 100], [50, 100, 200, 400, 100]]
-  Drop_Architecture: list = [[], [0.3, 0.3, 0.3, 0.3, 0.3], [0.1, 0.1, 0.1, 0.1, 0.1], [0.4, 0.5, 0.5, 0.6, 0.4]]
+  learning_rates = [0.01, 0.001]
+  Architectures = [[1500,1500,1500,1500,1500],[1500,1500,1500,2000,5000,2000,1000,1000,500],[2000,2000,2000,2000,2000,2000,2000,2000,2000]]
+  Con_Architecture: list = [[100, 100, 100, 100, 100], [100, 100, 100, 100, 100], [50, 50, 50, 50, 50], [50, 100, 150, 200, 100], [50, 100, 200, 400, 100]] #, [100, 100, 100, 100, 100], [50, 50, 50, 50, 50], [50, 100, 150, 200, 100], [50, 100, 200, 400, 100]]
+  Drop_Architecture: list = [[], [0.3, 0.3, 0.3, 0.3, 0.3], [0.1, 0.1, 0.1, 0.1, 0.1], [0.4, 0.5, 0.5, 0.6, 0.4]] # , [0.1, 0.1, 0.1, 0.1, 0.1], [0.4, 0.5, 0.5, 0.6, 0.4]]
+  Kernal_sizes = [[3,3,3,3,1]] # ,[3,3,3,3,1],[5,5,5,5,5]]
   dropouts = [0]
 
   with tf.device(GPU_STRING):
-        data_path = DATA_PATH
+        data_path = DATA_PATH_PROCESSED
 
         # iterate through multiple hyper parameter configs and train models
         for batch_size in batch_sizes:
            for learning_rate in learning_rates:
               for architecture in Con_Architecture:
                 for dropout in Drop_Architecture:
-                    # spe = steps per epoch, ep = epochs, slp = sequence len past, slf = sequence len future
-                    model_path =  'models_conv\\' + 'models_conv_spe30_ep25_slp1000_slf360\\' + str(dropout) + str(batch_size) + str(learning_rate) + str(architecture) + '\\'
-                    if not os.path.exists(model_path):
-                        os.makedirs(model_path)
-                    
-                    # model = setup_variable_mlp(architecture,dropout)
-                    model = setup_model_conv_1d(architecture,dropout)
-                    mode = 'train'
-                    train(data_path, model_path, model, batch_size, learning_rate)
-
+                    for kernal_size in Kernal_sizes:
+                      print(f"training model: dropout:{str(dropout)} batch_size:{str(batch_size)} lr:{str(learning_rate)} architecture:{str(architecture)} kernals:{str(kernal_size)}")
+                      # spe = steps per epoch, ep = epochs, slp = sequence len past, slf = sequence len future
+                      model_path =  'models_conv3\\' + f'models_conv_spe{STEPS_PER_EPOCH}_ep{EPOCHS}_slp{SEQ_LEN_PAST}_slf{SEQ_LEN_FUTURE}\\' + str(dropout) + str(batch_size) + str(learning_rate) + str(architecture) + '\\'
+                      if not os.path.exists(model_path):
+                          os.makedirs(model_path)
+                      
+                      # model = setup_variable_mlp(architecture,dropout)
+                      model = setup_model_conv_1d(architecture,dropout, kernal_size)
+                      mode = 'train'
+                      train(data_path, model_path, model, batch_size, learning_rate)          
 
 def normal_setup():
     # physical_devices = tf.config.list_physical_devices('GPU')
@@ -320,6 +324,7 @@ def normal_setup():
     with tf.device(GPU_STRING):
        
         data_path = DATA_PATH_PROCESSED
+        # model_path = 'models\\' + MODEL_NAME + '\\'
         model_path = 'models\\' + MODEL_NAME + '\\'
         
         if not os.path.exists(model_path):
@@ -336,8 +341,8 @@ def run():
     print("\nGPUs: {}\n".format(physical_devices))
     
     start = time.time()
-    normal_setup()
-    # loop_setup2()
+    # normal_setup()
+    loop_setup_conv()
     end = time.time()
     print(f"\n Compute time:{end - start}")
 
