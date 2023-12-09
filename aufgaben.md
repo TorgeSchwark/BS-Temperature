@@ -29,6 +29,10 @@ Datenanalyse:
 
 **Analyse von Architekturen (qualitativ, quantitativ):**
 - MLP
+  - Activation functions
+    - Selu
+    - Relu
+      - größtenteils benutzt, funktioniert gut (besser als andere?)
 - CNN (1D)
   - mit Learning rate bei 0.1 sah man solche Werte wie:
     - Epoch 24: val_mae did not improve from 25.38875
@@ -38,6 +42,8 @@ Datenanalyse:
       100/100 [==============================] - 45s 451ms/step - loss: 47.1001 - mse: 47.1001 - mae: 5.1008 - val_loss: 38.9700 - val_mse: 38.9700 - val_mae: 4.5528
 - RNN
 - ...
+- Allgemein:
+  Sehr häufig kam es bei den Modellen (abgesehen von MLP) immer wieder zu einer Grenze vom MAE bei 5, unsere Modelle kamen also nur in kurzen Ausnahme zu MAE Werten von gering unter 5 (dabei liegen mse bei ~30-40)
 
 **Analyse mit und ohne Normalisierung der Daten:**
 - ... TODO:
@@ -63,8 +69,10 @@ Datenanalyse:
   - ...
 
 ## Error Metriken / Vergleichparameter (Güte von nNs vergleichen)
-- mse: nicht so gut geeignet, da fehler stärker bestraft werden bei sehr variablen Temperaturen
-- mae: eher geeignet
+- mse: nicht so gut geeignet, da fehler stärker bestraft werden bei sehr variablen Temperaturen  
+  $L_{MSE}(w, y, \hat y)= \frac 1 {2p} \sum^p_{\mu = 1} L^{\mu}_{MSE}(w,y,\hat y) = \frac 1 {2p} \sum^p_{\mu = 1} \hat y(w, x^{(\mu)}-y^{\mu})^2$
+- mae: eher geeignet  
+  $MAE=\frac {\sum^n_{i=1} |y_i - x_i|} n = \frac {\sum^n_{i=1}|e_i|} n$
 
 # Phase 3
 > Dokumentation von Herangehensweise, Aufgaben und Expirimenten

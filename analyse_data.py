@@ -674,6 +674,7 @@ def analyse_same_val_cities():
     df = pd.read_csv(data_path)
     same_temp_values: dict = {} # key = temperature, value = [city1, city2, ...]
     # i = 5000
+    print("before same_temp_value creation")
     for index, dt, avgTemp, avgTempunc, city, country, lat, long in df.itertuples():
         # if i <= 0: break
         if avgTemp in same_temp_values:
@@ -681,6 +682,7 @@ def analyse_same_val_cities():
         else:
             same_temp_values[avgTemp] = [(index, dt, city, country, lat, long)]
         # i -= 1
+    print("before distance loop")
     for k, v in same_temp_values.items():
         if len(v) > 1:
             sus_list: list = distance(v)
