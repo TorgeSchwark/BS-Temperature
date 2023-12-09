@@ -56,15 +56,15 @@ def get_all_files_as_list():
         file = open(file_name,"r")
         lines = file.readlines()
         for line in lines:
-            ind_in_file += 1
-            count += 1
-
             temperature = float(line.strip().split(' ')[1])
             file_list.append((float(temperature),))
             if math.isnan(temperature):
                 count = 0
             if count >= SEQ_LEN_FUTURE+SEQ_LEN_PAST:
                 valid_ind_dict[ind_in_files_list].append(ind_in_file)
+            ind_in_file += 1
+            count += 1
+            
         ind_in_files_list += 1
         files_list.append(file_list)
     return files_list, valid_ind_dict
