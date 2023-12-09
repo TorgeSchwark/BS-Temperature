@@ -190,7 +190,7 @@ def plot_data_partial(sub_seq_input, sub_seq_label, sub_seq_pred, model_path, ep
     tmp = list(range(0, len(input_samples_y)))
     plt.scatter(tmp, input_samples_y)    
     pred_x = list(range(len(input_samples_y),len(input_samples_y)+len(pred_samples_y)))
-    print(pred_x,pred_samples_y)
+    
     plt.scatter(pred_x, pred_samples_y)
     plt.scatter(pred_x, label_samples_y)
     
@@ -204,7 +204,7 @@ def plot_data_partial(sub_seq_input, sub_seq_label, sub_seq_pred, model_path, ep
 def val_func(data_path, model_path, model, epoch):
     all_files = sorted(glob.glob(data_path + '*.txt'))
     num_plots = 10
-
+    
     for i in range(num_plots):
         idx_file = random.randint(0,(int((len(all_files)-1)*VALIDATION_PERCENTAGE)))
 
@@ -312,8 +312,6 @@ def loop_setup2():
                     mode = 'train'
                     train(data_path, model_path, model, batch_size, learning_rate)
 
-                    
-  
 
 def normal_setup():
     # physical_devices = tf.config.list_physical_devices('GPU')
@@ -338,7 +336,7 @@ def run():
     print("\nGPUs: {}\n".format(physical_devices))
     
     start = time.time()
-    # normal_setup()
+    normal_setup()
     # loop_setup2()
     end = time.time()
     print(f"\n Compute time:{end - start}")
