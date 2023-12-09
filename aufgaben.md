@@ -33,6 +33,9 @@ Datenanalyse:
   - mit Learning rate bei 0.1 sah man solche Werte wie:
     - Epoch 24: val_mae did not improve from 25.38875
       30/30 [==============================] - 16s 555ms/step - loss: 2934.5496 - mse: 2934.5491 - mae: 42.1311 - val_loss: 1541.8851 - val_mse: 1541.8850 - val_mae: 32.9383
+  - mit anderen learning rates (0.01, 0.001) liegen die Werte immer meistens bei: 
+    - Epoch 6: val_mae did not improve from 4.40800
+      100/100 [==============================] - 45s 451ms/step - loss: 47.1001 - mse: 47.1001 - mae: 5.1008 - val_loss: 38.9700 - val_mse: 38.9700 - val_mae: 4.5528
 - RNN
 - ...
 
@@ -54,6 +57,14 @@ Datenanalyse:
 ## Some Data Collection
 - Eigene predictions machen um eine Menschliche Vorhersage mit der eines NN zu vergleichen
 
+## Data Augmentation
+- skalieren und transformieren
+  - um Offset verschieben
+  - ...
+
+## Error Metriken / Vergleichparameter (Güte von nNs vergleichen)
+- mse: nicht so gut geeignet, da fehler stärker bestraft werden bei sehr variablen Temperaturen
+- mae: eher geeignet
 
 # Phase 3
 > Dokumentation von Herangehensweise, Aufgaben und Expirimenten
