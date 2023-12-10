@@ -120,29 +120,6 @@ def show_human_prediction():
   global_mse = global_mse/UMFRAGE_MENGE
   global_mae = global_mae/UMFRAGE_MENGE
   with open(UMFRAGE_PATH + "global_mse_mae.txt", 'w') as datei:
-      datei.write(f'MSE: {mse}\nMAE: {mae}')
+      datei.write(f'MSE: {global_mse}\nMAE: {global_mae}')
   
         
-
-def search_for_duplicates():
-  data, dict = get_all_files_as_list()
-  cleane_data = []
-  cleane_file = []
-  
-  for file in data:
-    cleane_file = []
-    for value in file:
-      cleane_file.append(value[0])
-    cleane_data.append(cleane_file)
-  
-  for file1 in cleane_data:
-    equals = 0
-    for file2 in cleane_data: 
-      if file2 == file1:
-        equals += 1
-    if equals > 1:
-      print("duplicates")
-
-
-#search_for_duplicates()
-show_human_prediction()

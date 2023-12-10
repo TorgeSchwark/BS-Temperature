@@ -3,6 +3,7 @@ DATA_PATH = 'data_To_Process\\'
 DATA_PATH_PROCESSED = 'processed_Data\\'
 HISTOGRAMS = 'histograms\\'
 UMFRAGE_PATH = 'human_prediction'
+DUPLICATES = 'duplicates\\'
 
 CITYS ='GlobalLandTemperaturesByCity.csv'
 COUNTRYS = 'GlobalLandTemperaturesByCountry.csv'
@@ -11,9 +12,9 @@ STATE = 'GlobalLandTemperaturesByState.csv'
 
 GPU_STRING = '/gpu:0'
 BATCH_SIZE = 100
-MODEL_NAME = "Tests"
+MODEL_NAME = "Mlp"
 EPOCHS = 25
-STEPS_PER_EPOCH = 100 # 30
+STEPS_PER_EPOCH = 50 # 30
 VALIDATION_STEPS = 32
 # in months
 SEQ_LEN_PAST = 840 # 70 years       
