@@ -13,7 +13,7 @@ STATE = 'GlobalLandTemperaturesByState.csv'
 GPU_STRING = '/gpu:0'
 BATCH_SIZE = 100
 MODEL_NAME = "Mlp"
-EPOCHS = 25
+EPOCHS = 50
 STEPS_PER_EPOCH = 50 # 30
 VALIDATION_STEPS = 32
 # in months

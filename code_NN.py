@@ -59,20 +59,43 @@ class ModelHistory(tf.keras.callbacks.Callback):
 def setup_model_lstm():
   input = tf.keras.layers.Input(shape=(SEQ_LEN_PAST, NUM_INPUT_PARAMETERS), name='input')
 
-  x = tf.keras.layers.LSTM(100, return_sequences=True)(input)
-  x = tf.keras.layers.LSTM(100, return_sequences=True)(x)
-  x = tf.keras.layers.LSTM(50, return_sequences=True)(x)
-  x = tf.keras.layers.LSTM(50)(x)
+  x = tf.keras.layers.LSTM(200, return_sequences=True)(input)
+  x = tf.keras.layers.LSTM(200, return_sequences=True)(x)
+  x = tf.keras.layers.LSTM(200, return_sequences=True)(x)
+  x = tf.keras.layers.LSTM(200, return_sequences=True)(x)
+  x = tf.keras.layers.LSTM(200, return_sequences=True)(x)
+  x = tf.keras.layers.LSTM(200)(x)
 
   # Zusätzliche Fully Connected (Dense) Layers
-  x = tf.keras.layers.Dense(500, activation='relu')(x)
-  x = tf.keras.layers.Dense(500, activation='relu')(x)
+  x = tf.keras.layers.Dense(2000, activation='relu')(x)
+  x = tf.keras.layers.Dense(1000, activation='relu')(x)
+  x = tf.keras.layers.Dense(700, activation='relu')(x)
+  x = tf.keras.layers.Dense(55, activation='relu')(x)
 
   x = tf.keras.layers.Dense(SEQ_LEN_FUTURE * NUM_OUTPUT_PARAMETERS, activation='linear')(x)
   x = tf.keras.layers.Reshape((SEQ_LEN_FUTURE, NUM_OUTPUT_PARAMETERS))(x)
 
   model = tf.keras.models.Model(input, x)
   return model  
+
+def setup_variable_lstm(architecture):
+  input = tf.keras.layers.Input(shape=(SEQ_LEN_PAST, NUM_INPUT_PARAMETERS), name='input')
+  #setup lstm layers
+  x = tf.keras.layers.LSTM(architecture[0][0], return_sequences=True)(input)
+  for layer in architecture[0][1:len(architecture[0])-1]:
+    x = tf.keras.layers.LSTM(layer, return_sequences=True)(x)
+  x = tf.keras.layers.LSTM(architecture[0][len(architecture)-1])(x)
+
+  #setup mlp layers:
+  for layer in architecture[1]:
+    x = tf.keras.layers.Dense(layer, activation='relu')(x)
+
+  x = tf.keras.layers.Dense(SEQ_LEN_FUTURE * NUM_OUTPUT_PARAMETERS, activation='linear')(x)
+  x = tf.keras.layers.Reshape((SEQ_LEN_FUTURE, NUM_OUTPUT_PARAMETERS))(x)
+
+  model = tf.keras.models.Model(input, x)
+  return model  
+
  
 def setup_model_conv_1d(filters_list: list = [100], dropout: list = [], kernel_sizes: list = []):
   
@@ -252,11 +275,11 @@ def train(data_path, model_path, model, batch_size, lr, from_checkpoint=False):
 
 # Like normal setup just with Training parameter loop
 def lopp_setup_mlp():
-   
+   # still needs 100,200 with 0.0005
    batch_sizes = [100,200]
-   learning_rates = [0.001,0.0005,0.0001]
+   learning_rates = [0.00005]
    Architectures = [[1500,1500,1500,1500,1500],[1500,1500,1500,2000,5000,2000,1000,1000,500],[2000,2000,2000,2000,2000,2000,2000,2000,2000]]
-   dropouts = [0,0.1]
+   dropouts = [0]
 
    with tf.device(GPU_STRING):
         data_path = DATA_PATH_PROCESSED 
@@ -266,7 +289,7 @@ def lopp_setup_mlp():
            for learning_rate in learning_rates:
               for architecture in Architectures:
                 for dropout in dropouts:
-                    model_path =  'models\\' + 'models_mlp_{STEPS_PER_EPOCH}_ep{EPOCHS}_slp{SEQ_LEN_PAST}_slf{SEQ_LEN_FUTURE}\\' + str(dropout) + str(batch_size) + str(learning_rate) + str(architecture) + '\\'
+                    model_path =  'models\\' + 'models_lstm_rest\\' + str(dropout) + str(batch_size) + str(learning_rate) + str(architecture) + str(STEPS_PER_EPOCH) +str(EPOCHS) +str(SEQ_LEN_PAST)+ str(SEQ_LEN_FUTURE)+ '\\'
                     if not os.path.exists(model_path):
                         os.makedirs(model_path)
                     
@@ -301,6 +324,23 @@ def loop_setup_conv():
                       mode = 'train'
                       train(data_path, model_path, model, batch_size, learning_rate)          
 
+def loop_setup_lstm():
+   batch_sizes = [25,50,75,100]
+   learning_rates = [0.05,0.01,0.005,0.001]
+   architectures = [[[20,20,20,20,20,20,20,20],[100,90,80,70,60,50]],[[10,10,10,10],[100,50]],[[30,30,30,30,30],[200,100]],[[100,100,100,100,100],[500,250]]]
+   
+   with tf.device(GPU_STRING):
+    data_path = DATA_PATH_PROCESSED 
+
+    for batch_size in batch_sizes:
+      for learning_rate in learning_rates:
+        for architecture in architectures:
+          model_path =  'models\\' + 'models_lstm\\' + str(batch_size) + str(learning_rate) + str(architecture) + str(STEPS_PER_EPOCH) +str(EPOCHS) +str(SEQ_LEN_PAST)+ str(SEQ_LEN_FUTURE)+ '\\'
+          if not os.path.exists(model_path):
+            os.makedirs(model_path)
+          model = setup_variable_lstm(architecture)
+          train(data_path, model_path, model, batch_size, learning_rate)
+
 def normal_setup():
     # physical_devices = tf.config.list_physical_devices('GPU')
     # print("\nGPUs: {}\n".format(physical_devices))
@@ -327,6 +367,8 @@ def run():
     start = time.time()
     lopp_setup_mlp()
     # loop_setup_conv()
+    #loop_setup_lstm()
+    #normal_setup()
     end = time.time()
     print(f"\n Compute time:{end - start}")
 
