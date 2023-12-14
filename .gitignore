@@ -2,7 +2,6 @@
 /processed_Data
 /histograms
 /data_To_Process
-/human_prediction
 /duplicates
 
 # IDE specific:
@@ -15,4 +14,4 @@
 
 # model stuff
 *.h5
-*.png
+.png

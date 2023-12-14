@@ -326,7 +326,7 @@ def loop_setup_conv():
 
 def loop_setup_lstm():
    batch_sizes = [25,50,75,100]
-   learning_rates = [0.05,0.01,0.005,0.001]
+   learning_rates = [0.03]#[0.05,0.01,0.005,0.001]
    architectures = [[[20,20,20,20,20,20,20,20],[100,90,80,70,60,50]],[[10,10,10,10],[100,50]],[[30,30,30,30,30],[200,100]],[[100,100,100,100,100],[500,250]]]
    
    with tf.device(GPU_STRING):
@@ -365,9 +365,9 @@ def run():
     print("\nGPUs: {}\n".format(physical_devices))
     
     start = time.time()
-    lopp_setup_mlp()
+    #lopp_setup_mlp()
     # loop_setup_conv()
-    #loop_setup_lstm()
+    loop_setup_lstm()
     #normal_setup()
     end = time.time()
     print(f"\n Compute time:{end - start}")

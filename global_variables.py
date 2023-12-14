@@ -2,7 +2,7 @@ VALIDATION_PERCENTAGE = 0.5
 DATA_PATH = 'data_To_Process\\'
 DATA_PATH_PROCESSED = 'processed_Data\\'
 HISTOGRAMS = 'histograms\\'
-UMFRAGE_PATH = 'human_prediction'
+UMFRAGE_PATH = 'human_prediction\\'
 DUPLICATES = 'duplicates\\'
 
 CITYS ='GlobalLandTemperaturesByCity.csv'
@@ -13,7 +13,7 @@ STATE = 'GlobalLandTemperaturesByState.csv'
 GPU_STRING = '/gpu:0'
 BATCH_SIZE = 100
 MODEL_NAME = "Mlp"
-EPOCHS = 50
+EPOCHS = 100
 STEPS_PER_EPOCH = 50 # 30
 VALIDATION_STEPS = 32
 # in months
