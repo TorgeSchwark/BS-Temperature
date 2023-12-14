@@ -41,9 +41,17 @@ Datenanalyse:
     - Epoch 6: val_mae did not improve from 4.40800
       100/100 [==============================] - 45s 451ms/step - loss: 47.1001 - mse: 47.1001 - mae: 5.1008 - val_loss: 38.9700 - val_mse: 38.9700 - val_mae: 4.5528
 - RNN
+  - ! exploding gradients (kann durch gradient clipping verhindert werden)
+- LSTM
+  - nicht lineares Verhalten beim mea
 - ...
 - Allgemein:
   Sehr häufig kam es bei den Modellen (abgesehen von MLP) immer wieder zu einer Grenze vom MAE bei 5, unsere Modelle kamen also nur in kurzen Ausnahme zu MAE Werten von gering unter 5 (dabei liegen mse bei ~30-40)
+
+positional encoding (sin wird iwi in Daten eingebracht?):
+- interessant für:
+  - CONV
+  - Transformer
 
 **Analyse mit und ohne Normalisierung der Daten:**
 - ... TODO:
