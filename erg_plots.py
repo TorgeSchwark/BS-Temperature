@@ -4,8 +4,10 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.colors import Normalize
 from matplotlib.colors import LightSource
 
-# [25,50,100,200]
-# [0.001,0.0005,0.0001,0.00005]
+
+####
+## ERGEBNISSE MLP -----------------------------------------------
+###
 
 batch_sizes = [25,25,25,25,50,50,50,50,100,100,100,100,200,200,200,200]
 learning_rates = [0.001,0.0005,0.0001,0.00005,0.001,0.0005,0.0001,0.00005,0.001,0.0005,0.0001,0.00005,0.001,0.0005,0.0001,0.00005]
@@ -78,6 +80,11 @@ ax.set_title('MAE arch compared')
 plt.show()
 plt.close()
 
+
+####
+## ERGEBNISSE LSTM -----------------------------------------------
+###
+
 batch_sizes = [25,25,25,25,25,50,50,50,50,50,75,75,75,75,75,100,100,100,100,100]
 learning_rates = [0.001,0.01,0.005,0.05,0.03,  0.001,0.01,0.005,0.05,0.03,  0.001,0.01,0.005,0.05,0.03,  0.001,0.01,0.005,0.05,0.03]
 
@@ -106,7 +113,6 @@ ax.set_title('MAE [10,10,10,10] arch')
 plt.show()
 plt.close()
 
-print(mae_third_arch_lstm)
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 surface1 = ax.plot_trisurf(batch_sizes, learning_rates, mae_second_arch_lstm, linewidth=0.2, antialiased=True, color='darkred')
@@ -154,6 +160,87 @@ surface3 = ax.plot_trisurf(batch_sizes, learning_rates, mae_foth_arch_lstm, line
 ax.set_xlabel('Batchsize')
 ax.set_ylabel('Learning rate')
 ax.set_zlabel('MAE')
+ax.set_title('compared arch')
+
+plt.show()
+plt.close()
+
+####
+## ERGEBNISSE CONV -----------------------------------------------
+###
+
+batch_sizes = [25,25,25,25, 50,50,50,50, 75,75,75,75, 100,100,100,100]
+learning_rates = [0.0001,0.001,0.002,0.0004,  0.0001,0.001,0.002,0.0004,  0.0001,0.001,0.002,0.0004,  0.0001,0.001,0.002,0.0004]
+
+#[10,10,10]
+mae_first_arch_conv = [1.0389,0.9118,0.9544,0.8993, 1.0182,0.8836,0.9147,0.8774, 1.0136,0.8811,0.8877,0.8715, 0.9736,0.8756,0.8781,0.8602]
+#[20,20,20,20,20,20,20]
+mae_second_arch_conv = [1.0402,1.1118,1.0885,0.9075, 1.0025,1.0577,1.0867,0.8700, 0.9995,1.0551,1.0766,0.8648, 0.9630,1.0439,1.1034,0.8717]
+#[50,50,50,50,50]
+mae_third_arch_conv = [1.0050,1.1,1.0945,0.9224, 0.9911,0.9176,1.0933,0.8958, 0.9785,0.9371,1.1042,0.8650, 0.9478,0.8899,1.0912,0.858]
+#[50,50,50]
+mae_foth_arch_conv = [1.0045,0.9416,1.0549,0.9204, 0.9818,0.8896,0.9527,0.8630, 0.9937,0.8632,0.8952,0.8644, 0.9920,0.8691,1.0586,0.8614]
+
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+surface1 = ax.plot_trisurf(batch_sizes, learning_rates, mae_first_arch_conv, linewidth=0.2, antialiased=True, color='darkblue')
+
+ax.set_xlabel('Batchsize')
+ax.set_ylabel('Learning rate')
+ax.set_zlabel('MAE ')
+ax.set_title('MAE [[10, 10, 10], [5, 5, 5]] arch')
+
+plt.show()
+plt.close()
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+surface1 = ax.plot_trisurf(batch_sizes, learning_rates, mae_second_arch_conv, linewidth=0.2, antialiased=True, color='darkred')
+
+ax.set_xlabel('Batchsize')
+ax.set_ylabel('Learning rate')
+ax.set_zlabel('MAE ')
+ax.set_title('MAE [[20, 20, 20, 20, 20], [30, 30, 30, 30, 30]] arch')
+
+plt.show()
+plt.close()
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+surface1 = ax.plot_trisurf(batch_sizes, learning_rates, mae_third_arch_conv, linewidth=0.2, antialiased=True, color='green')
+
+ax.set_xlabel('Batchsize')
+ax.set_ylabel('Learning rate')
+ax.set_zlabel('MAE ')
+ax.set_title('MAE [[50, 50, 50, 50, 50], [10, 20, 20, 20, 10]] arch')
+
+plt.show()
+plt.close()
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+surface1 = ax.plot_trisurf(batch_sizes, learning_rates, mae_foth_arch_conv, linewidth=0.2, antialiased=True, color='grey')
+
+ax.set_xlabel('Batchsize')
+ax.set_ylabel('Learning rate')
+ax.set_zlabel('MAE ')
+ax.set_title('MAE [[50, 50, 50], [10, 10, 10]] arch')
+
+plt.show()
+plt.close()
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+surface1 = ax.plot_trisurf(batch_sizes, learning_rates, mae_first_arch_conv, linewidth=0.2, antialiased=True, color='darkblue',shade=False, alpha=0.5)
+surface2 = ax.plot_trisurf(batch_sizes, learning_rates, mae_second_arch_conv, linewidth=0.2, antialiased=True, color='darkred',shade=False, alpha=0.5)
+surface3 = ax.plot_trisurf(batch_sizes, learning_rates, mae_third_arch_conv, linewidth=0.2, antialiased=True, color='green',shade=False, alpha=0.55)
+surface3 = ax.plot_trisurf(batch_sizes, learning_rates, mae_foth_arch_conv, linewidth=0.2, antialiased=True, color='grey',shade=False, alpha=0.6)
+
+ax.set_xlabel('Batchsize')
+ax.set_ylabel('Learning rate')
+ax.set_zlabel('MAE')
+ax.set_title('compared arch')
 
 plt.show()
 plt.close()
