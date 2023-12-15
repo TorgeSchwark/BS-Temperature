@@ -239,8 +239,8 @@ def val_func(data_path, model_path, model, epoch):
 
 def train(data_path, model_path, model, batch_size, lr, from_checkpoint=False):
 
-    train_gen = data_generator(batch_size, True) 
-    val_gen = data_generator(batch_size, False)
+    train_gen = data_generator(batch_size, True, True) 
+    val_gen = data_generator(batch_size, False, False)
 
     # TODO: ggf. vary on optimizer
     opt = tf.keras.optimizers.Adam(learning_rate=lr)
@@ -341,7 +341,7 @@ def loop_setup_lstm():
 def normal_setup():
     # physical_devices = tf.config.list_physical_devices('GPU')
     # print("\nGPUs: {}\n".format(physical_devices))
-    
+    architecture = [[20, 20, 20, 20, 20],[30,30,30,30,30]]
     with tf.device(GPU_STRING):
        
         data_path = DATA_PATH_PROCESSED
@@ -351,11 +351,11 @@ def normal_setup():
         if not os.path.exists(model_path):
             os.makedirs(model_path)
 
-        model = setup_model_lstm()
+        model = setup_model_conv_1d(architecture)
 
         mode = 'train'
 
-        train(data_path, model_path, model, BATCH_SIZE, 0.01)
+        train(data_path, model_path, model, BATCH_SIZE, 0.0004)
 
 def run():
     physical_devices = tf.config.list_physical_devices('GPU')
@@ -363,9 +363,9 @@ def run():
     
     start = time.time()
     #lopp_setup_mlp()
-    loop_setup_conv()
+    #loop_setup_conv()
     #loop_setup_lstm()
-    #normal_setup()
+    normal_setup()
     end = time.time()
     print(f"\n Compute time:{end - start}")
 

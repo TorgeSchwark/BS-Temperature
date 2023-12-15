@@ -67,6 +67,7 @@ positional encoding (sin wird iwi in Daten eingebracht?):
 ## Weitere Ideen:
 - (later optional): try a binary model (so only binary weights, inputs, outputs, etc.)  
     -> e.g. for tf dataset can be casted (normalized) to specific values (float32, int, bool?)
+- instegesammt nutzbare Datenzeiträume 4.071.935 !!
 
 ## Some Data Collection
 - Eigene predictions machen um eine Menschliche Vorhersage mit der eines NN zu vergleichen
@@ -85,6 +86,7 @@ positional encoding (sin wird iwi in Daten eingebracht?):
 # Phase 3
 > Dokumentation von Herangehensweise, Aufgaben und Expirimenten
 > Wissenschaftliches Vorgehen und Schreiben
+
 
 
 
