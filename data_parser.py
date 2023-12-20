@@ -93,25 +93,66 @@ def find_starting_idices(samples):
             valid_ind.append(ind_y)
     return valid_ind
     
-def select_data(batch_size, all_files, is_train):
+
+def generate_clipped_random_value(mu, sigma, lower_bound, upper_bound):
+    while True:
+        # Generiere einen zufälligen Wert aus der Normalverteilung
+        random_value = np.random.normal(mu, sigma)
+
+        # Überprüfe, ob der Wert innerhalb des Bereichs liegt
+        if lower_bound <= random_value <= upper_bound:
+            return random_value
+        
+def generate_clipped_gaussian_value(mu, sigma, lower_bound, upper_bound):
+    while True:
+        # Generiere einen zufälligen Wert aus der Normalverteilung
+        random_value = np.random.normal(mu, sigma)
+
+        # Überprüfe, ob der Wert innerhalb des Bereichs liegt
+        if lower_bound <= random_value <= upper_bound:
+            return random_value
+
+def select_data(batch_size, all_files, is_train, augmentation):
     selected_inputs = []
     selected_labels = []
 
     num = 0
     while num < batch_size:
-        if(is_train): 
-            idx_file = random.randint(int((len(all_files)-1)*VALIDATION_PERCENTAGE),int(len(all_files)-1))
+        if is_train:
+            idx_file = random.randint(int((len(all_files)-1)*VALIDATION_PERCENTAGE), int(len(all_files)-1))
         else:
-            idx_file = random.randint(0,(int((len(all_files)-1)*VALIDATION_PERCENTAGE)))
+            idx_file = random.randint(0, int((len(all_files)-1)*VALIDATION_PERCENTAGE))
 
         samples = parse_file(all_files[idx_file])
         valid_ind = find_starting_idices(samples)
 
-        if(len(valid_ind) != 0):
+        if len(valid_ind) != 0:
+            idx_seq = random.randint(0, len(valid_ind)-1)
+            sub_seq_input = np.array(samples[(valid_ind[idx_seq]-SEQ_LEN_FUTURE-SEQ_LEN_PAST+1):(valid_ind[idx_seq]-SEQ_LEN_FUTURE+1)])
+            sub_seq_label = np.array(samples[valid_ind[idx_seq]-SEQ_LEN_FUTURE+1:valid_ind[idx_seq]+1])
 
-            idx_seq = random.randint(0,len(valid_ind)-1)
-            sub_seq_input = samples[(valid_ind[idx_seq]-SEQ_LEN_FUTURE-SEQ_LEN_PAST+1):(valid_ind[idx_seq]-SEQ_LEN_FUTURE+1)]
-            sub_seq_label = samples[valid_ind[idx_seq]-SEQ_LEN_FUTURE+1:valid_ind[idx_seq]+1]
+            if augmentation:
+                mu = 1.25
+                sigma = 0.25
+                lower_bound = 0.5
+                upper_bound = 2.0
+
+                # Generiere einen zufälligen Wert und sichere, dass er im gewünschten Bereich (0.5-2) liegt
+                random_multip = generate_clipped_random_value(mu, sigma, lower_bound, upper_bound)
+
+                sub_seq_input *= random_multip
+                sub_seq_label *= random_multip
+
+                mu = 0
+                sigma = 5
+                lower_bound = -10
+                upper_bound = 10
+
+                # Generiere einen zufälligen Wert und sichere, dass er im gewünschten Bereich (-10,10) liegt
+                random_offset = generate_clipped_gaussian_value(mu, sigma, lower_bound, upper_bound)
+
+                sub_seq_input += random_offset
+                sub_seq_label += random_offset
 
             selected_inputs.append(sub_seq_input)
             selected_labels.append(sub_seq_label)
@@ -143,12 +184,12 @@ def fast_select_data(data, ind_dict, batch_size, is_train):
 
     return np.asarray(selected_inputs), np.asarray(selected_labels)
 
-def data_generator( batch_size, is_train):
+def data_generator( batch_size, is_train, augmenation):
     path = DATA_PATH_PROCESSED
     all_files = sorted(glob.glob(path + '*.txt'))
 
     while True:
-        inputs, labels = select_data(batch_size, all_files, is_train)
+        inputs, labels = select_data(batch_size, all_files, is_train, augmenation)
        
         #Data Augmentation
         mu = 0
@@ -159,6 +200,7 @@ def data_generator( batch_size, is_train):
 
 def fast_data_generator(batch_size, is_train):
     data, ind_dict = get_all_files_as_list()
+    print(sum(len(ind_dict[key]) for key in ind_dict))
     
     while True:
         inputs, labels = fast_select_data(data, ind_dict, batch_size, is_train)
@@ -174,3 +216,4 @@ def fast_data_generator(batch_size, is_train):
 
 
 
+data, ind_dict = get_all_files_as_list()

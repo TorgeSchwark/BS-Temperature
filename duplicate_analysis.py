@@ -23,7 +23,7 @@ def read_files():
 
 def search_for_duplicates():
     data_dict = read_files()
-    
+    same_count = 0
     duplicate_cities = []
     gleiche_cities_gruppen = []
     for key in data_dict:
@@ -37,8 +37,11 @@ def search_for_duplicates():
                         key_in_duplicates = True
                     gleiche_cities_gruppe.append(key2)
                     duplicate_cities.append(key2)
-            gleiche_cities_gruppen.append(gleiche_cities_gruppe)
-    
+            if len(gleiche_cities_gruppe) > 1:
+                same_count += len(gleiche_cities_gruppe)
+                gleiche_cities_gruppen.append(gleiche_cities_gruppe)
+
+    print("es gibt :", same_count , "gleiche städte aus ", len(data_dict))
     dateipfad = 'duplicate_cities.json'
     if not os.path.exists(DUPLICATES):
         os.makedirs(DUPLICATES)

@@ -48,7 +48,6 @@ def make_prediction_graphs():
         file.write("prediction"+str(count)+": " '\n')
     plt.close()
   
-
 def show_human_prediction():
   data, dict = get_all_files_as_list()
   cleane_data = []
@@ -64,40 +63,40 @@ def show_human_prediction():
   global_mse = 0
   global_mae = 0
   for i in range(UMFRAGE_MENGE):
-    found = False
-    label_array = []
-    with open(UMFRAGE_PATH+ str(i) +"\\" + "labels.txt") as datei:
-      for zeile in datei:
-        wert = float(zeile.strip("()\n,"))
-        label_array.append(wert)
+    # found = False
+    # label_array = []
+    # with open(UMFRAGE_PATH+ str(i) +"\\" + "labels.txt") as datei:
+    #   for zeile in datei:
+    #     wert = float(zeile.strip("()\n,"))
+    #     label_array.append(wert)
 
-    prediction_array = []
-    with open(UMFRAGE_PATH+ str(i) +"\\" + "Predictions.txt") as datei:
-      for zeile in datei:
-        wert = float(zeile.strip("\n").split()[1])
-        prediction_array.append(wert)
+    # prediction_array = []
+    # with open(UMFRAGE_PATH+ str(i) +"\\" + "Predictions.txt") as datei:
+    #   for zeile in datei:
+    #     wert = float(zeile.strip("\n").split()[1])
+    #     prediction_array.append(wert)
     
-    #find data and plot it
-    for s in range(len(cleane_data)): 
-      for m in range(len(cleane_data[s])):
+    # #find data and plot it
+    # for s in range(len(cleane_data)): 
+    #   for m in range(len(cleane_data[s])):
 
-        if len(cleane_data[s]) > m+len(label_array):
-          if all(cleane_data[s][m+k] == label_array[k] for k in range(len(label_array))) and m-SEQ_LEN_PAST >= 0 and not found: 
-            found = True
-            plt.figure()
-            plt.plot(list(range(SEQ_LEN_PAST+SEQ_LEN_FUTURE)),cleane_data[s][m-SEQ_LEN_PAST:m+SEQ_LEN_FUTURE])
-            plt.plot(list(range(SEQ_LEN_PAST,SEQ_LEN_PAST+SEQ_LEN_FUTURE)),prediction_array)
+    #     if len(cleane_data[s]) > m+len(label_array):
+    #       if all(cleane_data[s][m+k] == label_array[k] for k in range(len(label_array))) and m-SEQ_LEN_PAST >= 0 and not found: 
+    #         found = True
+    #         plt.figure()
+    #         plt.plot(list(range(SEQ_LEN_PAST+SEQ_LEN_FUTURE)),cleane_data[s][m-SEQ_LEN_PAST:m+SEQ_LEN_FUTURE])
+    #         plt.plot(list(range(SEQ_LEN_PAST,SEQ_LEN_PAST+SEQ_LEN_FUTURE)),prediction_array)
             
             
-            plt.title('Temperature')
-            plt.xlabel('Monate')
-            plt.ylabel('Temperatur')
-            plt.xticks(list(range(0,SEQ_LEN_PAST+SEQ_LEN_FUTURE)), fontsize='xx-small', rotation=90)
+    #         plt.title('Temperature')
+    #         plt.xlabel('Monate')
+    #         plt.ylabel('Temperatur')
+    #         plt.xticks(list(range(0,SEQ_LEN_PAST+SEQ_LEN_FUTURE)), fontsize='xx-small', rotation=90)
 
-            plt.grid(True, which='both', linestyle='-', linewidth=1)
+    #         plt.grid(True, which='both', linestyle='-', linewidth=1)
 
-            plt.savefig(UMFRAGE_PATH + str(i) + "\\" + str(s) + str(m) + 'plot.pdf',format='pdf', dpi=600)
-            plt.close()
+    #         plt.savefig(UMFRAGE_PATH + str(i) + "\\" + str(s) + str(m) + 'plot.pdf',format='pdf', dpi=600)
+    #         plt.close()
 
     #culculate mae and mse
     mae = 0
@@ -120,6 +119,6 @@ def show_human_prediction():
   global_mse = global_mse/UMFRAGE_MENGE
   global_mae = global_mae/UMFRAGE_MENGE
   with open(UMFRAGE_PATH + "global_mse_mae.txt", 'w') as datei:
-      datei.write(f'MSE: {global_mse}\nMAE: {global_mae}')
-  
-        
+      datei.write(f'MSE: {global_mse}\nMAE: {global_mae}')       
+
+show_human_prediction()
