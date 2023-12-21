@@ -11,14 +11,19 @@ import re
 # model-{epoch:03d}-mae{val_mae:.4f}.h5'
 
 
-def extract_parameters_from_folder(folder_path) -> dir:
+def extract_parameters_from_folder(folder_path):
     # Extract parameters from folder path using regular expressions
-    match = re.match(r'models\\models_lstm_rest\\(\d+\.\d+)(\d+)(\d+\.\d+)(\w+)(\d+)(\d+)(\d+)(\d+)', folder_path)
-    
+    match = re.match(r'models\\models_lstm_rest\\(\[\d+(,\d+)*\])(\d+)(\.\d+)(\[\d+(,\d+)*\])(\d+)(\d+)(\d+)(\d+)', folder_path)
+    print("match: ", match)
     if match:
-        dropout, batch_size, learning_rate, architecture, steps_per_epoch, epochs, seq_len_past, seq_len_future = match.groups()
+        dropout_list, batch_size, learning_rate, architecture_list, steps_per_epoch, epochs, seq_len_past, seq_len_future = match.groups()
+
+        # Convert the comma-separated strings to lists
+        dropout = [int(d) for d in dropout_list.strip('[]').split(',')]
+        architecture = [int(a) for a in architecture_list.strip('[]').split(',')]
+
         parameters = {
-            'dropout': float(dropout),
+            'dropout': dropout,
             'batch_size': int(batch_size),
             'learning_rate': float(learning_rate),
             'architecture': architecture,
@@ -49,8 +54,11 @@ def iterate_and_extract_parameters(root_folder = ".\\"):
     parameter_list = []
     for folder_name in os.listdir(root_folder):
         folder_path = os.path.join(root_folder, folder_name)
+        print("folder path:", folder_path)
         if os.path.isdir(folder_path):
+            print("     -> is a dir")
             parameters_from_folder = extract_parameters_from_folder(folder_name)
+            print("     -> params:", parameters_from_folder)
             if parameters_from_folder:
                 for file_name in os.listdir(folder_path):
                     if file_name.endswith('.h5'):
@@ -63,6 +71,7 @@ def iterate_and_extract_parameters(root_folder = ".\\"):
 
 # Example usage:
 root_folder = 'models\\models_lstm_rest'
+print("DOIN Stuff")
 parameters_list = iterate_and_extract_parameters(root_folder)
 
 # Display the extracted parameters
