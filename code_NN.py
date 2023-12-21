@@ -290,11 +290,11 @@ def lopp_setup_mlp():
         data_path = DATA_PATH_PROCESSED 
 
         # iterate through multiple hyper parameter configs and train mlp models
-        for batch_size in batch_sizes:
+        for batch_size in batch_sizes: 
            for learning_rate in learning_rates:
               for architecture in Architectures:
                 for dropout in dropouts:
-                    model_path =  'models\\' + 'models_lstm_rest\\' + str(dropout) + str(batch_size) + str(learning_rate) + str(architecture) + str(STEPS_PER_EPOCH) +str(EPOCHS) +str(SEQ_LEN_PAST)+ str(SEQ_LEN_FUTURE)+ '\\'
+                    model_path =  'models\\' + f'models_lstm_rest\\{dropout}_{batch_size}_{learning_rate}_{architecture}_{STEPS_PER_EPOCH}_{EPOCHS}_{SEQ_LEN_PAST}_{SEQ_LEN_FUTURE}\\'
                     if not os.path.exists(model_path):
                         os.makedirs(model_path)
                     
@@ -313,14 +313,13 @@ def loop_setup_conv():
         for batch_size in batch_sizes:
            for learning_rate in learning_rates:
               for architecture in Con_Architecture:
-                      
-                      model_path =  'models_conv3\\' + f'models_conv_spe{STEPS_PER_EPOCH}_ep{EPOCHS}_slp{SEQ_LEN_PAST}_slf{SEQ_LEN_FUTURE}\\'  + str(batch_size) + str(learning_rate) + str(architecture) + '\\'
-                      if not os.path.exists(model_path):
-                          os.makedirs(model_path)
-                      
-                      model = setup_model_conv_1d(architecture)
-                      mode = 'train'
-                      train(data_path, model_path, model, batch_size, learning_rate)          
+                model_path =  'models\\' + f'models_conv_spe\\{STEPS_PER_EPOCH}_{EPOCHS}_{SEQ_LEN_PAST}_{SEQ_LEN_FUTURE}_{batch_size}_{learning_rate}_{architecture}\\'
+                if not os.path.exists(model_path):
+                    os.makedirs(model_path)
+                
+                model = setup_model_conv_1d(architecture)
+                mode = 'train'
+                train(data_path, model_path, model, batch_size, learning_rate)          
 
 def loop_setup_lstm():
    batch_sizes = [25,50,75,100]
@@ -333,7 +332,8 @@ def loop_setup_lstm():
     for batch_size in batch_sizes:
       for learning_rate in learning_rates:
         for architecture in architectures:
-          model_path =  'models\\' + 'models_lstm\\' + str(batch_size) + str(learning_rate) + str(architecture) + str(STEPS_PER_EPOCH) +str(EPOCHS) +str(SEQ_LEN_PAST)+ str(SEQ_LEN_FUTURE)+ '\\'
+          # model_path =  'models\\' + f'models_lstm\\' +"_"+ str(batch_size) +"_"+ str(learning_rate) +"_"+ str(architecture) +"_"+ str(STEPS_PER_EPOCH) +"_"+ str(EPOCHS) +"_"+ str(SEQ_LEN_PAST) +"_"+ str(SEQ_LEN_FUTURE)+ '\\'
+          model_path =  'models\\' + f'models_lstm\\{batch_size}_{learning_rate}_{architecture}_{STEPS_PER_EPOCH}_{EPOCHS}_{SEQ_LEN_PAST}_{SEQ_LEN_FUTURE}\\'
           if not os.path.exists(model_path):
             os.makedirs(model_path)
           model = setup_variable_lstm(architecture)
@@ -396,10 +396,10 @@ def run():
     print("\nGPUs: {}\n".format(physical_devices))
     
     start = time.time()
-    #lopp_setup_mlp()
-    #loop_setup_conv()
-    #loop_setup_lstm()
-    normal_setup()
+    # lopp_setup_mlp()
+    loop_setup_conv()
+    # loop_setup_lstm()
+    # normal_setup()
     end = time.time()
     print(f"\n Compute time:{end - start}")
 
