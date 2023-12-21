@@ -10,6 +10,7 @@
 **Implementierung Data-Loader Pipeline:**
 - siehe code TODO: (optimieren)
 - Erster Verbesserungsversuch durch Einmaliges Einlesen aller Daten hat keine erkennbare Verbesserung gebracht
+- Dataloader so modifizieren, dass ALLE daten genommen werden (pro Epoche?)
 
 **Visualisierungen:**
 
@@ -23,6 +24,8 @@
 | ![Uncertainty](.\\histograms\\Uncertainty.png) | ![Years](.\\histograms\\Years.png) |
 ... TODO:
 
+- Transformers: https://bbycroft.net/llm
+
 Datenanalyse:
 - Städte haben teilweise exakt die gleichen Werte (in mehreren locations??)
 - siehe ```analyse_data.py``` function (```analyse_same_val_cities()```)
@@ -34,12 +37,19 @@ Datenanalyse:
     - Relu
       - größtenteils benutzt, funktioniert gut (besser als andere?)
 - CNN (1D)
-  - mit Learning rate bei 0.1 sah man solche Werte wie:
-    - Epoch 24: val_mae did not improve from 25.38875
-      30/30 [==============================] - 16s 555ms/step - loss: 2934.5496 - mse: 2934.5491 - mae: 42.1311 - val_loss: 1541.8851 - val_mse: 1541.8850 - val_mae: 32.9383
-  - mit anderen learning rates (0.01, 0.001) liegen die Werte immer meistens bei: 
-    - Epoch 6: val_mae did not improve from 4.40800
-      100/100 [==============================] - 45s 451ms/step - loss: 47.1001 - mse: 47.1001 - mae: 5.1008 - val_loss: 38.9700 - val_mse: 38.9700 - val_mae: 4.5528
+  - mit global average pooling vor den dense layern
+    - mit Learning rate bei 0.1 sah man solche Werte wie:
+      - Epoch 24: val_mae did not improve from 25.38875
+        30/30 [==============================] - 16s 555ms/step - loss: 2934.5496 - mse: 2934.5491 - mae: 42.1311 - val_loss: 1541.8851 - val_mse: 1541.8850 - val_mae: 32.9383
+    - mit anderen learning rates (0.01, 0.001) liegen die Werte immer meistens bei: 
+      - Epoch 6: val_mae did not improve from 4.40800
+        100/100 [==============================] - 45s 451ms/step - loss: 47.1001 - mse: 47.1001 - mae: 5.1008 - val_loss: 38.9700 - val_mse: 38.9700 - val_mae: 4.5528
+  - mit flatten vor den dense layers
+    - vergleichsweise richtig gute Ergebnisse
+    - TODO: siehe grafiken
+    - allgemein: 
+      - ab einem bestimmten Punkt performanen ALLE Modelle plötzlich deutlich besser
+      - GRÖ?größere Filter könnten sinnvoll sein, da dann z.B. ein ganzes jahr betrachtet werden kann
 - RNN
   - ! exploding gradients (kann durch gradient clipping verhindert werden)
 - LSTM
@@ -47,6 +57,8 @@ Datenanalyse:
 - ...
 - Allgemein:
   Sehr häufig kam es bei den Modellen (abgesehen von MLP) immer wieder zu einer Grenze vom MAE bei 5, unsere Modelle kamen also nur in kurzen Ausnahme zu MAE Werten von gering unter 5 (dabei liegen mse bei ~30-40)
+  TODO: bei kleinerer learning rate auch steps erhöhen (um gleiche Anzahl an samples zu haben)
+  TODO: lineare activation function ausprobieren
 
 positional encoding (sin wird iwi in Daten eingebracht?):
 - interessant für:
@@ -61,8 +73,6 @@ positional encoding (sin wird iwi in Daten eingebracht?):
 - 16:
 - 32:
 - 64:
-
-
 
 ## Weitere Ideen:
 - (later optional): try a binary model (so only binary weights, inputs, outputs, etc.)  
@@ -82,6 +92,10 @@ positional encoding (sin wird iwi in Daten eingebracht?):
   $L_{MSE}(w, y, \hat y)= \frac 1 {2p} \sum^p_{\mu = 1} L^{\mu}_{MSE}(w,y,\hat y) = \frac 1 {2p} \sum^p_{\mu = 1} \hat y(w, x^{(\mu)}-y^{\mu})^2$
 - mae: eher geeignet  
   $MAE=\frac {\sum^n_{i=1} |y_i - x_i|} n = \frac {\sum^n_{i=1}|e_i|} n$
+
+## NAS (neoronal architecture search)
+- automatisierte Model Suchen werden sich höchstwahrscheinlich nicht lohnen, da der Searchspace einfach zu groß ist (z.B. im Gegenteil zu Edge Devices)
+- kann ggf. trotzdem ausprobiert werden
 
 # Phase 3
 > Dokumentation von Herangehensweise, Aufgaben und Expirimenten

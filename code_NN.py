@@ -97,21 +97,22 @@ def setup_variable_lstm(architecture):
   return model  
 
  
-def setup_model_conv_1d(architecture):
+def setup_model_conv_1d(architecture, normalized = False):
   
   input = tf.keras.layers.Input(shape=(SEQ_LEN_PAST, NUM_INPUT_PARAMETERS), name='input')
   filters_list = architecture[0]
   kernel_sizes = architecture[1]
   
   if (len(filters_list) == len(kernel_sizes)): # if dropout -> list is not empty
-    print("hey")
     x = tf.keras.layers.Conv1D(filters=filters_list[0], kernel_size=kernel_sizes[0], activation='relu', padding='valid')(input)
     for i in range(1, len(filters_list)):
+      if normalized: x = tf.keras.layers.LayerNormalization()(x)
       x = tf.keras.layers.Conv1D(filters=filters_list[i], kernel_size=kernel_sizes[i], activation='relu', padding='valid')(x)
   else:
     x = tf.keras.layers.Conv1D(filters=filters_list[0], kernel_size=5, activation='relu', padding='valid')(input)
 
     for i in range(1, len(filters_list)):
+      if normalized: x = tf.keras.layers.LayerNormalization()(x)
       x = tf.keras.layers.Conv1D(filters=filters_list[i], kernel_size=5, activation='relu', padding='valid')(input)
      
   # x = tf.keras.layers.Dropout(dp)(x)  
@@ -273,7 +274,7 @@ def train(data_path, model_path, model, batch_size, lr, from_checkpoint=False):
     model.summary()
     
     history = model.fit(train_gen, steps_per_epoch=STEPS_PER_EPOCH, validation_steps=VALIDATION_STEPS, epochs=EPOCHS, 
-                      validation_data=val_gen, callbacks=[checkpoint_callback,model_history_callback], #,checkpoint_callback, val_callback, early_stopping_callback],
+                      validation_data=val_gen, callbacks=[checkpoint_callback,model_history_callback, lr_scheduler], #,checkpoint_callback, val_callback, early_stopping_callback],
                       shuffle=True, verbose='auto')
     val_func(data_path, model_path, model, EPOCHS)
 
@@ -337,6 +338,39 @@ def loop_setup_lstm():
             os.makedirs(model_path)
           model = setup_variable_lstm(architecture)
           train(data_path, model_path, model, batch_size, learning_rate)
+
+def transformer_encoder(inputs, dropout=0.25, head_size=256, num_heads=32, ff_dim=4):
+    # Normalization and Attention
+    x = tf.keras.layers.LayerNormalization(epsilon=1e-6)(inputs)
+    x = tf.keras.layers.MultiHeadAttention(key_dim=head_size, num_heads=num_heads, dropout=dropout)(x, x)
+    x = tf.keras.layers.Dropout(dropout)(x)
+
+    res = x + inputs
+
+    # Feed Forward Part
+    x = tf.keras.layers.LayerNormalization(epsilon=1e-6)(res)
+    x = tf.keras.layers.Conv1D(filters=ff_dim, kernel_size=1, activation="relu")(x)
+    x = tf.keras.layers.Dropout(dropout)(x)
+    x = tf.keras.layers.Conv1D(filters=inputs.shape[-1], kernel_size=1)(x)
+    return x + res
+
+
+def setup_model_transformer(dropout=0.4, num_transformer_blocks=8, mlp_units=[128]):
+  inputs = tf.keras.Input(shape=(SEQ_LEN_PAST, NUM_INPUT_PARAMETERS))
+  x = inputs
+
+  for _ in range(num_transformer_blocks):
+      x = transformer_encoder(x)
+
+  x = tf.keras.layers.GlobalAveragePooling1D(data_format="channels_first")(x) # TODO: ggf. wie bei conv1D wieder auf flatten umsteigen?
+  for dim in mlp_units:
+      x = tf.keras.layers.Dense(dim, activation="relu")(x)
+      x = tf.keras.layers.Dropout(dropout)(x)
+
+  outputs = tf.keras.layers.Dense(SEQ_LEN_FUTURE * NUM_OUTPUT_PARAMETERS)(x)
+  outputs = tf.keras.layers.Reshape((SEQ_LEN_FUTURE, NUM_OUTPUT_PARAMETERS))(outputs)
+
+  return tf.keras.Model(inputs, outputs)
 
 def normal_setup():
     # physical_devices = tf.config.list_physical_devices('GPU')
