@@ -101,7 +101,13 @@ positional encoding (sin wird iwi in Daten eingebracht?):
 > Dokumentation von Herangehensweise, Aufgaben und Expirimenten
 > Wissenschaftliches Vorgehen und Schreiben
 
-
+## Conv net:
+- bei konstanter epoch zahl
+- 3-4 verschiedne architekturen
+- batch size [50,100] ? so mehr so besser
+- 3 learning rates [0.01,0.005,0.001] ?? 
+- dann potten 
+ 
 
 
 
