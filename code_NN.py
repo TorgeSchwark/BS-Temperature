@@ -339,20 +339,51 @@ def loop_setup_lstm():
           model = setup_variable_lstm(architecture)
           train(data_path, model_path, model, batch_size, learning_rate)
 
+def loop_setup_transformer():
+  batch_sizes = [1] # [25,50,75,100]
+  learning_rates = [0.005, 0.001, 0.0005, 0.0001]#[0.05,0.01,0.005,0.001]
+  dropouts = [0] # [0, 0.4]
+  num_transformer_blocks = [8]
+  mlp_units = [[128], [128, 128]]
+
+  with tf.device(GPU_STRING):
+    data_path = DATA_PATH_PROCESSED 
+
+    for batch_size in batch_sizes:
+      for learning_rate in learning_rates:
+        for dropout in dropouts:
+          for num_transformer_block in num_transformer_blocks:
+            for mlp_unit in mlp_units:
+              model_path = 'models\\' + f"transformer_batch_size1\\{STEPS_PER_EPOCH}_{EPOCHS}_{SEQ_LEN_PAST}_{SEQ_LEN_FUTURE}_{dropout}_{batch_size}_{learning_rate}_{num_transformer_block}_{mlp_unit}\\"
+              if not os.path.exists(model_path):
+                os.makedirs(model_path)
+              model = setup_model_transformer(dropout, num_transformer_block, mlp_unit)
+              mode = 'train'
+              train(data_path, model_path, model, batch_size, learning_rate)
+
+    mlp_unit = [128,128,128]
+    model_path = 'models\\' + f"transformer_batch_size1\\{STEPS_PER_EPOCH}_{EPOCHS}_{SEQ_LEN_PAST}_{SEQ_LEN_FUTURE}_{0}_{4}_{learning_rates[3]}_{2}_{mlp_unit}\\"
+    if not os.path.exists(model_path):
+      os.makedirs(model_path)
+    model = setup_model_transformer(0, 2, mlp_unit)
+    mode = 'train'
+    train(data_path, model_path, model, 4, learning_rates[3])
+        
+
 def transformer_encoder(inputs, dropout=0.25, head_size=256, num_heads=32, ff_dim=4):
-    # Normalization and Attention
-    x = tf.keras.layers.LayerNormalization(epsilon=1e-6)(inputs)
-    x = tf.keras.layers.MultiHeadAttention(key_dim=head_size, num_heads=num_heads, dropout=dropout)(x, x)
-    x = tf.keras.layers.Dropout(dropout)(x)
+  # Normalization and Attention
+  x = tf.keras.layers.LayerNormalization(epsilon=1e-6)(inputs)
+  x = tf.keras.layers.MultiHeadAttention(key_dim=head_size, num_heads=num_heads, dropout=dropout)(x, x)
+  x = tf.keras.layers.Dropout(dropout)(x)
 
-    res = x + inputs
+  res = x + inputs
 
-    # Feed Forward Part
-    x = tf.keras.layers.LayerNormalization(epsilon=1e-6)(res)
-    x = tf.keras.layers.Conv1D(filters=ff_dim, kernel_size=1, activation="relu")(x)
-    x = tf.keras.layers.Dropout(dropout)(x)
-    x = tf.keras.layers.Conv1D(filters=inputs.shape[-1], kernel_size=1)(x)
-    return x + res
+  # Feed Forward Part
+  x = tf.keras.layers.LayerNormalization(epsilon=1e-6)(res)
+  x = tf.keras.layers.Conv1D(filters=ff_dim, kernel_size=1, activation="relu")(x)
+  x = tf.keras.layers.Dropout(dropout)(x)
+  x = tf.keras.layers.Conv1D(filters=inputs.shape[-1], kernel_size=1)(x)
+  return x + res
 
 
 def setup_model_transformer(dropout=0.4, num_transformer_blocks=8, mlp_units=[128]):
@@ -360,7 +391,7 @@ def setup_model_transformer(dropout=0.4, num_transformer_blocks=8, mlp_units=[12
   x = inputs
 
   for _ in range(num_transformer_blocks):
-      x = transformer_encoder(x)
+    x = transformer_encoder(x)
 
   x = tf.keras.layers.GlobalAveragePooling1D(data_format="channels_first")(x) # TODO: ggf. wie bei conv1D wieder auf flatten umsteigen?
   for dim in mlp_units:
@@ -370,7 +401,30 @@ def setup_model_transformer(dropout=0.4, num_transformer_blocks=8, mlp_units=[12
   outputs = tf.keras.layers.Dense(SEQ_LEN_FUTURE * NUM_OUTPUT_PARAMETERS)(x)
   outputs = tf.keras.layers.Reshape((SEQ_LEN_FUTURE, NUM_OUTPUT_PARAMETERS))(outputs)
 
-  return tf.keras.Model(inputs, outputs)
+  # return tf.keras.Model(inputs, outputs)
+  return tf.keras.models.Model(inputs, outputs)
+
+def normal_transformer_setup():
+    with tf.device(GPU_STRING):
+       
+      data_path = DATA_PATH_PROCESSED
+      batch_size = 1
+      learning_rate = 0.0001
+      dropout = 0 # 0.4
+      num_transformer_blocks = 12
+      mlp_units=[128, 128]
+
+      # model_path = 'models\\' + MODEL_NAME + '\\'
+      model_path = 'models\\' + f"transformer\\{STEPS_PER_EPOCH}_{EPOCHS}_{SEQ_LEN_PAST}_{SEQ_LEN_FUTURE}_{dropout}_{batch_size}_{learning_rate}_{num_transformer_blocks}_{mlp_units}\\"
+      
+      if not os.path.exists(model_path):
+          os.makedirs(model_path)
+
+      model = setup_model_transformer(dropout, num_transformer_blocks, mlp_units)
+
+      mode = 'train'
+
+      train(data_path, model_path, model, batch_size, learning_rate)
 
 def normal_setup():
     # physical_devices = tf.config.list_physical_devices('GPU')
@@ -391,13 +445,16 @@ def normal_setup():
 
         train(data_path, model_path, model, BATCH_SIZE, 0.0004)
 
+
 def run():
     physical_devices = tf.config.list_physical_devices('GPU')
     print("\nGPUs: {}\n".format(physical_devices))
     
     start = time.time()
+    loop_setup_transformer()
+    # normal_transformer_setup()
     # lopp_setup_mlp()
-    loop_setup_conv()
+    # loop_setup_conv()
     # loop_setup_lstm()
     # normal_setup()
     end = time.time()

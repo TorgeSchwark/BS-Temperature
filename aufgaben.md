@@ -54,6 +54,15 @@ Datenanalyse:
   - ! exploding gradients (kann durch gradient clipping verhindert werden)
 - LSTM
   - nicht lineares Verhalten beim mea
+- Transformer
+  - Errors (out of memory)
+    - bei einer Konfiguration mit (und den Standard SEQ_LEN etc.):
+      - ```batch_size = 2```
+      - ```learning_rate = 0.0001```
+      - ```dropout = 0```
+      - ```num_transformer_blocks = 8```
+      - ```mlp_units=[128]```
+      - mit ```batch_size = 1``` $\Rightarrow$ trotzdem ein MAE von ~2.35 bei 50 Epochen, 50 Steps
 - ...
 - Allgemein:
   Sehr häufig kam es bei den Modellen (abgesehen von MLP) immer wieder zu einer Grenze vom MAE bei 5, unsere Modelle kamen also nur in kurzen Ausnahme zu MAE Werten von gering unter 5 (dabei liegen mse bei ~30-40)
