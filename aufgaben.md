@@ -8,8 +8,10 @@
 ## Fragestellungen:
 
 **Implementierung Data-Loader Pipeline:**
+- aktuelles gegebenes Vorgehen
+  - ```data_generator``` $\rightarrow$ ```select_data``` $\rightarrow$ ```parse_file```, ```find_starting_idices```, ```autmengation-part```
 - siehe code TODO: (optimieren)
-- Erster Verbesserungsversuch durch Einmaliges Einlesen aller Daten hat keine erkennbare Verbesserung gebracht
+- Erster Verbesserungsversuch durch einmaliges Einlesen aller Daten hat keine erkennbare Verbesserung gebracht (TODO: oder?)
 - Dataloader so modifizieren, dass ALLE daten genommen werden (pro Epoche?)
 
 **Visualisierungen:**
@@ -22,9 +24,11 @@
 | ![Continents](.\\histograms\\Continents.png) | ![Gaps in Data](.\\histograms\\Data_gaps.png) |
 | ![Temperatur](.\\histograms\\Temperatur.png) | ![Uncertainty over years](.\\histograms\\Uncertainty_per_year.png) |
 | ![Uncertainty](.\\histograms\\Uncertainty.png) | ![Years](.\\histograms\\Years.png) |
-... TODO:
 
-- Transformers: https://bbycroft.net/llm
+- Map Plot of data samples:  
+![map plot](.\\histograms\\map_plot_data_points.png)
+
+<!-- Transformers: https://bbycroft.net/llm -->
 
 Datenanalyse:
 - Städte haben teilweise exakt die gleichen Werte (in mehreren locations??)
@@ -68,6 +72,12 @@ Datenanalyse:
   Sehr häufig kam es bei den Modellen (abgesehen von MLP) immer wieder zu einer Grenze vom MAE bei 5, unsere Modelle kamen also nur in kurzen Ausnahme zu MAE Werten von gering unter 5 (dabei liegen mse bei ~30-40)
   TODO: bei kleinerer learning rate auch steps erhöhen (um gleiche Anzahl an samples zu haben)
   TODO: lineare activation function ausprobieren
+- Bewertung Architekturen:
+  - Qualitativ:
+    - MLPs (TODO: oder LSTM?) performen nach detailierter Suche von allen am besten
+  - Quantitativ:
+    - Transformer (TODO: oder MLP?) performen im Schnitt am besten ohne viel am Code vornehmen zu müssen
+
 
 positional encoding (sin wird iwi in Daten eingebracht?):
 - interessant für:
