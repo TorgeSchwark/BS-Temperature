@@ -16,3 +16,6 @@
 # model stuff
 *.h5
 *.png
+
+# Libre office
+*.odp#
