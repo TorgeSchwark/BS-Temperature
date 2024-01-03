@@ -19,3 +19,30 @@
 
 # Libre office
 *.odp#
+
+#--- Latex Stuff ---
+
+# Ignore LaTeX temporary files
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+
+# Ignore generated PDFs
+# *.pdf
+
+# Ignore OS or editor files
+.DS_Store
+._*
+*~
+*.swp
+*.swo
+
+# Ignore other generated files
+*.synctex.gz
+*.fdb_latexmk
+*.fls
