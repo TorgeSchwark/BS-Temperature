@@ -10,6 +10,7 @@ import re
 # model_path =  'models\\' + 'models_lstm_rest\\' + str(dropout) + str(batch_size) + str(learning_rate) + str(architecture) + str(STEPS_PER_EPOCH) +str(EPOCHS) +str(SEQ_LEN_PAST)+ str(SEQ_LEN_FUTURE)+ '\\'
 # model-{epoch:03d}-mae{val_mae:.4f}.h5'
 
+# 
 def extract_parameters_from_path(path):
     model_name: str = path.split("\\")[1]
     # print("\n!!!!!!!!!!! model:", model_name)
@@ -77,7 +78,7 @@ def extract_parameters_from_path(path):
         pass
 
     return None
-
+ 
 def extract_parameters_from_model_name(model_name) -> dict:
     # Extract parameters from model name using regular expressions
     match = re.match(r'model-(\d+)-mae(\d+\.\d+)', model_name)
@@ -92,6 +93,7 @@ def extract_parameters_from_model_name(model_name) -> dict:
     else:
         return None
 
+# iterate through each model config folder and extract the parameters
 def iterate_and_extract_parameters(root_folder):
     parameter_list = []
 
@@ -111,7 +113,7 @@ def iterate_and_extract_parameters(root_folder):
                             path_parameters = extract_parameters_from_path(file_path)
                             
                             if path_parameters and model_parameters:
-                                parameters = {**path_parameters, **model_parameters}
+                                parameters = {**path_parameters, **model_parameters} # merge dictionaries
                                 parameter_list.append(parameters)
                 else: # maybe older model storing methods
                     for file_name in os.listdir(type_path):
