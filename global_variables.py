@@ -18,6 +18,12 @@ STEPS_PER_EPOCH = 50 # 30
 VALIDATION_STEPS = 32
 # in months
 SEQ_LEN_PAST = 840 # 70 years       
+# TODO: "Wie verhält sich die Performance einer beliebigen Architektur, wenn die Länge der Input-Sequenzen von 8, 16, 32, 64 verändert wird?"
+# SEQ_LEN_PAST = 8
+# SEQ_LEN_PAST = 16
+# SEQ_LEN_PAST = 32
+# SEQ_LEN_PAST = 64
+
 SEQ_LEN_FUTURE = 300 # 25 years prediction
 NUM_INPUT_PARAMETERS = 1
 NUM_OUTPUT_PARAMETERS = 1
