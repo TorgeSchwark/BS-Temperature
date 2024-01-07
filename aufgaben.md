@@ -117,7 +117,9 @@ positional encoding (sin wird iwi in Daten eingebracht?):
 - 3 learning rates [0.01,0.005,0.001] ?? 
 - dann potten 
  
-
+TODO:
+- Visualisierung von predictions (Temperatur der Monate)
+- Zukunftspredictions
 
 
 
