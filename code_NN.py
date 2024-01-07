@@ -355,11 +355,14 @@ def loop_setup_transformer():
           for num_transformer_block in num_transformer_blocks:
             for mlp_unit in mlp_units:
               model_path = 'models\\' + f"transformer_batch_size1\\{STEPS_PER_EPOCH}_{EPOCHS}_{SEQ_LEN_PAST}_{SEQ_LEN_FUTURE}_{dropout}_{batch_size}_{learning_rate}_{num_transformer_block}_{mlp_unit}\\"
-              if not os.path.exists(model_path):
-                os.makedirs(model_path)
-              model = setup_model_transformer(dropout, num_transformer_block, mlp_unit)
-              mode = 'train'
-              train(data_path, model_path, model, batch_size, learning_rate)
+              try:
+                if not os.path.exists(model_path):
+                  os.makedirs(model_path)
+                model = setup_model_transformer(dropout, num_transformer_block, mlp_unit)
+                mode = 'train'
+                train(data_path, model_path, model, batch_size, learning_rate)
+              except:
+                print("ERROR: ", model_path)
 
     mlp_unit = [128,128,128]
     model_path = 'models\\' + f"transformer_batch_size1\\{STEPS_PER_EPOCH}_{EPOCHS}_{SEQ_LEN_PAST}_{SEQ_LEN_FUTURE}_{0}_{4}_{learning_rates[3]}_{2}_{mlp_unit}\\"
