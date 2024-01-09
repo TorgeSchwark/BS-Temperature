@@ -46,3 +46,5 @@
 *.synctex.gz
 *.fdb_latexmk
 *.fls
+
+!/best_model.h5
