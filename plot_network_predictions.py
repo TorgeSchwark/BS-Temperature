@@ -33,45 +33,65 @@ if os.path.isfile(model_file_path):
 # Use the last 840 samples to predict the next 300 outputs
 train_gen = data_generator(batch_size, True, True) 
 x_data, y_data = next(train_gen) # get the next batch
-# print(x_data.shape)
-# print(y_data.shape)
+print("x data", x_data.shape)
+print("y data", y_data.shape)
+
+num_given_years = 25
 
 # Reshape or squeeze x_data and y_data into 1D arrays
-x_data_1d = np.squeeze(x_data)[-24:]
+x_data_1d = np.squeeze(x_data)[-(num_given_years * 12):] # only shot last 25 years of given data
+print("     -> len:", len(x_data_1d))
 y_data_1d = np.squeeze(y_data)
+print("     -> len:", len(y_data_1d))
 
-# y_pred = model.predict(x_data.reshape(1, -1))
-# print(y_pred.shape)
+y_pred = model.predict(x_data.reshape(1, -1)) # reshape x_data into a 1 x 840 array
+print("prediction:", y_pred.shape)
+y_pred_1d = np.squeeze(y_pred)
 
-# Plot the last 12 samples
-plt.plot(np.arange(24), x_data_1d, color='blue', label='Input samples')
+# # Plot the last 12 samples
+# plt.plot(np.arange(24), x_data_1d, color='blue', label='Input samples')
 
-# Plot the predicted outputs
-plt.plot(np.arange(24, 24 + len(y_data_1d)), y_data_1d, color='red', label='Predicted outputs')
+# # Plot the predicted outputs
+# plt.plot(np.arange(24, 24 + len(y_data_1d)), y_data_1d, color='red', label='Predicted outputs')
 
-plt.legend()
-plt.show()
+# plt.legend()
+# plt.show()
 
-print(x_data_1d)
-print(y_data_1d)
+# print(x_data_1d)
+# print(y_data_1d)
 
-# Average the first 12 entries of x_data_1d
-# avg_first_12 = np.mean(x_data_1d[:12])
-
-# Average the second 12 entries of x_data_1d
-# avg_second_12 = np.mean(x_data_1d[12:])
-
-# print(avg_first_12)
-# print(avg_second_12)
+# Average each 12 entries of x_data_1d
+x_averages = np.array([np.mean(x_data_1d[i:i+12]) for i in range(0, len(x_data_1d), 12)])
+y_averages = np.array([np.mean(y_data_1d[i:i+12]) for i in range(0, len(y_data_1d), 12)])
+y_pred_averages = np.array([np.mean(y_pred_1d[i:i+12]) for i in range(0, len(y_pred_1d), 12)])
 
 # Compute moving averages over each bucket of 12 values
 y_data_1d_moving_avg = np.convolve(y_data_1d, np.ones(12), 'valid') / 12
 
 # Plot the last 12 samples
-plt.plot(np.arange(12), x_data_1d, color='blue', label='Input samples')
+plt.plot(np.arange(0, num_given_years), x_averages, color='blue', label='Input samples')
 
 # Plot the moving averages
-plt.plot(np.arange(12, 12 + len(y_data_1d_moving_avg)), y_data_1d_moving_avg, color='red', label='Predicted outputs')
+# plt.plot(np.arange((num_given_years * 12) // 12, ((num_given_years * 12) // 12) + len(y_averages)), y_averages, color='green', label='actual outputs')
+# plt.plot(np.arange((num_given_years * 12) // 12, ((num_given_years * 12) // 12) + len(y_pred_averages)), y_pred_averages, color='red', label='Predicted outputs')
+plt.plot(np.arange(num_given_years, num_given_years + (len(y_data_1d) // 12)), y_data_1d, color='green', label='actual outputs')
+# plt.plot(np.arange((num_given_years * 12) // 12, ((num_given_years * 12) // 12) + len(y_pred_1d)), y_pred_1d, color='red', label='Predicted outputs')
+
+print("scaling:", np.arange(0, (num_given_years) + len(y_data_1d), 12))
+print(" -> len:", len(np.arange(0, (num_given_years) + len(y_data_1d), 12)))
+print("labeling:", np.arange(0, ((num_given_years) + len(y_data_1d)) / 12).astype(int))
+print(" -> len:", len(np.arange(0, ((num_given_years) + len(y_data_1d)) / 12).astype(int)))
+
+plt.xticks(np.arange(num_given_years+ (len(x_data_1d) // 12) ), np.arange(num_given_years+ (len(x_data_1d) // 12)).astype(int))
+# plt.xticks(np.arange(0, (num_given_years) + len(y_data_1d), 12), np.arange(0, ((num_given_years) + len(y_data_1d)) / 12).astype(int))
+
+plt.title('Predicted Temperatures for the next 25 years')
+plt.xlabel('Years')
+plt.ylabel('Temperatures (°C)')
 
 plt.legend()
+
+# Save the plot as an image file
+plt.savefig('./resources/prediction_plot.png')
+
 plt.show()
