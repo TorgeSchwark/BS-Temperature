@@ -128,9 +128,50 @@ positional encoding (sin wird iwi in Daten eingebracht?):
 - dann potten 
  
 TODO:
-- Visualisierung von predictions (Temperatur der Monate)
+- Transformer:
+  - Visualisierung von predictions (Temperatur der Monate)
+  - Beste aus
+    - ersten run:
+      - 100_50_840_300_0_1_0.0005_8_[128,128] $\Rightarrow mae=1.1406$
+    - batch_size = 1
+      - 100_50_840_300_0_4_0.0001_2_[128, 128, 128] $\Rightarrow mae=1.0893$
 - Zukunftspredictions
 
 
 
 Paper: https://www.overleaf.com/project/656739453dc04ca9c1e95e41
+
+
+## Präsentation:
+
+**Joschua:**
+- Begrüßung
+- Ablauf
+- Datensatz
+  - Plots -> Dataoffset (bei uns weniger relevant)
+- Grid-Search ConvNet
+  - sehr stabil in Loss-Curve (Folie 16)
+  - sehr gute Performance
+  - Optimum bei learning rate gefunden
+  - !!! Loss-Curves haben unterschiedliche Epoch skalierungen
+- Grid-Search LSTM
+  - einige finden diese Grenze nicht, wo Performance signifikant besser wird (also bleiben)
+- Ergebnisse
+  - Transformer
+    - warum nicht geplottet -> weil sehr lange gebraucht haben, wir uns erst später rangetraut haben
+    - ...
+- Klimavorhersage:
+  - Plots auswerten
+    - Wie wurden die erstellt?
+    - Beste NN wurde dafür jeweils genutzt
+**Torge:**
+- Datenaufbereitung
+- Data-Pipeline
+- Was ist eine gute Vorhersage?
+- Trainieren der Neuronalen Netze
+- Grid-Search MLP
+- Auswertung
+- Finetuning Ergebnisse (ohne Transformer)
+- Klimavorhersage:
+    - Aussagekraft
+- Abschluss
