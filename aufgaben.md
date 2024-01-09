@@ -164,6 +164,8 @@ Paper: https://www.overleaf.com/project/656739453dc04ca9c1e95e41
   - Plots auswerten
     - Wie wurden die erstellt?
     - Beste NN wurde dafür jeweils genutzt
+    - Uncertainty: Vermutlich im Schnitt größer als der MAE, da es bei neueren Jahren mehr Daten gab (sicherere Prediction) und vermutlich wegen Gauß Verteilung
+    - 
 **Torge:**
 - Datenaufbereitung
 - Data-Pipeline
@@ -173,5 +175,9 @@ Paper: https://www.overleaf.com/project/656739453dc04ca9c1e95e41
 - Auswertung
 - Finetuning Ergebnisse (ohne Transformer)
 - Klimavorhersage:
+    - Plots auswerten
+      - nur AVG-Temperatur 
+        - Histogramme:
+          - Data Gabs 1830 -> auch sehr stark sichtbar in AVG-Temperatur plot
     - Aussagekraft
 - Abschluss
