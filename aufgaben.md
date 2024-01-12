@@ -147,23 +147,34 @@ Paper: https://www.overleaf.com/project/656739453dc04ca9c1e95e41
 **Joschua:**
 - Begrüßung
 - Ablauf
-- Datensatz
+- Datensatz (Offizieller Name)
   - Plots -> Dataoffset (bei uns weniger relevant)
-- Grid-Search ConvNet
+  - Warum Duplikate?
+  - Lücken
+  - ungenauigkeit
+  - Uncertainty: 
+    - Vermutlich im Schnitt größer als der MAE, da es bei neueren Jahren mehr Daten gab (sicherere Prediction) und vermutlich wegen Gauß Verteilung
+    - zusammenhang mit Datagabs
+- Grid-Search ConvNet (Legende Plots: [Anzahl Kernal, Kernal size])
   - sehr stabil in Loss-Curve (Folie 16)
   - sehr gute Performance
+  - bei größeren Batchsizes schlechter?
+    - weniger Updates + kleinere Learning rate -> schlechteres Training
   - Optimum bei learning rate gefunden
   - !!! Loss-Curves haben unterschiedliche Epoch skalierungen
+  - 
 - Grid-Search LSTM
   - einige finden diese Grenze nicht, wo Performance signifikant besser wird (also bleiben)
 - Ergebnisse
+  - Skalen anmerken (teilweise deutlich schlechter)
   - Transformer
-    - warum nicht geplottet -> weil sehr lange gebraucht haben, wir uns erst später rangetraut haben
+    - warum nicht geplottet -> weil die sehr lange gebraucht haben zum trainieren, wir uns erst später rangetraut haben, wurde erst später im Seminar Thematisiert
+    - sind vermutlich auch zu mächtig für so eine "einfache" prediction
     - ...
 - Klimavorhersage:
   - Plots auswerten
-    - Wie wurden die erstellt?
-    - Beste NN wurde dafür jeweils genutzt
+    - TODO: Wie wurden die erstellt?
+    - Beste NN wurde dafür jeweils genutzt (TODO: WOFÜR, es gibt keine weiteren Plots??)
     - Uncertainty: Vermutlich im Schnitt größer als der MAE, da es bei neueren Jahren mehr Daten gab (sicherere Prediction) und vermutlich wegen Gauß Verteilung
     - 
 **Torge:**
