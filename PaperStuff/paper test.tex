@@ -146,21 +146,39 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-  Diese Studie untersucht verschiedene neuronale Netzwerkarchitekturen 
-  im Kontext der Analyse von Klimawandel-Daten, insbesondere der Erdoberflächentemperatur. 
-  Die Architekturen umfassen MLPs, 1D Convolutional Neural Networks, LSTMs und Transformer. 
-  Die Analyse konzentriert sich auf den Climate Change: Earth Surface Temperature Data-Datensatz. 
-  Eine Data-Loader-Pipeline wurde implementiert, Visualisierungen erstellt und
-   die Leistung der Architekturen qualitativ und quantitativ bewertet. 
-  MLPs zeigten die besten Ergebnisse nach detaillierter Suche. 
-  Die Studie beleuchtet auch Normalisierungseffekte 
-  und die Auswirkungen variabler Input-Sequenzen auf die Performance.
+Dieses Paper untersucht verschiedene neuronale Netzwerkarchitekturen 
+im Kontext der Analyse von Klimawandel-Daten, insbesondere der Erdoberflächentemperatur. 
+Die Architekturen umfassen MLPs, 1D Convolutional Neural Networks, LSTMs und Transformer. 
+Die Analyse konzentriert sich auf den Climate Change: Earth Surface Temperature Data-Datensatz. 
+Eine Data-Loader-Pipeline wurde implementiert, Visualisierungen erstellt und
+  die Leistung der Architekturen qualitativ und quantitativ bewertet. 
+MLPs zeigten die besten Ergebnisse nach detaillierter Suche. 
+Die Studie beleuchtet auch Normalisierungseffekte 
+und die Auswirkungen variabler Input-Sequenzen auf die Performance.
+\end{abstract}
+
+%% TODO: Text in grau markiert unsichere/zu überarbeitende Stellen
+\begin{abstract}
+In Anbetracht der globalen Bedeutung und Auswirkungen des Klimawandels sind präzise Vorhersagen der zukünftigen Klimaentwicklung von entscheidender Bedeutung. 
+Die vorliegende Studie konzentriert sich auf die Anwendung von neuronalen Netzwerken zur Klimavorhersage, 
+wobei der umfangreiche Datensatz "Climate Change: Earth Surface Temperature Data" als Grundlage dient. 
+Durch die systematische Verwendung verschiedener Architekturen, darunter Multilayer-Perzeptronen (MLPs), Long Short-Term Memory Networks (LSTMs), 
+Convolutional Neural Networks (ConvNets) und Transformer-Modelle, wird das Ziel verfolgt, 
+präzise und langfristige Vorhersagen zur \textcolor{gray}{globalen Durchschnittstemperatur für die kommenden 100 Jahre zu ermöglichen.}
+\textcolor{gray}{Mit Blick auf die Dringlichkeit des Themas Klimawandel soll dieses Paper einen differenzierten Einblick in die Anwendung neuronaler Netze für die Klimavorhersage bieten. 
+Der Fokus liegt dabei nicht nur auf der Vorhersage zukünftiger Temperaturentwicklungen, sondern auch auf der Identifizierung langfristiger globaler Trends.} 
+Die Bedeutung und weitreichenden Folgen des Klimawandels für Mensch und Umwelt unterstreichen die Notwendigkeit, präzise und zuverlässige Vorhersagemodelle zu entwickeln, 
+um fundierte Entscheidungen und Maßnahmen treffen zu können.
+Neben der Motivation zur Untersuchung des Klimawandels aus datengetriebener Sicht werden in diesem Paper auch Einblicke in die angewandten Methoden, 
+den verwendeten Datensatz, den Trainingsprozess, die erzielten Ergebnisse und abschließende Schlussfolgerungen präsentiert. Das übergeordnete Ziel besteht darin, 
+einen bedeutenden Beitrag zur Vorhersage zukünftiger Klimaentwicklungen zu leisten und damit einen wertvollen Beitrag zum besseren Verständnis und zur Bewältigung des Klimawandels zu leisten.
+\textcolor{gray}{Diese Studie erstreckt sich über insgesamt 6 getippte Seiten, wobei dieser einleitende Abschnitt den notwendigen Rahmen für das folgende Forschungspapier bildet.}
 \end{abstract}
 
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{neuronal networks, NN, MLP, 1D CONV, LSTM, Transformer, Climate change, Temperature}
+\keywords{neuronale Netzwerke, NN, MLP, 1D CONV, LSTM, Transformer, Klimawandel, Temperatur}
 
 %% A "teaser" image appears between the author and affiliation
 %% information and the body of the document, and typically spans the
@@ -182,48 +200,45 @@
 %% information and builds the first part of the formatted document.
 \maketitle
 
+% \section{Einleitung}
 \section{Introduction}
-TODO:
 
 \section{Einführung und Datenverständnis}
-Die Grundlage dieser Studie bildet der "Climate Change: Earth Surface Temperature" Datensatz. Ziel ist es, die Besonderheiten der Daten zu verstehen und eine strukturierte Organisierung für den Einsatz in neuronalen Netzwerken zu gewährleisten. Die Temperaturen werden dabei auf Float-Werte mit zwei Nachkommastellen gerundet und nach geografischen Kategorien wie Land, Staat, Stadt und Hauptstadt in separate Textdateien sortiert. Eine mögliche Optimierung besteht darin, die Daten beim Einlesen in ein Array zu speichern, um den Zugriff während des Trainings zu beschleunigen.
-\section{Trainieren mit verschiedenen Netzwerkarchitekturen}
+Die Grundlage dieser Studie bildet der "Climate Change: Earth Surface Temperature" Datensatz. 
+Ziel ist es, die Besonderheiten der Daten zu verstehen und eine strukturierte Organisierung für den Einsatz in neuronalen Netzwerken zu gewährleisten. 
+Die Temperaturen werden dabei auf Float-Werte mit zwei Nachkommastellen gerundet und nach geografischen Kategorien wie Land, Staat, Stadt und \textcolor{gray}{Hauptstadt} in separate Textdateien sortiert. 
+Eine zunächst vermutete Optimierung bestand darin, die Daten beim Einlesen in ein Array zu speichern, um den Zugriff während des Trainings zu beschleunigen.
+Nachdem dieser Ansatz aber keine messbaren Veränderungen mit sich brachte, wurden weitere Optimierungen bezüglich einer Parallelisierung auf der CPU und GPU untersucht, 
+welche eine deutliche Beschleunigung des Trainingsprozesses von bis zu \textcolor{gray}{text}{50\%} ermöglichten. 
+Hierzu wird die Klasse Pool des Paketes multiprocessing verwendet, welche eine einfache Parallelisierung von Python-Code ermöglicht, indem eine Funktion mit mehreren Inputs auf mehrere Prozesse verteilt wird.
 
-\begin{table}
-  \caption{Network Architekturen}
-  \label{tab:freq}
-  \begin{tabular}{ccl}
-    \toprule
-    Netzwerk&Anzahl Paramete&Anzahl Layern\\
-    \midrule
-    MLP & TODO: & meisten Parameter aufgrund von dense layern\\
-    CONV 1D & TODO: & gringere Anzahl duch feature extraction convolution layer vor den dense layern\\
-    LSTM & TODO: & TODO:\\
-    Transformer & TODO: & (zweit) meisten Parameter aufgrund von mehreren inneren MLPs\\
-  \bottomrule
-\end{tabular}
-\end{table}
 
-Die Netzwerkarchitekturen, nämlich MLP, 1D Conv Net, LSTM und Transformer, wurden auf den vorbereiteten Datensätzen trainiert. Dabei wurde darauf geachtet, wie sich jede Architektur an die spezifischen Charakteristiken des Datensatzes anpasst und wie gut sie die Temperaturvorhersagen durchführen kann. Eine sorgfältige Auswahl der Hyperparameter und Aktivierungsfunktionen wurde durchgeführt, um die Leistung der Modelle zu optimieren.
+\section{Data-Loader Pipeline}
+
+Die Data-Loader Pipeline wurde implementiert, um Mini-Batches von Sequenzen von Datenpunkten gemäß den Anforderungen der Architekturen bereitzustellen. Dieser Prozess wurde optimiert, um die Effizienz des Trainings zu steigern. 
+Zur Analyse wurden Visualisierungen wie Histogramme für geografische Merkmale, Datenverteilungen und Kartenplots verwendet. 
+T-SNE-Plots ermöglichen eine multidimensionale Darstellung der Datenpunkte für eine bessere Analyse.
+
+
 \section{Visualisierungen für Datenanalyse und Predictions}
 
 \begin{figure}[htp]
   \centering
   \begin{subfigure}{.45\textwidth}
       \centering
-      \includegraphics[width=.8\linewidth]{./histograms/Continents}
-      \caption{Histogram 1}
+      \includegraphics[width=.8\linewidth]{./histograms/map_plot_data_points}
+      \caption{Histogram}
       \label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.45\textwidth}
       \centering
-      \includegraphics[width=.8\linewidth]{./histograms/Continents}
+      \includegraphics[width=.8\linewidth]{./histograms/Uncertainty}
       \caption{Histogram 2}
       \label{fig:sub2}
   \end{subfigure}\\
   \begin{subfigure}{.45\textwidth}
       \centering
-      \includegraphics[width=.8\linewidth]{./histograms/Continents}
+      \includegraphics[width=.8\linewidth]{./histograms/Temperatur}
       \caption{Histogram 3}
       \label{fig:sub3}
   \end{subfigure}%
@@ -238,9 +253,33 @@ Die Netzwerkarchitekturen, nämlich MLP, 1D Conv Net, LSTM und Transformer, wurd
   \Description{Histograms caputuring the distribution of the data.}
 \end{figure}
 
-Die Implementierung verschiedener Visualisierungen spielt eine entscheidende Rolle bei der Analyse von Daten und Vorhersagen. Hierbei wurden Histogramme für den Längen- und Breitengrad, die Verteilung von Datenlücken, Temperaturverteilungen und Unsicherheiten erstellt. Zusätzlich wurde ein Kartenplot der Datenpunkte generiert. Diese Visualisierungen bieten Einblicke in die geografische Verteilung der Daten und ermöglichen eine detaillierte Analyse von Städten mit identischen Werten.
-\section{Data-Loader Pipeline und Visualisierungen}
-Die Data-Loader Pipeline wurde implementiert, um Mini-Batches von Sequenzen von Datenpunkten gemäß den Anforderungen der Architekturen bereitzustellen. Dieser Prozess wurde optimiert, um die Effizienz des Trainings zu steigern. Zur Analyse wurden Visualisierungen wie Histogramme für geografische Merkmale, Datenverteilungen und Kartenplots verwendet. T-SNE-Plots ermöglichen eine multidimensionale Darstellung der Datenpunkte für eine bessere Analyse.
+Die Implementierung verschiedener Visualisierungen spielt eine entscheidende Rolle bei der Analyse von Daten und Vorhersagen. 
+Hierbei wurden Histogramme für den Längen- und Breitengrad, die Verteilung von Datenlücken, Temperaturverteilungen und Unsicherheiten erstellt. 
+Zusätzlich wurde ein Kartenplot der Datenpunkte generiert. 
+Diese Visualisierungen bieten Einblicke in die geografische Verteilung der Daten und ermöglichen eine detaillierte Analyse von Städten mit identischen Werten.
+
+
+\section{Trainieren mit verschiedenen Netzwerkarchitekturen}
+
+\begin{table}
+  \caption{Network Architekturen}
+  \label{tab:freq}
+  \begin{tabular}{ccl}
+    \toprule
+    Netzwerk&Anzahl Parameter&Anzahl Layern\\
+    \midrule
+    MLP & TODO: & meisten Parameter aufgrund von dense layern\\
+    CONV 1D & TODO: & geringere Anzahl durch feature extraction convolution layer vor den dense layern\\
+    LSTM & TODO: & TODO:\\
+    Transformer & TODO: & (zweit) meisten Parameter aufgrund von mehreren inneren MLPs\\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+Die Netzwerkarchitekturen MLP, 1D Conv Net, LSTM und Transformer wurden auf den vorbereiteten Datensätzen trainiert. 
+Dabei wurde darauf geachtet, wie sich jede Architektur an die spezifischen Charakteristiken des Datensatzes anpasst und wie gut sie die Temperaturvorhersagen durchführen kann. 
+Eine sorgfältige Auswahl der Hyperparameter und Aktivierungsfunktionen wurde durchgeführt, um die Leistung der Modelle zu optimieren.
+
 \section{Architekturvergleich und Normalisierungen}
 Die Leistung der Architekturen wurde sowohl qualitativ als auch quantitativ bewertet. Aktivierungsfunktionen wie Selu und Relu wurden für MLP analysiert. Bei 1D Conv Net wurde die Auswirkung von Global Average Pooling und Flatten vor den Dense Layern untersucht. LSTM und Transformer wurden auf ihre spezifischen Eigenschaften und Fehlerquellen analysiert. Der Vergleich erfolgte durch Bewertung der qualitativen Anpassung und quantitativen Metriken wie dem Mean Absolute Error (MAE).
 \section{Normalisierung und Variation der Input-Sequenzen}
@@ -248,6 +287,7 @@ Die Daten wurden vor dem Training normalisiert, und die Auswirkungen auf die Vor
 
 
 Insgesamt bietet diese Studie eine umfassende Analyse der Climate Change-Daten unter Verwendung verschiedener Netzwerkarchitekturen. Die gewonnenen Erkenntnisse ermöglichen nicht nur eine bessere Anpassung der Modelle an die Daten, sondern auch Optimierungsmöglichkeiten für zukünftige Forschungen im Bereich des Klimawandels.
+
 
 \section{Citations and Bibliographies}
 
