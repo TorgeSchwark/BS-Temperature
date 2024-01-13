@@ -277,12 +277,20 @@ Diese Visualisierungen bieten Einblicke in die geografische Verteilung der Daten
 \end{table}
 
 Die Netzwerkarchitekturen MLP, 1D Conv Net, LSTM und Transformer wurden auf den vorbereiteten Datensätzen trainiert. 
-Dabei wurde darauf geachtet, wie sich jede Architektur an die spezifischen Charakteristiken des Datensatzes anpasst und wie gut sie die Temperaturvorhersagen durchführen kann. 
-Eine sorgfältige Auswahl der Hyperparameter und Aktivierungsfunktionen wurde durchgeführt, um die Leistung der Modelle zu optimieren.
+Im ersten Schritt wurde eine Grid Search durchgeführt, um die optimalen Modelle und deren Hyperparameter zu bestimmen. 
+Nach dieser automatisierten Suchstrategie wurde ein händisches Fine-Tuning durchgeführt, um die Leistung der Modelle weiter zu verbessern. 
+Während des gesamten Prozesses wurde darauf geachtet, wie sich jede Architektur an die spezifischen Charakteristiken des Datensatzes anpasst und 
+wie gut sie die Temperaturvorhersagen durchführen kann. 
+Die sorgfältige Auswahl und Anpassung der Hyperparameter und Aktivierungsfunktionen spielte eine entscheidende Rolle bei der Optimierung der Modellleistung.
+
 
 \section{Architekturvergleich und Normalisierungen}
+
 Die Leistung der Architekturen wurde sowohl qualitativ als auch quantitativ bewertet. Aktivierungsfunktionen wie Selu und Relu wurden für MLP analysiert. Bei 1D Conv Net wurde die Auswirkung von Global Average Pooling und Flatten vor den Dense Layern untersucht. LSTM und Transformer wurden auf ihre spezifischen Eigenschaften und Fehlerquellen analysiert. Der Vergleich erfolgte durch Bewertung der qualitativen Anpassung und quantitativen Metriken wie dem Mean Absolute Error (MAE).
+
+
 \section{Normalisierung und Variation der Input-Sequenzen}
+
 Die Daten wurden vor dem Training normalisiert, und die Auswirkungen auf die Vorhersagegenauigkeit wurden verglichen. Zusätzlich wurde die Performance der Modelle für variable Input-Sequenzen von 8, 16, 32 und 64 untersucht. Dies ermöglichte eine tiefgreifende Analyse, wie die Länge der Input-Sequenzen die Modellleistung beeinflusst.
 
 
