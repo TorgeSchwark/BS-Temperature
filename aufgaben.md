@@ -10,9 +10,9 @@
 **Implementierung Data-Loader Pipeline:**
 - aktuelles gegebenes Vorgehen
   - ```data_generator``` $\rightarrow$ ```select_data``` $\rightarrow$ ```parse_file```, ```find_starting_idices```, ```autmengation-part```
-- siehe code TODO: (optimieren)
-- Erster Verbesserungsversuch durch einmaliges Einlesen aller Daten hat keine erkennbare Verbesserung gebracht (TODO: oder?)
-- Dataloader so modifizieren, dass ALLE daten genommen werden (pro Epoche?)
+- Erster Verbesserungsversuch durch einmaliges Einlesen aller Daten hat keine erkennbare Verbesserung gebracht
+- finaler Verbesserungsversuch mittels des Paketes multiprocessing bringt deutliche Perfomancevorteile
+- Dataloader so modifizieren, dass ALLE Daten genommen werden
 
 **Visualisierungen:**
 
@@ -31,7 +31,7 @@
 <!-- Transformers: https://bbycroft.net/llm -->
 
 Datenanalyse:
-- Städte haben teilweise exakt die gleichen Werte (in mehreren locations??)
+- Städte haben teilweise exakt die gleichen Werte über den gesamten Zeitraum(in mehreren locations)
 - siehe ```analyse_data.py``` function (```analyse_same_val_cities()```)
 
 **Analyse von Architekturen (qualitativ, quantitativ):**
@@ -96,7 +96,7 @@ positional encoding (sin wird iwi in Daten eingebracht?):
 ## Weitere Ideen:
 - (later optional): try a binary model (so only binary weights, inputs, outputs, etc.)  
     -> e.g. for tf dataset can be casted (normalized) to specific values (float32, int, bool?)
-- instegesammt nutzbare Datenzeiträume 4.071.935 !!
+- insgesamt nutzbare Datenzeiträume 4.071.935
 
 ## Some Data Collection
 - Eigene predictions machen um eine Menschliche Vorhersage mit der eines NN zu vergleichen
@@ -127,7 +127,6 @@ positional encoding (sin wird iwi in Daten eingebracht?):
 - 3 learning rates [0.01,0.005,0.001] ?? 
 - dann potten 
  
-TODO:
 - Transformer:
   - Visualisierung von predictions (Temperatur der Monate)
   - Beste aus

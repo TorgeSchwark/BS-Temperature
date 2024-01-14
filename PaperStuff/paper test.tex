@@ -48,6 +48,7 @@
 \documentclass[manuscript,screen,review]{acmart}
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{todonotes}
 
 %% Fonts used in the template cannot be substituted; margin 
 %% adjustments are not allowed.
@@ -146,38 +147,38 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
+\todo[size=\small]{Abstract noch kürzer?}
 Dieses Paper untersucht verschiedene neuronale Netzwerkarchitekturen 
 im Kontext der Analyse von Klimawandel-Daten, insbesondere der Erdoberflächentemperatur. 
 Die Architekturen umfassen MLPs, 1D Convolutional Neural Networks, LSTMs und Transformer. 
-Die Analyse konzentriert sich auf den Climate Change: Earth Surface Temperature Data-Datensatz. 
-Eine Data-Loader-Pipeline wurde implementiert, Visualisierungen erstellt und
-  die Leistung der Architekturen qualitativ und quantitativ bewertet. 
-MLPs zeigten die besten Ergebnisse nach detaillierter Suche. 
-Die Studie beleuchtet auch Normalisierungseffekte 
-und die Auswirkungen variabler Input-Sequenzen auf die Performance.
+Die Analyse konzentriert sich auf den \textit{Climate Change: Earth Surface Temperature Data-Datensatz}. 
+Dazu wird zunächst eine effiziente Data-Loader-Pipeline implementiert, Visualisierungen zum jeweiligen Datensatz 
+als auch der Performance der Modelle erstellt und die Leistung der Architekturen qualitativ und quantitativ bewertet. 
+Dabei weisen MLPs als auch 1D ConvNets ein sehr zuverlässiges und schnelles Training auf 
+und bieten gleichzeitig die besten Ergebnisse. 
+Die Studie beleuchtet auch Normalisierungseffekte, die Auswirkungen variabler Input-Sequenzen auf die Performance
+und liefert Temperaturvorhersagen \textcolor{gray}{auf bis zu 100 Jahre in die Zukunft}, 
+um weitere Schlüsse im Bezug auf den klimawandel ziehen zu können.
 \end{abstract}
 
-%% TODO: Text in grau markiert unsichere/zu überarbeitende Stellen
-\begin{abstract}
-In Anbetracht der globalen Bedeutung und Auswirkungen des Klimawandels sind präzise Vorhersagen der zukünftigen Klimaentwicklung von entscheidender Bedeutung. 
-Die vorliegende Studie konzentriert sich auf die Anwendung von neuronalen Netzwerken zur Klimavorhersage, 
-wobei der umfangreiche Datensatz "Climate Change: Earth Surface Temperature Data" als Grundlage dient. 
-Durch die systematische Verwendung verschiedener Architekturen, darunter Multilayer-Perzeptronen (MLPs), Long Short-Term Memory Networks (LSTMs), 
-Convolutional Neural Networks (ConvNets) und Transformer-Modelle, wird das Ziel verfolgt, 
-präzise und langfristige Vorhersagen zur \textcolor{gray}{globalen Durchschnittstemperatur für die kommenden 100 Jahre zu ermöglichen.}
-\textcolor{gray}{Mit Blick auf die Dringlichkeit des Themas Klimawandel soll dieses Paper einen differenzierten Einblick in die Anwendung neuronaler Netze für die Klimavorhersage bieten. 
-Der Fokus liegt dabei nicht nur auf der Vorhersage zukünftiger Temperaturentwicklungen, sondern auch auf der Identifizierung langfristiger globaler Trends.} 
-Die Bedeutung und weitreichenden Folgen des Klimawandels für Mensch und Umwelt unterstreichen die Notwendigkeit, präzise und zuverlässige Vorhersagemodelle zu entwickeln, 
-um fundierte Entscheidungen und Maßnahmen treffen zu können.
-Neben der Motivation zur Untersuchung des Klimawandels aus datengetriebener Sicht werden in diesem Paper auch Einblicke in die angewandten Methoden, 
-den verwendeten Datensatz, den Trainingsprozess, die erzielten Ergebnisse und abschließende Schlussfolgerungen präsentiert. Das übergeordnete Ziel besteht darin, 
-einen bedeutenden Beitrag zur Vorhersage zukünftiger Klimaentwicklungen zu leisten und damit einen wertvollen Beitrag zum besseren Verständnis und zur Bewältigung des Klimawandels zu leisten.
-\textcolor{gray}{Diese Studie erstreckt sich über insgesamt 6 getippte Seiten, wobei dieser einleitende Abschnitt den notwendigen Rahmen für das folgende Forschungspapier bildet.}
-\end{abstract}
+% %% TODO: Text in grau markiert unsichere/zu überarbeitende Stellen
+% \begin{abstract}
+% In Anbetracht der globalen Bedeutung und Auswirkungen des Klimawandels sind präzise Vorhersagen der zukünftigen Klimaentwicklung von entscheidender Bedeutung. 
+% Die vorliegende Studie konzentriert sich auf die Anwendung von neuronalen Netzwerken zur Klimavorhersage, 
+% wobei der umfangreiche Datensatz "Climate Change: Earth Surface Temperature Data" als Grundlage dient. 
+% Durch die systematische Verwendung verschiedener Architekturen, darunter Multilayer-Perzeptronen (MLPs), Long Short-Term Memory Networks (LSTMs), 
+% Convolutional Neural Networks (ConvNets) und Transformer-Modelle, wird das Ziel verfolgt, 
+% präzise und langfristige Vorhersagen zur \textcolor{gray}{globalen Durchschnittstemperatur für die kommenden 100 Jahre zu ermöglichen.}
+% \textcolor{gray}{Mit Blick auf die Dringlichkeit des Themas Klimawandel soll dieses Paper einen differenzierten Einblick in die Anwendung neuronaler Netze für die Klimavorhersage bieten. 
+% Der Fokus liegt dabei nicht nur auf der Vorhersage zukünftiger Temperaturentwicklungen, sondern auch auf der Identifizierung langfristiger globaler Trends.} 
+% Die Bedeutung und weitreichenden Folgen des Klimawandels für Mensch und Umwelt unterstreichen die Notwendigkeit, präzise und zuverlässige Vorhersagemodelle zu entwickeln, 
+% um fundierte Entscheidungen und Maßnahmen treffen zu können.
+% Neben der Motivation zur Untersuchung des Klimawandels aus datengetriebener Sicht werden in diesem Paper auch Einblicke in die angewandten Methoden, 
+% den verwendeten Datensatz, den Trainingsprozess, die erzielten Ergebnisse und abschließende Schlussfolgerungen präsentiert. Das übergeordnete Ziel besteht darin, 
+% einen bedeutenden Beitrag zur Vorhersage zukünftiger Klimaentwicklungen zu leisten und damit einen wertvollen Beitrag zum besseren Verständnis und zur Bewältigung des Klimawandels zu leisten.
+% \textcolor{gray}{Diese Studie erstreckt sich über insgesamt 6 getippte Seiten, wobei dieser einleitende Abschnitt den notwendigen Rahmen für das folgende Forschungspapier bildet.}
+% \end{abstract}
 
-%%
-%% Keywords. The author(s) should pick words that accurately describe
-%% the work being presented. Separate the keywords with commas.
 \keywords{neuronale Netzwerke, NN, MLP, 1D CONV, LSTM, Transformer, Klimawandel, Temperatur}
 
 %% A "teaser" image appears between the author and affiliation
@@ -202,6 +203,35 @@ einen bedeutenden Beitrag zur Vorhersage zukünftiger Klimaentwicklungen zu leis
 
 % \section{Einleitung}
 \section{Introduction}
+Die vorliegende Arbeit widmet sich der ganzheitlichen Entwicklung 
+und Evaluierung von neuronalen Netzwerkarchitekturen für die Klimavorhersage unter Verwendung eines ausgewählten Datensatzes. 
+Angesichts der wachsenden Bedeutung präziser und zuverlässiger Klimavorhersagen für zahlreiche Anwendungsgebiete, 
+vom landwirtschaftlichen Management bis hin zu infrastrukturellen Planungsprozessen, ist es von entscheidender Bedeutung, 
+leistungsstarke und effektive Modelle zu entwickeln.
+Das Ziel des vorliegenden Papers besteht darin, eine umfassende Analyse verschiedener Aspekte des Modelltrainings 
+und der Architekturleistung durchzuführen, um fundierte Einblicke in die Vorhersagegenauigkeit 
+und das Verhalten der Netzwerke zu gewinnen. 
+Dabei liegt ein zentraler Schwerpunkt auf der Implementierung einer effizienten Data-Loader Pipeline, 
+die darauf abzielt, Sequenzen von Datenpunkten effizient als Mini-Batches bereitzustellen. 
+Durch die konsequente Anwendung bewährter Methoden \todo[size=\small]{Methoden nennen?} zur strukturierten Vorverarbeitung der Daten 
+sollen optimale Voraussetzungen für das Training der neuronalen Netzwerke geschaffen werden. 
+Darüber hinaus werden Visualisierungen für die Analyse der Daten angestrebt, 
+um detaillierte Einblicke in die Strukturen und Charakteristika des Datensatzes als auch der Modelle zu gewinnen.
+Im Zusammenhang dazu liegt ein weiterer zentraler Fokus dieser Arbeit 
+auf der eingehenden Untersuchung der Leistung verschiedener Architekturen für neuronale Netzwerke, 
+um die Frage zu beantworten, welche Architektur qualitativ und quantitativ die besten Vorhersageergebnisse erzielt. 
+Dabei werden verschiedene Architekturen wie 1-dimensionale Convolutional Neural Networks (1D ConvNets), 
+Multilayer-Perzeptronen (MLPs), Long Short-Term Memory Networks (LSTMs) und Transformer-Architekturen systematisch analysiert und verglichen.
+Darüber hinaus wird die Wirkung der Datenormalisierung auf die Vorhersagegenauigkeit untersucht, 
+indem die Performance der Modelle bei Verwendung von normalisierten und nicht-normalisierten Daten verglichen wird. 
+Dies ermöglicht es, die Auswirkungen der Datenormalisierung auf die Modellleistung zu bewerten 
+und präzise Rückschlüsse auf deren Bedeutung für die Vorhersagegenauigkeit zu ziehen.
+Zusätzlich wird die Leistung verschiedener Architekturen in Abhängigkeit von der Länge der Input-Sequenzen 
+von 8, 16, 32 und 64 analysiert \todo[size=\small]{Anpassen / erläutern, warum wir andere Werte haben (840, 300)}, 
+um die Auswirkungen der Input-Sequenzlänge auf die Modellperformance zu untersuchen 
+und wichtige Erkenntnisse für die spätere Modellauswahl zu gewinnen.
+Insgesamt zielt diese Arbeit darauf ab, durch eine systematische und methodisch fundierte Vorgehensweise 
+umfassende Einblicke in die Entwicklung und Leistungsfähigkeit von neuronalen Netzwerkarchitekturen für die Klimavorhersage zu gewinnen. Durch die Kombination von Vorverarbeitungstechniken, architekturspezifischen Analysen und Vergleichen sowie der Untersuchung verschiedener Einflussfaktoren auf die Modellperformance soll ein umfassendes Verständnis für die Gestaltung effektiver und präziser Klimavorhersagemodelle erlangt werden.
 
 \section{Einführung und Datenverständnis}
 Die Grundlage dieser Studie bildet der "Climate Change: Earth Surface Temperature" Datensatz. 
@@ -218,7 +248,6 @@ Hierzu wird die Klasse Pool des Paketes multiprocessing verwendet, welche eine e
 Die Data-Loader Pipeline wurde implementiert, um Mini-Batches von Sequenzen von Datenpunkten gemäß den Anforderungen der Architekturen bereitzustellen. Dieser Prozess wurde optimiert, um die Effizienz des Trainings zu steigern. 
 Zur Analyse wurden Visualisierungen wie Histogramme für geografische Merkmale, Datenverteilungen und Kartenplots verwendet. 
 T-SNE-Plots ermöglichen eine multidimensionale Darstellung der Datenpunkte für eine bessere Analyse.
-
 
 \section{Visualisierungen für Datenanalyse und Predictions}
 
@@ -282,6 +311,33 @@ Nach dieser automatisierten Suchstrategie wurde ein händisches Fine-Tuning durc
 Während des gesamten Prozesses wurde darauf geachtet, wie sich jede Architektur an die spezifischen Charakteristiken des Datensatzes anpasst und 
 wie gut sie die Temperaturvorhersagen durchführen kann. 
 Die sorgfältige Auswahl und Anpassung der Hyperparameter und Aktivierungsfunktionen spielte eine entscheidende Rolle bei der Optimierung der Modellleistung.
+
+Rewe GPT:
+Optimierung von Architekturen und Parametern
+Die Auswahl und Optimierung der geeigneten Parameter für neuronale Netzwerkarchitekturen spielt eine entscheidende Rolle bei der Leistungsfähigkeit und Zuverlässigkeit der Klimavorhersagemodelle. 
+Im Rahmen der Untersuchung wurden verschiedene Schlüsselparameter betrachtet und optimiert, um die bestmöglichen Ergebnisse zu erzielen.
+
+\textbf{MLP (Multilayer-Perzeptronen)}
+Im Kontext von Multilayer-Perzeptronen (MLPs) spielen insbesondere die Anzahl der Hidden Layers, die Anzahl der Neuronen pro Layer, 
+die Wahl der Aktivierungsfunktionen und die Lernrate eine bedeutsame Rolle bei der Optimierung. 
+Die Anpassung dieser Parameter beeinflusst maßgeblich die Fähigkeit des MLP-Modells, komplexe nichtlineare Zusammenhänge zu erfassen und präzise Vorhersagen zu generieren. 
+Unsere Experimente haben gezeigt, dass die Auswahl und Feinabstimmung dieser Parameter entscheidend sind, um eine ausgewogene Modellkapazität zu gewährleisten und \textcolor{gray}{Überanpassung/Overfitting} zu vermeiden.
+Die systematische Optimierung der genannten Architekturen und Parameter bildet die Grundlage für die Evaluierung ihrer Leistungsfähigkeit im Kontext der Klimavorhersage. 
+Es ist wichtig, die spezifischen Verhaltensweisen und Interaktionen der Optimierungsergebnisse zu analysieren, um fundierte Schlussfolgerungen hinsichtlich der Vorhersagequalität und der Quantifizierung des Modellverhaltens ziehen zu können.
+
+\textbf{LSTMs (Long Short-Term Memory Networks)}
+Ein zentraler Parameter bei LSTMs ist die Anzahl der Memory Units oder sogenannten Neuronen in der Zelle. Durch gezielte Anpassung dieser Anzahl kann die Netzwerkleistung verbessert 
+und die Fähigkeit zur Erfassung von langfristigen Abhängigkeiten gesteuert werden. 
+In dem Experimenten wurde festgestellt, dass eine moderate Anzahl von Memory Units zu einer ausgewogenen Leistung führt, während zu wenige Units die Kapazität des Netzwerks begrenzen und zu schlechterer Modellleistung führen können.
+
+\textbf{Convolutional Neural Networks (ConvNets)}
+Für ConvNets sind insbesondere die Größe und Anordnung der \textcolor{gray}{Kernel/Filter} sowie deren Anzahl in den Convolutional Layern von großer Bedeutung. 
+Während größere \textcolor{gray}{Kernel/Filter} und eine höhere Anzahl von Filtern zu einer komplexeren Modellarchitektur und möglicherweise zu einer besseren Erfassung räumlicher Merkmale führen können, 
+besteht die Herausforderung darin, ein ausgewogenes Verhältnis zu finden, das Overfitting vermeidet und effektivere Modelle ermöglicht.
+
+\textbf{Transformer-Architekturen}
+Bei der Optimierung von Transformer-Modellen, insbesondere in Bezug auf Klimavorhersagen, sind die Anzahl der Layer, die Dimensionalität der Embeddings, die Anzahl der Köpfe in den Multi-Head Attention Mechanismen und die Lernrate wichtige Parameter. Unsere Untersuchungen haben gezeigt, dass die sorgfältige Abstimmung dieser Parameter in einem komplexen Zusammenspiel entscheidend ist, um eine optimale Leistungsfähigkeit der Transformer-Architekturen zu erreichen.
+Es ist wichtig zu betonen, dass Optimierungsansätze stark von den spezifischen Merkmalen des betrachteten Datensatzes und den Zielsetzungen der Klimavorhersagen abhängen. Daher ist eine systematische und gewissenhafte Evaluierung der Optimierungsergebnisse unerlässlich, um fundierte Schlussfolgerungen hinsichtlich der Performanz der unterschiedlichen Architekturen zu ziehen.
 
 
 \section{Architekturvergleich und Normalisierungen}
