@@ -233,17 +233,21 @@ und wichtige Erkenntnisse für die spätere Modellauswahl zu gewinnen.
 Insgesamt zielt diese Arbeit darauf ab, durch eine systematische und methodisch fundierte Vorgehensweise 
 umfassende Einblicke in die Entwicklung und Leistungsfähigkeit von neuronalen Netzwerkarchitekturen für die Klimavorhersage zu gewinnen. Durch die Kombination von Vorverarbeitungstechniken, architekturspezifischen Analysen und Vergleichen sowie der Untersuchung verschiedener Einflussfaktoren auf die Modellperformance soll ein umfassendes Verständnis für die Gestaltung effektiver und präziser Klimavorhersagemodelle erlangt werden.
 
-\section{Einführung und Datenverständnis}
+\section{Method}
+\todo[options]{}
+
+\section{Datensatz}
+\subsection*{Einführung und Datenverständnis}
 Die Grundlage dieser Studie bildet der "Climate Change: Earth Surface Temperature" Datensatz. 
 Ziel ist es, die Besonderheiten der Daten zu verstehen und eine strukturierte Organisierung für den Einsatz in neuronalen Netzwerken zu gewährleisten. 
 Die Temperaturen werden dabei auf Float-Werte mit zwei Nachkommastellen gerundet und nach geografischen Kategorien wie Land, Staat, Stadt und \textcolor{gray}{Hauptstadt} in separate Textdateien sortiert. 
 Eine zunächst vermutete Optimierung bestand darin, die Daten beim Einlesen in ein Array zu speichern, um den Zugriff während des Trainings zu beschleunigen.
 Nachdem dieser Ansatz aber keine messbaren Veränderungen mit sich brachte, wurden weitere Optimierungen bezüglich einer Parallelisierung auf der CPU und GPU untersucht, 
-welche eine deutliche Beschleunigung des Trainingsprozesses von bis zu \textcolor{gray}{text}{50\%} ermöglichten. 
+welche eine deutliche Beschleunigung des Trainingsprozesses von bis zu \textcolor{gray}{50\%} ermöglichten. 
 Hierzu wird die Klasse Pool des Paketes multiprocessing verwendet, welche eine einfache Parallelisierung von Python-Code ermöglicht, indem eine Funktion mit mehreren Inputs auf mehrere Prozesse verteilt wird.
 
 
-\section{Data-Loader Pipeline}
+\subsection*{Data-Loader Pipeline}
 
 Die Data-Loader Pipeline wurde implementiert, um Mini-Batches von Sequenzen von Datenpunkten gemäß den Anforderungen der Architekturen bereitzustellen. Dieser Prozess wurde optimiert, um die Effizienz des Trainings zu steigern. 
 Zur Analyse wurden Visualisierungen wie Histogramme für geografische Merkmale, Datenverteilungen und Kartenplots verwendet. 
@@ -288,7 +292,7 @@ Zusätzlich wurde ein Kartenplot der Datenpunkte generiert.
 Diese Visualisierungen bieten Einblicke in die geografische Verteilung der Daten und ermöglichen eine detaillierte Analyse von Städten mit identischen Werten.
 
 
-\section{Trainieren mit verschiedenen Netzwerkarchitekturen}
+\section{Training-Procedure}
 
 \begin{table}
   \caption{Network Architekturen}
@@ -340,18 +344,23 @@ Bei der Optimierung von Transformer-Modellen, insbesondere in Bezug auf Klimavor
 Es ist wichtig zu betonen, dass Optimierungsansätze stark von den spezifischen Merkmalen des betrachteten Datensatzes und den Zielsetzungen der Klimavorhersagen abhängen. Daher ist eine systematische und gewissenhafte Evaluierung der Optimierungsergebnisse unerlässlich, um fundierte Schlussfolgerungen hinsichtlich der Performanz der unterschiedlichen Architekturen zu ziehen.
 
 
-\section{Architekturvergleich und Normalisierungen}
+\subsection{Architekturvergleich und Normalisierungen}
 
 Die Leistung der Architekturen wurde sowohl qualitativ als auch quantitativ bewertet. Aktivierungsfunktionen wie Selu und Relu wurden für MLP analysiert. Bei 1D Conv Net wurde die Auswirkung von Global Average Pooling und Flatten vor den Dense Layern untersucht. LSTM und Transformer wurden auf ihre spezifischen Eigenschaften und Fehlerquellen analysiert. Der Vergleich erfolgte durch Bewertung der qualitativen Anpassung und quantitativen Metriken wie dem Mean Absolute Error (MAE).
 
 
-\section{Normalisierung und Variation der Input-Sequenzen}
+\subsection{Normalisierung und Variation der Input-Sequenzen}
 
 Die Daten wurden vor dem Training normalisiert, und die Auswirkungen auf die Vorhersagegenauigkeit wurden verglichen. Zusätzlich wurde die Performance der Modelle für variable Input-Sequenzen von 8, 16, 32 und 64 untersucht. Dies ermöglichte eine tiefgreifende Analyse, wie die Länge der Input-Sequenzen die Modellleistung beeinflusst.
 
 
 Insgesamt bietet diese Studie eine umfassende Analyse der Climate Change-Daten unter Verwendung verschiedener Netzwerkarchitekturen. Die gewonnenen Erkenntnisse ermöglichen nicht nur eine bessere Anpassung der Modelle an die Daten, sondern auch Optimierungsmöglichkeiten für zukünftige Forschungen im Bereich des Klimawandels.
 
+\section{Results}
+\todo[size=\small]{TODO}
+
+\section{Conclusion}
+\todo[size=\small]{TODO}
 
 \section{Citations and Bibliographies}
 
