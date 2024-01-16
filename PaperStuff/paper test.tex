@@ -49,6 +49,7 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{todonotes}
+\usepackage{hyperref}
 
 %% Fonts used in the template cannot be substituted; margin 
 %% adjustments are not allowed.
@@ -234,13 +235,36 @@ Insgesamt zielt diese Arbeit darauf ab, durch eine systematische und methodisch 
 umfassende Einblicke in die Entwicklung und Leistungsfähigkeit von neuronalen Netzwerkarchitekturen für die Klimavorhersage zu gewinnen. Durch die Kombination von Vorverarbeitungstechniken, architekturspezifischen Analysen und Vergleichen sowie der Untersuchung verschiedener Einflussfaktoren auf die Modellperformance soll ein umfassendes Verständnis für die Gestaltung effektiver und präziser Klimavorhersagemodelle erlangt werden.
 
 \section{Method}
+\subsection*{Datensatz}
+Datensatz: 
+
+
+
+
 \todo[options]{}
 
 \section{Datensatz}
 \subsection*{Einführung und Datenverständnis}
-Die Grundlage dieser Studie bildet der "Climate Change: Earth Surface Temperature" Datensatz. 
-Ziel ist es, die Besonderheiten der Daten zu verstehen und eine strukturierte Organisierung für den Einsatz in neuronalen Netzwerken zu gewährleisten. 
-Die Temperaturen werden dabei auf Float-Werte mit zwei Nachkommastellen gerundet und nach geografischen Kategorien wie Land, Staat, Stadt und \textcolor{gray}{Hauptstadt} in separate Textdateien sortiert. 
+Die Grundlage dieser Studie bildet der \href{https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data?select=GlobalLandTemperaturesByCity.csv}{"Climate Change: Earth Surface Temperature"} Datensatz. 
+\textcolor{gray}{Ziel ist es, die Besonderheiten der Daten zu verstehen und eine strukturierte Organisierung für den Einsatz in neuronalen Netzwerken zu gewährleisten.} 
+Dabei umfasst der genannte Datensatz unsgesamt 5 csv Dateien mit den folgenden Inhalten:
+\todo[]{}
+\begin{table}
+  \caption{Komponenten Datensatzes}
+  \label{tab:freq}
+  \begin{tabular}{ccl}
+    \toprule
+    Beschriftung & Erläuterung\\
+    \midrule
+    GlobalLandTemperatureByCity & TODO \\
+    GlobalLandTemperatureByCountry 1D & TODO \\
+    GlobalLandTemperatureByMajorCity & TODO \\
+    GlobalLandTemperatureByState & TODO \\
+    GlobalLandTemperature & TODO \\
+  \bottomrule
+\end{tabular}
+\end{table}
+Die Temperaturen werden dabei von Float-Werten mit 16 Nachkommastellen auf zwei Nachkommastellen gerundet und nach geografischen Kategorien wie Land, Staat, Stadt und \textcolor{gray}{Hauptstadt} in separate Textdateien sortiert. 
 Eine zunächst vermutete Optimierung bestand darin, die Daten beim Einlesen in ein Array zu speichern, um den Zugriff während des Trainings zu beschleunigen.
 Nachdem dieser Ansatz aber keine messbaren Veränderungen mit sich brachte, wurden weitere Optimierungen bezüglich einer Parallelisierung auf der CPU und GPU untersucht, 
 welche eine deutliche Beschleunigung des Trainingsprozesses von bis zu \textcolor{gray}{50\%} ermöglichten. 
