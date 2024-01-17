@@ -262,13 +262,13 @@ Die spätere Anwendung von Multiprocessing zur Ausführung des Data-Loaders auf 
   \begin{subfigure}{.45\textwidth}
       \centering
       \includegraphics[width=.8\linewidth]{./map_plot_data_points}
-      \caption{Histogram}
+      \caption{Ursprung Daten}
       \label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.45\textwidth}
       \centering
-      \includegraphics[width=.8\linewidth]{./Uncertainty}
-      \caption{Histogram 2}
+      \includegraphics[width=.8\linewidth]{./Years}
+      \caption{Anzahl Daten}
       \label{fig:sub2}
   \end{subfigure}\\
   \begin{subfigure}{.45\textwidth}
@@ -279,8 +279,8 @@ Die spätere Anwendung von Multiprocessing zur Ausführung des Data-Loaders auf 
   \end{subfigure}%
   \begin{subfigure}{.45\textwidth}
       \centering
-      \includegraphics[width=.8\linewidth]{./Years}
-      \caption{Histogram 4}
+      \includegraphics[width=.8\linewidth]{./Uncertainty}
+      \caption{Unsicherheiten}
       \label{fig:sub4}
   \end{subfigure}
   \caption{Four histograms}
@@ -288,13 +288,23 @@ Die spätere Anwendung von Multiprocessing zur Ausführung des Data-Loaders auf 
   \Description{Histograms caputuring the distribution of the data.}
 \end{figure}
 
-\todo
+\subsection{Histogramm Ursprung Daten}
+\todo{Beschreibung / Deutung}
+
+\subsection{Histogramm Anzahl Daten}
+\todo{Beschreibung / Deutung}
+
+\subsection{Histogramm Uncertainty}
+\todo{Beschreibung / Deutung}
+
+\subsection{Histogramm Datagaps}
+\todo{Beschreibung / Deutung}
 
 
 \section{Training-Procedure}
-\todo{Werte eintragen, falls solch eine Tabelle sinnvoll erscheint}
+
 \begin{table}
-  \caption{Network Architekturen}
+  \caption{Netzwerk Architekturen}
   \label{tab:freq}
   \begin{tabular}{ccl}
     \toprule
@@ -307,6 +317,8 @@ Die spätere Anwendung von Multiprocessing zur Ausführung des Data-Loaders auf 
   \bottomrule
 \end{tabular}
 \end{table}
+
+\todo{Werte eintragen, falls solch eine Tabelle sinnvoll erscheint}
 
 Die Netzwerkarchitekturen MLP, 1D Conv Net, LSTM und Transformer wurden auf den vorbereiteten Datensätzen trainiert. 
 Im ersten Schritt wurde eine Grid Search durchgeführt, um die optimalen Modelle und deren Hyperparameter zu bestimmen. 
@@ -431,6 +443,8 @@ Die Leistung der Architekturen wurde sowohl qualitativ als auch quantitativ bewe
 
 \section{Conclusion}
 \todo[size=\small]{TODO}
+
+Die Anwendung neuronaler Netzwerke zur Vorhersage von Temperaturdaten über einen Zeitraum von hundert Jahren erweist sich als recht realistisch. Trotz der generell linearen Charakteristik der Vorhersagen liefern die Ergebnisse wertvolle Erkenntnisse bezüglich der Erkennung bekannter Klimatrends durch die Modelle und spiegeln ... \todo{weiter schreiben}.
 
 \todo{137 von hier 199 \textcolor{gray}{betrachteten/}getesteten Modelle Architekturen waren besser als die Vorhersage von Menschen nach dem erläuterten Versuch}
 
