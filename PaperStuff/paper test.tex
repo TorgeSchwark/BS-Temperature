@@ -1,4 +1,4 @@
-%%
+i auch%%
 %% This is file `sample-manuscript.tex',
 %% generated with the docstrip utility.
 %%
@@ -50,6 +50,13 @@
 \usepackage{subcaption}
 \usepackage{todonotes}
 \usepackage{hyperref}
+\usepackage{etoolbox}
+
+% \preto{\section}{\clearpageafterfirst}
+% \preto{\subsection}{\filbreak}
+% \newcommand{\clearpageafterfirst}{%
+%   \gdef\clearpageafterfirst{\clearpage}%
+% }
 
 %% Fonts used in the template cannot be substituted; margin 
 %% adjustments are not allowed.
@@ -120,7 +127,7 @@
 %%
 %% The "title" command has an optional parameter,
 %% allowing the author to define a "short title" to be used in page headers.
-\title[Analyse von neuronal networks und climate change temperature data]{Analyse von neuronal network Architekturen im Bezug auf climate change temperature data}
+\title[Trainieren Neuronaler Netze zur Klimavorhersage}
 
 %%
 %% The "author" command and its associated commands are used to define
@@ -143,24 +150,6 @@
   \country{Germany}
   \postcode{2411TODO:}
 }
-
-%%
-%% The abstract is a short summary of the work to be presented in the
-%% article.
-\begin{abstract}
-\todo[size=\small]{Abstract noch kürzer?}
-Dieses Paper untersucht verschiedene neuronale Netzwerkarchitekturen 
-im Kontext der Analyse von Klimawandel-Daten, insbesondere der Erdoberflächentemperatur. 
-Die Architekturen umfassen MLPs, 1D Convolutional Neural Networks, LSTMs und Transformer. 
-Die Analyse konzentriert sich auf den \textit{Climate Change: Earth Surface Temperature Data-Datensatz}. 
-Dazu wird zunächst eine effiziente Data-Loader-Pipeline implementiert, Visualisierungen zum jeweiligen Datensatz 
-als auch der Performance der Modelle erstellt und die Leistung der Architekturen qualitativ und quantitativ bewertet. 
-Dabei weisen MLPs als auch 1D ConvNets ein sehr zuverlässiges und schnelles Training auf 
-und bieten gleichzeitig die besten Ergebnisse. 
-Die Studie beleuchtet auch Normalisierungseffekte, die Auswirkungen variabler Input-Sequenzen auf die Performance
-und liefert Temperaturvorhersagen \textcolor{gray}{auf bis zu 100 Jahre in die Zukunft}, 
-um weitere Schlüsse im Bezug auf den klimawandel ziehen zu können.
-\end{abstract}
 
 % %% TODO: Text in grau markiert unsichere/zu überarbeitende Stellen
 % \begin{abstract}
@@ -202,106 +191,95 @@ um weitere Schlüsse im Bezug auf den klimawandel ziehen zu können.
 %% information and builds the first part of the formatted document.
 \maketitle
 
+\todo{Wohin damit??}
+\section{Glossar}
+... Abkürzungen hier
+
 % \section{Einleitung}
-\section{Introduction}
-Die vorliegende Arbeit widmet sich der ganzheitlichen Entwicklung 
-und Evaluierung von neuronalen Netzwerkarchitekturen für die Klimavorhersage unter Verwendung eines ausgewählten Datensatzes. 
-Angesichts der wachsenden Bedeutung präziser und zuverlässiger Klimavorhersagen für zahlreiche Anwendungsgebiete, 
-vom landwirtschaftlichen Management bis hin zu infrastrukturellen Planungsprozessen, ist es von entscheidender Bedeutung, 
-leistungsstarke und effektive Modelle zu entwickeln.
-Das Ziel des vorliegenden Papers besteht darin, eine umfassende Analyse verschiedener Aspekte des Modelltrainings 
-und der Architekturleistung durchzuführen, um fundierte Einblicke in die Vorhersagegenauigkeit 
-und das Verhalten der Netzwerke zu gewinnen. 
-Dabei liegt ein zentraler Schwerpunkt auf der Implementierung einer effizienten Data-Loader Pipeline, 
-die darauf abzielt, Sequenzen von Datenpunkten effizient als Mini-Batches bereitzustellen. 
-Durch die konsequente Anwendung bewährter Methoden \todo[size=\small]{Methoden nennen?} zur strukturierten Vorverarbeitung der Daten 
-sollen optimale Voraussetzungen für das Training der neuronalen Netzwerke geschaffen werden. 
-Darüber hinaus werden Visualisierungen für die Analyse der Daten angestrebt, 
-um detaillierte Einblicke in die Strukturen und Charakteristika des Datensatzes als auch der Modelle zu gewinnen.
-Im Zusammenhang dazu liegt ein weiterer zentraler Fokus dieser Arbeit 
-auf der eingehenden Untersuchung der Leistung verschiedener Architekturen für neuronale Netzwerke, 
-um die Frage zu beantworten, welche Architektur qualitativ und quantitativ die besten Vorhersageergebnisse erzielt. 
-Dabei werden verschiedene Architekturen wie 1-dimensionale Convolutional Neural Networks (1D ConvNets), 
-Multilayer-Perzeptronen (MLPs), Long Short-Term Memory Networks (LSTMs) und Transformer-Architekturen systematisch analysiert und verglichen.
-Darüber hinaus wird die Wirkung der Datenormalisierung auf die Vorhersagegenauigkeit untersucht, 
-indem die Performance der Modelle bei Verwendung von normalisierten und nicht-normalisierten Daten verglichen wird. 
-Dies ermöglicht es, die Auswirkungen der Datenormalisierung auf die Modellleistung zu bewerten 
-und präzise Rückschlüsse auf deren Bedeutung für die Vorhersagegenauigkeit zu ziehen.
-Zusätzlich wird die Leistung verschiedener Architekturen in Abhängigkeit von der Länge der Input-Sequenzen 
-von 8, 16, 32 und 64 analysiert \todo[size=\small]{Anpassen / erläutern, warum wir andere Werte haben (840, 300)}, 
-um die Auswirkungen der Input-Sequenzlänge auf die Modellperformance zu untersuchen 
-und wichtige Erkenntnisse für die spätere Modellauswahl zu gewinnen.
-Insgesamt zielt diese Arbeit darauf ab, durch eine systematische und methodisch fundierte Vorgehensweise 
-umfassende Einblicke in die Entwicklung und Leistungsfähigkeit von neuronalen Netzwerkarchitekturen für die Klimavorhersage zu gewinnen. Durch die Kombination von Vorverarbeitungstechniken, architekturspezifischen Analysen und Vergleichen sowie der Untersuchung verschiedener Einflussfaktoren auf die Modellperformance soll ein umfassendes Verständnis für die Gestaltung effektiver und präziser Klimavorhersagemodelle erlangt werden.
+\section{Einleitung}
+Der Klimawandel stellt zweifellos eine der größten Herausforderungen des 21. Jahrhunderts dar. Der rapide Anstieg globaler Durchschnittstemperaturen und die daraus resultierenden Auswirkungen auf Umwelt und Gesellschaft erfordern dringendes Handeln. Als Grundlage für präventive Maßnahmen ist ein umfassendes Verständniss und das erkennen langfristiger Klimatrends zwingend notwendig. 
+Die Anwendung neuronaler Netze verspricht nicht nur verbesserte Vorhersagegenauigkeit, sondern eröffnet auch die Möglichkeit, bisher unbekannte Muster und Trends zu identifizieren, die für ein umfassenderes Verständnis des Klimawandels von entscheidender Bedeutung sind.
 
-\section{Method}
-\subsection*{Datensatz}
-Datensatz: 
+\subsection{Schwerpunkt: Das Training Neuronaler Netze}
+Der Fokus dieser Untersuchung liegt auf dem Training neuronaler Netze, um eine möglichst hohe Vorhersagegenauigkeit zu erzielen. Dabei werden die Architekturtypen MLP, ConvNet, LSTM und Transformer darauf trainiert, eine Klimavorhersage über 25 Jahre zu treffen. Anschließend werden die Ergebnisse analysiert und die Performance der trainierten neuronalen Netze miteinander verglichen. 
 
+\subsection{Ziel}
+Das Ziel besteht darin, mithilfe des besten neuronalen Netzes eine aussagekräftige Vorhersage für die Klimaentwicklung der nächsten 100 Jahre zu treffen.
+Die folgenden Abschnitte werden detailliert auf die verwendeten Methoden, die Datenaufbereitung, den Trainingsprozess, die Ergebnisse und die abschließende Schlussfolgerung eingehen.
 
+\section{Methoden}
 
+\subsection*{Datensatz und Datenaufbereitung}
+\begin{itemize}
+    \item Umfassende Analyse des Datensatzes: Histogramme, Barcharts, Landkarten.
+    \item Überprüfung auf Duplikate, insbesondere gleiche Städte.
+    \item Aufteilung in Trainings- und Validierungssets (70/30).
+    \item Filterung von Zeiträumen mit konstanten Daten über 95 Jahre.
+\end{itemize}
 
-\todo[options]{}
+\subsection*{Training der neuronalen Netze}
+\begin{itemize}
+    \item Berechnung des MAE über 720 menschliche Vorhersagen als Bezugsgröße.
+    \item Anwendung einer Grid Search-Methode für MLPs, ConvNets, LSTMs.
+    \item Feintuning: Anpassung von Hyperparametern, Augmentation, Normalisierung.
+\end{itemize}
+
+\subsection*{Auswertung}
+\begin{itemize}
+    \item Prüfen auf Overfitting, Analyse des Loss Graphen.
+    \item Vergleich des MAE mit menschlichen Vorhersagen.
+    \item Analyse der Genauigkeit an Beispielen.
+\end{itemize}
+
+\subsection*{Anwendung}
+\begin{itemize}
+    \item Anwendung des besten Netzwerks für Vorhersagen bis 2110.
+    \item Erstellung eines Durchschnittsgraphen von 1750 bis 2110 mittels rolling prediction.
+\end{itemize}
 
 \section{Datensatz}
-\subsection*{Einführung und Datenverständnis}
-Die Grundlage dieser Studie bildet der \href{https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data?select=GlobalLandTemperaturesByCity.csv}{"Climate Change: Earth Surface Temperature"} Datensatz. 
-\textcolor{gray}{Ziel ist es, die Besonderheiten der Daten zu verstehen und eine strukturierte Organisierung für den Einsatz in neuronalen Netzwerken zu gewährleisten.} 
-Dabei umfasst der genannte Datensatz unsgesamt 5 csv Dateien mit den folgenden Inhalten:
-\todo[]{}
-\begin{table}
-  \caption{Komponenten Datensatzes}
-  \label{tab:freq}
-  \begin{tabular}{ccl}
-    \toprule
-    Beschriftung & Erläuterung\\
-    \midrule
-    GlobalLandTemperatureByCity & TODO \\
-    GlobalLandTemperatureByCountry 1D & TODO \\
-    GlobalLandTemperatureByMajorCity & TODO \\
-    GlobalLandTemperatureByState & TODO \\
-    GlobalLandTemperature & TODO \\
-  \bottomrule
-\end{tabular}
-\end{table}
-Die Temperaturen werden dabei von Float-Werten mit 16 Nachkommastellen auf zwei Nachkommastellen gerundet und nach geografischen Kategorien wie Land, Staat, Stadt und \textcolor{gray}{Hauptstadt} in separate Textdateien sortiert. 
-Eine zunächst vermutete Optimierung bestand darin, die Daten beim Einlesen in ein Array zu speichern, um den Zugriff während des Trainings zu beschleunigen.
-Nachdem dieser Ansatz aber keine messbaren Veränderungen mit sich brachte, wurden weitere Optimierungen bezüglich einer Parallelisierung auf der CPU und GPU untersucht, 
-welche eine deutliche Beschleunigung des Trainingsprozesses von bis zu \textcolor{gray}{50\%} ermöglichten. 
-Hierzu wird die Klasse Pool des Paketes multiprocessing verwendet, welche eine einfache Parallelisierung von Python-Code ermöglicht, indem eine Funktion mit mehreren Inputs auf mehrere Prozesse verteilt wird.
+\subsection{Einführung und Datenverständnis}
+Die Grundlage dieser Studie bildet der \href{https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data?select=GlobalLandTemperaturesByCity.csv}{"Climate Change: Earth Surface Temperature"} Datensatz.
+Der genannte Datensatz umfasst insgesamt 10.064.718 monatliche Durchschnittstemperaturen, die in 3.448 Städten von 159 Ländern erhoben wurden. Die Aufzeichnungen reichen dabei von den frühesten Daten im Jahr 1743 bis zu den aktuellsten im Jahr 2015.
 
+\subsection{Fehlende Daten und Ungenauigkeiten}
+Bei unserer Analyse auf Duplikate stellten wir fest, dass 117 Städte im Datensatz doppelt oder mehrfach vorkommen. Dabei wurden Duplikate erkannt, falls die Daten zweier Städte vollständig identisch sind.  Diese doppelten Einträge sind vermutlich auf die Tatsache zurückzuführen, dass der Datensatz eine Zusammenstellung von 16 bereits bestehenden Datenarchiven darstellt. Im Datensatz sind zu den jeweiligen durchschnittlichen Temperaturen auch die durchschnittlichen Messunsicherheiten aufgeführt. Obwohl diese Unsicherheiten stetig abnehmen, stellen sie dennoch eine Herausforderung für die Vorhersagegenauigkeit dar. dabei ist zu beachten, dass der exakte Messwert mit hoher Wahrscheinlichkeit eine geringere Abweichung aufweist als die Messunsicherheit. Daher ist der durchschnittliche Messfehler deutlich geringer als die Messunsicherheit.
+Das bedeutet, das der Zufallsfaktor, der durch ungenaue Messungen entsteht und eine untere Schranke für die Vorhersagegenauigkeit bildet nicht der angegebenen Messunsicherheit endspricht.
 
-\subsection*{Data-Loader Pipeline}
+\subsection{Data-Loader Pipeline} % noch überarbeiten
+Die Data-Loader Pipeline wurde implementiert, um Mini-Batches von Sequenzen von Datenpunkten gemäß den Anforderungen der Architekturen bereitzustellen. Dabei muss sichergestellt werden, dass Datenpunkte für die gesammte input länge von 70 Jahren(840 Monaten) und output länge von 25 Jahren(320 Monate) ohne Lücken vorhanden sind.
+Um die Effizienz des Trainings zu steigern, erfolgte die Extraktion der Daten aus den fünf CSV-Dateien, wobei für jeden Standort eine eigene Textdatei angelegt wurde. Zu Beginn wählten wir einen zufälligen Standort und einen zufälligen Zeitraum in dem 90 Jahre vollstänige Messwerte vohanden waren.
+Später versuchten wir den Data-Loader weiter zu verbessern, dazu speicherten wir die gesamten Daten zunächst in Listen und führten die Suche nach passenden Zeiträumen einmalig am Anfang des Trainings durch. Diese Optimierung brachte jedoch nicht den gewünschten Effekt.
 
-Die Data-Loader Pipeline wurde implementiert, um Mini-Batches von Sequenzen von Datenpunkten gemäß den Anforderungen der Architekturen bereitzustellen. Dieser Prozess wurde optimiert, um die Effizienz des Trainings zu steigern. 
-Zur Analyse wurden Visualisierungen wie Histogramme für geografische Merkmale, Datenverteilungen und Kartenplots verwendet. 
-T-SNE-Plots ermöglichen eine multidimensionale Darstellung der Datenpunkte für eine bessere Analyse.
+Die spätere Anwendung von Multiprocessing zur Ausführung des Data-Loaders auf bis zu 20 Prozessen gleichzeitig, beschleunigte den Data-Loader mit minimalem Aufwand um etwa das Zehnfache und erhöhte die Hardware-Auslastung merklich. Der Flaschenhals lag dabei im Arbeitsspeicher.
+
 
 \section{Visualisierungen für Datenanalyse und Predictions}
 
+\todo{richtigen Histogramme hinzufügen}
 \begin{figure}[htp]
   \centering
   \begin{subfigure}{.45\textwidth}
       \centering
-      \includegraphics[width=.8\linewidth]{./histograms/map_plot_data_points}
+      \includegraphics[width=.8\linewidth]{./map_plot_data_points}
       \caption{Histogram}
       \label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.45\textwidth}
       \centering
-      \includegraphics[width=.8\linewidth]{./histograms/Uncertainty}
+      \includegraphics[width=.8\linewidth]{./Uncertainty}
       \caption{Histogram 2}
       \label{fig:sub2}
   \end{subfigure}\\
   \begin{subfigure}{.45\textwidth}
       \centering
-      \includegraphics[width=.8\linewidth]{./histograms/Temperatur}
+      \includegraphics[width=.8\linewidth]{./Temperatur}
       \caption{Histogram 3}
       \label{fig:sub3}
   \end{subfigure}%
   \begin{subfigure}{.45\textwidth}
       \centering
-      \includegraphics[width=.8\linewidth]{./histograms/Continents}
+      \includegraphics[width=.8\linewidth]{./Years}
       \caption{Histogram 4}
       \label{fig:sub4}
   \end{subfigure}
@@ -310,14 +288,11 @@ T-SNE-Plots ermöglichen eine multidimensionale Darstellung der Datenpunkte für
   \Description{Histograms caputuring the distribution of the data.}
 \end{figure}
 
-Die Implementierung verschiedener Visualisierungen spielt eine entscheidende Rolle bei der Analyse von Daten und Vorhersagen. 
-Hierbei wurden Histogramme für den Längen- und Breitengrad, die Verteilung von Datenlücken, Temperaturverteilungen und Unsicherheiten erstellt. 
-Zusätzlich wurde ein Kartenplot der Datenpunkte generiert. 
-Diese Visualisierungen bieten Einblicke in die geografische Verteilung der Daten und ermöglichen eine detaillierte Analyse von Städten mit identischen Werten.
+\todo
 
 
 \section{Training-Procedure}
-
+\todo{Werte eintragen, falls solch eine Tabelle sinnvoll erscheint}
 \begin{table}
   \caption{Network Architekturen}
   \label{tab:freq}
@@ -337,54 +312,127 @@ Die Netzwerkarchitekturen MLP, 1D Conv Net, LSTM und Transformer wurden auf den 
 Im ersten Schritt wurde eine Grid Search durchgeführt, um die optimalen Modelle und deren Hyperparameter zu bestimmen. 
 Nach dieser automatisierten Suchstrategie wurde ein händisches Fine-Tuning durchgeführt, um die Leistung der Modelle weiter zu verbessern. 
 Während des gesamten Prozesses wurde darauf geachtet, wie sich jede Architektur an die spezifischen Charakteristiken des Datensatzes anpasst und 
-wie gut sie die Temperaturvorhersagen durchführen kann. 
-Die sorgfältige Auswahl und Anpassung der Hyperparameter und Aktivierungsfunktionen spielte eine entscheidende Rolle bei der Optimierung der Modellleistung.
+wie gut sie die Temperaturvorhersagen durchführen kann.
 
-Rewe GPT:
-Optimierung von Architekturen und Parametern
+\subsection{Optimierung von Architekturen und Parametern}
 Die Auswahl und Optimierung der geeigneten Parameter für neuronale Netzwerkarchitekturen spielt eine entscheidende Rolle bei der Leistungsfähigkeit und Zuverlässigkeit der Klimavorhersagemodelle. 
-Im Rahmen der Untersuchung wurden verschiedene Schlüsselparameter betrachtet und optimiert, um die bestmöglichen Ergebnisse zu erzielen.
+Im Rahmen der Untersuchung wurden verschiedene \textcolor{gray}{Schlüsselparameter/Hyperparameter} betrachtet und optimiert, um die bestmöglichen Ergebnisse zu erzielen.
+Dazu gehören zum einen allgemein Parameter wie etwa die Batchsize, Anzahl der Epoche, Steps pro Epoche, Anzahl der validierungs Steps und der prozentuale Anteil von Trainings- und Validierungs-Daten.
+Weiterhin besitzen die genannten Architekturen auch eigene exklusive Charakteristiken, welche einen enormen Einfluss auf die Performance haben und dementsprechend im folgenden genauer untersucht werden.
+\subsection{Allgemeine Parameter / Settings}
+Bei den Aktivierungsfunktionen wurden sowohl Selu \todo{Formel} als auch ReLu ($f(h)=max(h,0)$) verwendet, dabei gab es eine mit ReLu durchschnittlich bessere Performance \todo{Faktor/Wert vorhanden?}. Allgemein lässt sich dazu sagen, dass sowohl Selu als auch ReLu die Linearität innerhalb des Netzwerkes brechen und somit zu einer höheren Kapazität und Komplexität des Netzwerkes beitragen, weshalb im Weiteren keine anderen Aktivierungsfunktionen betrachtet wurden.
 
-\textbf{MLP (Multilayer-Perzeptronen)}
-Im Kontext von Multilayer-Perzeptronen (MLPs) spielen insbesondere die Anzahl der Hidden Layers, die Anzahl der Neuronen pro Layer, 
-die Wahl der Aktivierungsfunktionen und die Lernrate eine bedeutsame Rolle bei der Optimierung. 
-Die Anpassung dieser Parameter beeinflusst maßgeblich die Fähigkeit des MLP-Modells, komplexe nichtlineare Zusammenhänge zu erfassen und präzise Vorhersagen zu generieren. 
-Unsere Experimente haben gezeigt, dass die Auswahl und Feinabstimmung dieser Parameter entscheidend sind, um eine ausgewogene Modellkapazität zu gewährleisten und \textcolor{gray}{Überanpassung/Overfitting} zu vermeiden.
-Die systematische Optimierung der genannten Architekturen und Parameter bildet die Grundlage für die Evaluierung ihrer Leistungsfähigkeit im Kontext der Klimavorhersage. 
-Es ist wichtig, die spezifischen Verhaltensweisen und Interaktionen der Optimierungsergebnisse zu analysieren, um fundierte Schlussfolgerungen hinsichtlich der Vorhersagequalität und der Quantifizierung des Modellverhaltens ziehen zu können.
-
-\textbf{LSTMs (Long Short-Term Memory Networks)}
-Ein zentraler Parameter bei LSTMs ist die Anzahl der Memory Units oder sogenannten Neuronen in der Zelle. Durch gezielte Anpassung dieser Anzahl kann die Netzwerkleistung verbessert 
-und die Fähigkeit zur Erfassung von langfristigen Abhängigkeiten gesteuert werden. 
-In dem Experimenten wurde festgestellt, dass eine moderate Anzahl von Memory Units zu einer ausgewogenen Leistung führt, während zu wenige Units die Kapazität des Netzwerks begrenzen und zu schlechterer Modellleistung führen können.
-
-\textbf{Convolutional Neural Networks (ConvNets)}
-Für ConvNets sind insbesondere die Größe und Anordnung der \textcolor{gray}{Kernel/Filter} sowie deren Anzahl in den Convolutional Layern von großer Bedeutung. 
-Während größere \textcolor{gray}{Kernel/Filter} und eine höhere Anzahl von Filtern zu einer komplexeren Modellarchitektur und möglicherweise zu einer besseren Erfassung räumlicher Merkmale führen können, 
-besteht die Herausforderung darin, ein ausgewogenes Verhältnis zu finden, das Overfitting vermeidet und effektivere Modelle ermöglicht.
-
-\textbf{Transformer-Architekturen}
-Bei der Optimierung von Transformer-Modellen, insbesondere in Bezug auf Klimavorhersagen, sind die Anzahl der Layer, die Dimensionalität der Embeddings, die Anzahl der Köpfe in den Multi-Head Attention Mechanismen und die Lernrate wichtige Parameter. Unsere Untersuchungen haben gezeigt, dass die sorgfältige Abstimmung dieser Parameter in einem komplexen Zusammenspiel entscheidend ist, um eine optimale Leistungsfähigkeit der Transformer-Architekturen zu erreichen.
-Es ist wichtig zu betonen, dass Optimierungsansätze stark von den spezifischen Merkmalen des betrachteten Datensatzes und den Zielsetzungen der Klimavorhersagen abhängen. Daher ist eine systematische und gewissenhafte Evaluierung der Optimierungsergebnisse unerlässlich, um fundierte Schlussfolgerungen hinsichtlich der Performanz der unterschiedlichen Architekturen zu ziehen.
+Weiterhin lässt sich allgemein beobachten, dass die Loss-Kurven vom Train- als auch Validation-Set beim Training bei allen guten Modellen aller vier Architekturen gleich konsistent ab einer bestimmten Anzahl an Epochen ihr Optimum erreicht haben.
 
 
-\subsection{Architekturvergleich und Normalisierungen}
+Außerdem wurde beim Training der Netzwerke Early Stopping angewendet, bei dem die Metrik val\_loss in Kombination mit einer modelabhängigen Patience betrachtet wurde. \todo{Early stopping}
 
-Die Leistung der Architekturen wurde sowohl qualitativ als auch quantitativ bewertet. Aktivierungsfunktionen wie Selu und Relu wurden für MLP analysiert. Bei 1D Conv Net wurde die Auswirkung von Global Average Pooling und Flatten vor den Dense Layern untersucht. LSTM und Transformer wurden auf ihre spezifischen Eigenschaften und Fehlerquellen analysiert. Der Vergleich erfolgte durch Bewertung der qualitativen Anpassung und quantitativen Metriken wie dem Mean Absolute Error (MAE).
+Zusätzlich wurde eine adaptive Learningrate definiert, welche in Abhängigkeit von der Epoche entweder bei \textcolor{darkgray}{$epoche < 10$} den gegeben Learningrate Wert besitzt oder im \textcolor{darkgray}{$epoche \geq 10$} Fall \textcolor{darkgray}{learningrate = learningrate $\cdot e^{-0.1}$} setzt. Dies ermöglicht ein bei größeren Epochen präziseres Lernen.\todo{Adaptiv learningrate}
 
+Die verwendeten Optimizer waren Adam als auch SGD, wobei Adam in den meisten Fällen eine bessere Performance lieferte und somit bei dem größten Teil aller Modelle und vorallem bei den besten Modellen verwendet wurde. \todo{Optimizer}
 
-\subsection{Normalisierung und Variation der Input-Sequenzen}
+\todo{Normalisierung}
+Zu Overfitting kam es bei diesem Datensatz in keinem Mal. Dies ist in der schieren Größen des Datensatzes zu begründen, in dem es ausreichend natürliche Varianz an Daten gibt, welche durch Augmentation nur noch mehr verstärkt wird.
+Auf Normalisierung wurde hingegen bewusst verzichtet, da dies bei solch einem begrenzt kleinen Wertebereich eher kontraproduktiv wäre und die Interpretierbarkeit schwächen könnte. So umfasst der Datensatz Temperaturdaten von \todo{Werte fehlt} ... bis ... .
 
-Die Daten wurden vor dem Training normalisiert, und die Auswirkungen auf die Vorhersagegenauigkeit wurden verglichen. Zusätzlich wurde die Performance der Modelle für variable Input-Sequenzen von 8, 16, 32 und 64 untersucht. Dies ermöglichte eine tiefgreifende Analyse, wie die Länge der Input-Sequenzen die Modellleistung beeinflusst.
+Des Weiteren gab es keine Analysen im großem Umfang zu variablen Input-Sequenzen, da die gewählten Skalen angepasst an den Datensatz zur zuverlässigen Vorhersagen von Temperaturdaten in einer Jahres-Skala dienen sollten und eine Input-Sequenz von zum Beispiel 8 bis 64 in diesem Kontext wenig Sinn ergeben würde.
 
+\todo{Sollen die Architekturen mit den Hyperparametern in eine Tabelle??}
 
-Insgesamt bietet diese Studie eine umfassende Analyse der Climate Change-Daten unter Verwendung verschiedener Netzwerkarchitekturen. Die gewonnenen Erkenntnisse ermöglichen nicht nur eine bessere Anpassung der Modelle an die Daten, sondern auch Optimierungsmöglichkeiten für zukünftige Forschungen im Bereich des Klimawandels.
+\subsection{Analyse von Architekturen}
+
+\subsubsection*{MLP (Multilayer-Perzeptronen)}
+Im Kontext von Multilayer-Perzeptronen (MLPs) spielen insbesondere die Anzahl der Hidden Layer in Kombination mit Dropout Layern und die Anzahl der Neuronen pro Layer eine bedeutsame Rolle bei der Optimierung.
+\todo{soll das eher in die Results?}Allgemein lässt sich dabei beobachten, dass MLPs eine grundsätzlich gleichbleibende Stabilität der Performance innerhalb der Gridsearch und explizit bei der Loss-Kurve des Trainings bieten, was darauf schließen lässt, dass diese Modelle eine relativ passende Kapazität im Bezug auf die Daten aufweisen. So sind viele der getesteten Modelle schon ab einer Epoche von 4-5 in einem sehr niedrigen Loss-Bereich. \todo{Loss-curve Grafik einbinden?} Im Zusammenhang damit ist auch die Dauer insbesondere mit einer Epochendauer von ~3 Sekunde bei den besser performenden Architekturen enorm gering.
+Durch geziehltes Finetuning konnte somit der MAE von 1.1 auf 0.88 reduziert werden.
+Dabei sieht die entstandene am besten performende Architektur mit Finetuning wie folgt aus:
+\begin{itemize}
+    \item Layer mit Anzahl an Neuronen: [500, 500, 500, 500, 500, 500, 500]
+    \item Learning rate: 0.00008
+    \item Augmentation: \todo{Wert}
+    \item Earlystopping patience: 40
+    \item Batch Size: 300
+    \item Verbesserung durch gezieltes Finetuning (MAE): 0.86 $\rightarrow$ 0.83
+\end{itemize}
+
+\todo{Visualiierung der Architektur einbinden?}
+\todo{Weiter Erläutern}
+\todo{Flatten am Anfang}
+
+\subsubsection*{1D-Convolutional Neural Networks (1D-ConvNets)}
+Für 1D-ConvNets sind insbesondere die Größe und Anordnung der \textcolor{gray}{Kernel/Filter} sowie deren Anzahl in den Convolutional Layern und dem darauf folgendem MLP von großer Bedeutung. 
+Während größere \textcolor{gray}{Kernel/Filter} und eine höhere Anzahl von Filtern zu einer komplexeren Modellarchitektur und möglicherweise zu einer besseren Erfassung räumlicher Merkmale führen können, haben sich trotzdem allgemein eher kleinere Kernelgrößen in den state of the art Modellen bewährt, welche wiederum ein detailierteres Verständnis für den input liefern können.
+Somit wurden zunächst Modelle mit Kernels der Größe 3 und 5 getestet, welche aber im Vergleich zu den danach getesteten Architekturen mit Kernelgrößen bis zu 10 deutlich schlechter abschnitten. Das ist mit der schon erwähnten besseren Erfassung von räumlichen Merkmalen zu begründen, da ein Datenpunkte immer der Durchschnittswert eines Monats ist und Vorhersagen über viele Jahre nicht mehr den Verlauf von Temperaturen über wenige Monate sondern z.B. eines ganzen Jahres vorraussetzen.
+Ein weiterer noch viel größerer Faktor bei den 1D-ConvNets Architekturen war der Layer zwischen den Convolution Layers und dem \textcolor{gray}{Dense/}MLP-Teil, welcher zum Beispiel ein 1D global average pooling oder ein Flatten sein konnte. Dabei schnitt das 1D global average pooling deutlich schlechter ab, sodass viele Modelle einen MAE von ~30 hatten und der beste erreichte MAE ~4.5 war, wohingegen durch ein Flatten Layer MAEs von unter 1 erreicht werden konnten. Dies lässt darauf schließen, dass ein 1D global average pooling einen signifikanten Anteil an Informationen verloren gehen lässt. Wieder im Vergleich dazu bietet Flatten durch ein simples aneinanderreihen von Zeilen der letzten Featuremaps den vollen Informationsumfang, sodass der folgende \textcolor{gray}{Dense/}MLP-Teil mit den extrahierten Features besser weiterarbeiten kann.
+\todo{soll das eher in die Results?} Analog zu den MLPs waren auch die 1D-ConvsNets nach dem Umstieg auf Flatten sehr konsistent stabil im Training und wiesen mit einer Epochendauer von ~3 Sekunden ein schnelles Training auf. \todo{es gab modelle mit bestimmten punkt, wo performance signifikant besser wurde (auch siehe LSTM)}
+Die am besten abschneidende Architektur mit Finetuning sieht wie folgt aus:
+\begin{itemize}
+    \item Anzahl Kernels pro Layer: [10, 10, 10, 10]
+    \item Kernelgrößen pro Layer: [5, 5, 5, 5]
+    \item MLP Anzahl Neuronen: \todo{bekannt?}
+    \item Learning rate: 0.00005
+    \item Augmentation: \todo{Wert}
+    \item Earlystopping patience: 40
+    \item Batch Size: 300
+    \item Verbesserung durch gezieltes Finetuning (MAE): 0.86 $\rightarrow$ 0.8365
+\end{itemize}
+
+\todo{Visualiierung der Architektur einbinden?}
+\todo{Weiter Erläutern}
+
+\subsubsection*{LSTMs (Long Short-Term Memory Networks)}
+Bei den LSTMs hingegen ist ein zentraler Parameter die Anzahl der Memory Units. Durch gezielte Anpassung dieser Anzahl kann die Netzwerkleistung verbessert und die Fähigkeit zur Erfassung von langfristigen Abhängigkeiten gesteuert werden. Nach den LSTM Layern folgt wieder ein \textcolor{gray}{Dene/}MLP-Teil. \todo{warum auch hier wieder MLP-Teil?}
+In dem Experimenten wurde festgestellt, dass ... .
+Auch hier sind wieder Grenzen innerhalb der Gridsearch auffindbar, ab denen die Netzwerke mit deutlichem Abstand bessere Weight-Updates vornehmen und nach nur wenigen Epochen ein besseres Optimum erreichen. Diese grenzen lassen sich besonders bei einer Learningrate von 0.01 erkennen, wobei es bei einigen Architekturen ab einer noch geringeren Learningrate wieder zu ähnlich starken Steigungen des MAEs kommen kann. Dabei ist dieses Verhalten fast komplett unabhängig von der Batchsize und lässt sich teilweise dadurch begründe, dass es bei größeren Learningrates (hier z.B. auch betrachtet: 0.02, 0.03, 0.04, 0.05) ein hin und her springen in den Tälern der \textcolor{gray}{"Loss-Landschaft"} gibt, wodurch das lokale Minimum nie präzise genug erreicht werden kann.
+Eine weitere Auffälligkeit war die Dauer des Trainings, bei dem die am besten performenden Architekturen pro Epoche um die 25 Sekunden brauchten was besonder im Vergleich zu MLPs und 1D-ConvsNets mit ~3 Sekunden deutlich länger ist. \todo{Vergleich hier nicht rein?}
+Die am besten abschneidende Architektur mit Finetuning sieht wie folgt aus:
+\begin{itemize}
+    \item Anzahl Memory Units pro Layer: [30, 30, 30, 30, 30]
+    \item MLP Anzahl Neuronen: [200, 100]
+    \item Learning rate: 0.01
+    \item Augmentation: \todo{Wert}
+    \item Earlystopping patience: 40
+    \item Batch Size: 100
+    \item Verbesserung durch gezieltes Finetuning (MAE): 1.1 $\rightarrow$ 0.88
+\end{itemize}
+
+\subsubsection*{Transformer-Architekturen}
+Bei der Optimierung von Transformer-Modellen, insbesondere in Bezug auf Klimavorhersagen, sind die Anzahl und Größe der hier festen Transformerblocks und des \textcolor{gray}{Dense-/}MLP-Teils relevant.
+Eine Begründung für die hier genannte vergleichsweise schlechte Performance des besten Modells lässt sich anhand der deutlich erhöhten Leistungsstärke von Transformer erklären, welche zum Beispiel auch in large language models (LLMs) erstaunliche Leistungen erbringen können.
+In diesem Zusammenhang verhält sich auch der Speicherverbrauch signifikant anders, so wurden bei Batchsizes von nur 2 bei 8 Transformerblocks und 3 MLP Layern schon der Grafikspeicher von 8GB dediziert und 8GB geteiltem überschritten, wodurch solch ein Modell nicht ein mal auf den zur Verfügung stehenden Computern trainiert werden konnte. Beim verkleiner der Anzahl an Transformerblöcken und dem Anpassen der MLP Layer ist eine Batchsize von maximal 4 möglich.
+Die am besten abschneidende Architektur mit Finetuning sieht wie folgt aus:
+\begin{itemize}
+    \item Anzahl Transformerblocks: 2
+    \item MLP Anzahl Neuronen: [128, 128, 128]
+    \item Learning rate: 0.0001
+    \item Augmentation: \todo{Wert}
+    \item Earlystopping patience: 40
+    \item Batch Size: 4
+    \item Verbesserung durch gezieltes Finetuning (MAE): 1.0893 $\rightarrow$ 1.0893
+\end{itemize}
 
 \section{Results}
 \todo[size=\small]{TODO}
 
+\subsection{Architekturvergleich}
+Die Leistung der Architekturen wurde sowohl qualitativ als auch quantitativ bewertet. Aktivierungsfunktionen wie Selu und Relu wurden für MLP analysiert. Bei 1D Conv Net wurde die Auswirkung von Global Average Pooling und Flatten vor den Dense Layern untersucht. LSTM und Transformer wurden auf ihre spezifischen Eigenschaften und Fehlerquellen analysiert. Der Vergleich erfolgte durch Bewertung der qualitativen Anpassung und quantitativen Metriken wie dem Mean Absolute Error (MAE).
+\todo{mehr explizit schreiben}
+
+\todo{siehe Auswertung (Präsentation)} Die am besten abgeschnittenen Netzwerkarchitekturen waren mit Abstand MLPs und 1D-ConvNets, was sich anhand einer Auswertung gut erkennen lässt, bei der die besten 88 in diesem Projekt betrachteten Modelle ausschließlich MLPs und 1D-ConvsNets waren. Erst das Modell aus Platz 89. war ein LSTM.
+
+\todo{Verbesserungsvorschläge / nicht betrachtete Felder:}
+\begin{itemize}
+    \item  gradient clipping gegen exploding gradientes bei RNN
+    \item Binary Networks
+    \item Positional Encoding (interessant für CONV, Transformer??)
+    \item starke Varianz der Input-Sequenzlängen, da gesetzte größe einen begründeten Hintergrund hat \todo{Begründung genauer machen im Paper?}
+    \item ...
+\end{itemize}
+
 \section{Conclusion}
 \todo[size=\small]{TODO}
+
+\todo{137 von hier 199 \textcolor{gray}{betrachteten/}getesteten Modelle Architekturen waren besser als die Vorhersage von Menschen nach dem erläuterten Versuch}
 
 \section{Citations and Bibliographies}
 
@@ -568,3 +616,4 @@ massa et mattis lacinia.
 \endinput
 %%
 %% End of file `sample-authordraft.tex'.
+Besonders in den frühen Jahren der Temperaturaufzeichnung sind zudem Monate vorhanden, für die keine Werte protokolliert wurden.
