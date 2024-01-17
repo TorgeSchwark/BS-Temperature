@@ -3,8 +3,9 @@ import pandas as pd
 import math
 import os
 import numpy as np
-import pygal
 from global_variables import *
+import os
+import csv
 
 
 LONGITUDE = "Longitude"
@@ -690,19 +691,46 @@ def analyse_same_val_cities():
                 print("avgTemp:" + str(k) + " sus entries: \n" + str(sus_list))
     pass
 
+def summe_zeilen_in_csv_ordner(ordnerpfad):
+    gesamtanzahl_zeilen = 0
+
+    # Überprüfen, ob der angegebene Pfad ein Verzeichnis ist
+    if not os.path.isdir(ordnerpfad):
+        print(f"{ordnerpfad} ist kein gültiges Verzeichnis.")
+        return
+
+    # Durchsuchen des Verzeichnisses nach CSV-Dateien
+    for dateiname in os.listdir(ordnerpfad):
+        if dateiname.endswith(".csv"):
+            dateipfad = os.path.join(ordnerpfad, dateiname)
+
+            # Lesen und Summieren der Zeilen in der CSV-Datei
+            with open(dateipfad, 'r') as csv_datei:
+                csv_reader = csv.reader(csv_datei)
+                anzahl_zeilen = sum(1 for row in csv_reader)
+                gesamtanzahl_zeilen += anzahl_zeilen
+
+                print(f"Datei: {dateiname}, Zeilen: {anzahl_zeilen}")
+
+    print(f"Gesamtanzahl der Zeilen in allen CSV-Dateien: {gesamtanzahl_zeilen}")
+
+
+
+
 def run():
-    data_path = DATA_PATH  
-    cities = "GlobalLandTemperaturesByCity.csv"
-    if not os.path.exists(HISTOGRAMS):
-            os.makedirs(HISTOGRAMS)
+    # data_path = DATA_PATH  
+    # cities = "GlobalLandTemperaturesByCity.csv"
+    # if not os.path.exists(HISTOGRAMS):
+    #         os.makedirs(HISTOGRAMS)
     
-    # analyse_same_val_cities() # TODO: runs tooooooooo long
-    # create_country_map(data_path,cities) # TODO: not working yet
-    create_latitude_histogram(data_path,cities)
-    create_longitute_histogram(data_path,cities)
-    create_continent_barchar(data_path,cities)
-    create_temperature_histogram(data_path,cities)
-    create_year_histogram(data_path,cities)
-    create_uncertainty_histogram(data_path,cities)
-    create_uncertainty_and_nans_per_year_barchar(data_path,cities)
+    # # analyse_same_val_cities() # TODO: runs tooooooooo long
+    # # create_country_map(data_path,cities) # TODO: not working yet
+    # create_latitude_histogram(data_path,cities)
+    # create_longitute_histogram(data_path,cities)
+    # create_continent_barchar(data_path,cities)
+    # create_temperature_histogram(data_path,cities)
+    # create_year_histogram(data_path,cities)
+    # create_uncertainty_histogram(data_path,cities)
+    # create_uncertainty_and_nans_per_year_barchar(data_path,cities)
+    summe_zeilen_in_csv_ordner(DATA_PATH)
 run()

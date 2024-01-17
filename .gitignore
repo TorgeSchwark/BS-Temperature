@@ -1,6 +1,5 @@
 /models
 /processed_Data
-/histograms
 /data_To_Process
 /duplicates
 /models_conv3
@@ -48,3 +47,4 @@
 *.fls
 
 !/best_model.h5
+!/histograms/*
