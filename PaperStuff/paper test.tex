@@ -1,4 +1,4 @@
-i auch%%
+%%
 %% This is file `sample-manuscript.tex',
 %% generated with the docstrip utility.
 %%
@@ -45,12 +45,15 @@ i auch%%
 
 %%%% Generic manuscript mode, required for submission
 %%%% and peer review
-\documentclass[manuscript,screen,review]{acmart}
+
+\documentclass[manuscript,screen,review]{acmart} % twocolumn
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{todonotes}
 \usepackage{hyperref}
 \usepackage{etoolbox}
+\usepackage{multicol}
+
 
 % \preto{\section}{\clearpageafterfirst}
 % \preto{\subsection}{\filbreak}
@@ -124,6 +127,8 @@ i auch%%
 %% end of the preamble, start of the body of the document source.
 \begin{document}
 
+% \begin{multicols}{2}
+
 %%
 %% The "title" command has an optional parameter,
 %% allowing the author to define a "short title" to be used in page headers.
@@ -195,7 +200,10 @@ i auch%%
 \section{Glossar}
 ... Abkürzungen hier
 
-% \section{Einleitung}
+% \section{Einleitung
+
+
+
 \section{Einleitung}
 Der Klimawandel stellt zweifellos eine der größten Herausforderungen des 21. Jahrhunderts dar. Der rapide Anstieg globaler Durchschnittstemperaturen und die daraus resultierenden Auswirkungen auf Umwelt und Gesellschaft erfordern dringendes Handeln. Als Grundlage für präventive Maßnahmen ist ein umfassendes Verständniss und das erkennen langfristiger Klimatrends zwingend notwendig. 
 Die Anwendung neuronaler Netze verspricht nicht nur verbesserte Vorhersagegenauigkeit, sondern eröffnet auch die Möglichkeit, bisher unbekannte Muster und Trends zu identifizieren, die für ein umfassenderes Verständnis des Klimawandels von entscheidender Bedeutung sind.
@@ -206,6 +214,8 @@ Der Fokus dieser Untersuchung liegt auf dem Training neuronaler Netze, um eine m
 \subsection{Ziel}
 Das Ziel besteht darin, mithilfe des besten neuronalen Netzes eine aussagekräftige Vorhersage für die Klimaentwicklung der nächsten 100 Jahre zu treffen.
 Die folgenden Abschnitte werden detailliert auf die verwendeten Methoden, die Datenaufbereitung, den Trainingsprozess, die Ergebnisse und die abschließende Schlussfolgerung eingehen.
+]
+
 
 \section{Methoden}
 
@@ -303,51 +313,23 @@ Die spätere Anwendung von Multiprocessing zur Ausführung des Data-Loaders auf 
 
 \section{Training-Procedure}
 
-\begin{table}
-  \caption{Netzwerk Architekturen}
-  \label{tab:freq}
-  \begin{tabular}{ccl}
-    \toprule
-    Netzwerk&Anzahl Parameter&Anzahl Layern\\
-    \midrule
-    MLP & TODO: & meisten Parameter aufgrund von dense layern\\
-    CONV 1D & TODO: & geringere Anzahl durch feature extraction convolution layer vor den dense layern\\
-    LSTM & TODO: & TODO:\\
-    Transformer & TODO: & (zweit) meisten Parameter aufgrund von mehreren inneren MLPs\\
-  \bottomrule
-\end{tabular}
-\end{table}
-
-\todo{Werte eintragen, falls solch eine Tabelle sinnvoll erscheint}
-
-Die Netzwerkarchitekturen MLP, 1D Conv Net, LSTM und Transformer wurden auf den vorbereiteten Datensätzen trainiert. 
-Im ersten Schritt wurde eine Grid Search durchgeführt, um die optimalen Modelle und deren Hyperparameter zu bestimmen. 
-Nach dieser automatisierten Suchstrategie wurde ein händisches Fine-Tuning durchgeführt, um die Leistung der Modelle weiter zu verbessern. 
+Um Klimaprognosen zu erstellen wurden die Architekturtypen MLP, ConvNet, LSTM und Transformer trainiert, auf einem Input von 70 Jahren(840 Monaten) eine Vorhersage für die Nächsten 25 Jahre(300) Monate zu treffen.
+Im ersten Schritt wurde eine Grid Search durchgeführt, um optimale Modelle und deren Hyperparameter für die jeweiligen Architekturtypen zu aproximieren. 
+Nach dieser automatisierten Suche wurde ein händisches Fine-Tuning durchgeführt, um die Leistung der Modelle weiter zu verbessern. 
 Während des gesamten Prozesses wurde darauf geachtet, wie sich jede Architektur an die spezifischen Charakteristiken des Datensatzes anpasst und 
 wie gut sie die Temperaturvorhersagen durchführen kann.
 
 \subsection{Optimierung von Architekturen und Parametern}
 Die Auswahl und Optimierung der geeigneten Parameter für neuronale Netzwerkarchitekturen spielt eine entscheidende Rolle bei der Leistungsfähigkeit und Zuverlässigkeit der Klimavorhersagemodelle. 
 Im Rahmen der Untersuchung wurden verschiedene \textcolor{gray}{Schlüsselparameter/Hyperparameter} betrachtet und optimiert, um die bestmöglichen Ergebnisse zu erzielen.
-Dazu gehören zum einen allgemein Parameter wie etwa die Batchsize, Anzahl der Epoche, Steps pro Epoche, Anzahl der validierungs Steps und der prozentuale Anteil von Trainings- und Validierungs-Daten.
+Dazu gehören zum einen allgemein Parameter wie etwa die Batchsize, Anzahl der Epochen, Steps pro Epoche, Anzahl der validierungs Steps und das Verhältniss von Trainingsdaten zu Validierungsdaten.
 Weiterhin besitzen die genannten Architekturen auch eigene exklusive Charakteristiken, welche einen enormen Einfluss auf die Performance haben und dementsprechend im folgenden genauer untersucht werden.
-\subsection{Allgemeine Parameter / Settings}
-Bei den Aktivierungsfunktionen wurden sowohl Selu \todo{Formel} als auch ReLu ($f(h)=max(h,0)$) verwendet, dabei gab es eine mit ReLu durchschnittlich bessere Performance \todo{Faktor/Wert vorhanden?}. Allgemein lässt sich dazu sagen, dass sowohl Selu als auch ReLu die Linearität innerhalb des Netzwerkes brechen und somit zu einer höheren Kapazität und Komplexität des Netzwerkes beitragen, weshalb im Weiteren keine anderen Aktivierungsfunktionen betrachtet wurden.
 
-Weiterhin lässt sich allgemein beobachten, dass die Loss-Kurven vom Train- als auch Validation-Set beim Training bei allen guten Modellen aller vier Architekturen gleich konsistent ab einer bestimmten Anzahl an Epochen ihr Optimum erreicht haben.
+\subsection{Allgemeine Parameter / Settings} \todo{Batchsize / Steps dynamisch anpassen}
 
+Da im Training als erstes eine Grid Search durchgeführt wurde und in dieser ausschließlich die Auswirkung der verschiedener Architekturen, Batch sizes und Learning rates auf den MAE untersucht wurden, mussten die restlichen Parameter zunächst festgelegt werden. Dabei wurde sich auf die bereits erwähnte Input- und Output-Länge, die Aufteilung des Datensatzes in 70 Prozent zum Trainieren und 30 Prozent zum Validieren und die Patience von 10 Epochen geeinigt. Durch die Patience wird sichergestellt, dass das Training erst nach 10 Epochen ohne eine Verbesserung des MAEs beendet wird. Des Weiteren wurden damit die Geschwindigkeit des Trainings vergleichbar, auch wurden die Steps/Epoche dynamisch an die Batch size angepasst, sodass unabhängig von der Batch Size pro Epoche die gleiche Menge an Daten betrachtet werden. Wie jedoch später in der Auswertung zu sehen ist, ist auch dieses Vorgehen im Vergleich zu den verschiedenen Batch sizes nicht unbedingt fair. 
 
-Außerdem wurde beim Training der Netzwerke Early Stopping angewendet, bei dem die Metrik val\_loss in Kombination mit einer modelabhängigen Patience betrachtet wurde. \todo{Early stopping}
-
-Zusätzlich wurde eine adaptive Learningrate definiert, welche in Abhängigkeit von der Epoche entweder bei \textcolor{darkgray}{$epoche < 10$} den gegeben Learningrate Wert besitzt oder im \textcolor{darkgray}{$epoche \geq 10$} Fall \textcolor{darkgray}{learningrate = learningrate $\cdot e^{-0.1}$} setzt. Dies ermöglicht ein bei größeren Epochen präziseres Lernen.\todo{Adaptiv learningrate}
-
-Die verwendeten Optimizer waren Adam als auch SGD, wobei Adam in den meisten Fällen eine bessere Performance lieferte und somit bei dem größten Teil aller Modelle und vorallem bei den besten Modellen verwendet wurde. \todo{Optimizer}
-
-\todo{Verhältnis Batchsize und Learningrate}
-Zu Overfitting kam es bei diesem Datensatz in keinem Mal. Dies ist in der schieren Größen des Datensatzes zu begründen, in dem es ausreichend natürliche Varianz an Daten gibt, welche durch Augmentation nur noch mehr verstärkt wird.
-Auf Normalisierung wurde hingegen bewusst verzichtet, da dies bei solch einem begrenzt kleinen Wertebereich eher kontraproduktiv wäre und die Interpretierbarkeit schwächen könnte. So umfasst der Datensatz Temperaturdaten von \todo{Werte fehlt} ... bis ... .
-
-Des Weiteren gab es keine Analysen im großem Umfang zu variablen Input-Sequenzen, da die gewählten Skalen angepasst an den Datensatz zur zuverlässigen Vorhersagen von Temperaturdaten in einer Jahres-Skala dienen sollten und eine Input-Sequenz von zum Beispiel 8 bis 64 in diesem Kontext wenig Sinn ergeben würde.
+\todo{hier doch trotzdem als "Setting sinnvoll und nicht bei Results right?"} Weiterhin wurde eine adaptive Learningrate definiert, welche in Abhängigkeit von der Epoche entweder bei \textcolor{darkgray}{$epoche < 10$} den gegeben Learningrate Wert besitzt oder im \textcolor{darkgray}{$epoche \geq 10$} Fall \textcolor{darkgray}{learningrate = learningrate $\cdot e^{-0.1}$} setzt. Dies ermöglicht ein bei größeren Epochen präziseres Lernen.
 
 \todo{Sollen die Architekturen mit den Hyperparametern in eine Tabelle??}
 
@@ -355,7 +337,7 @@ Des Weiteren gab es keine Analysen im großem Umfang zu variablen Input-Sequenze
 
 \subsubsection*{MLP (Multilayer-Perzeptronen)}
 Im Kontext von Multilayer-Perzeptronen (MLPs) spielen insbesondere die Anzahl der Hidden Layer in Kombination mit Dropout Layern und die Anzahl der Neuronen pro Layer eine bedeutsame Rolle bei der Optimierung.
-\todo{soll das eher in die Results?}Allgemein lässt sich dabei beobachten, dass MLPs eine grundsätzlich gleichbleibende Stabilität der Performance innerhalb der Gridsearch und explizit bei der Loss-Kurve des Trainings bieten, was darauf schließen lässt, dass diese Modelle eine relativ passende Kapazität im Bezug auf die Daten aufweisen. So sind viele der getesteten Modelle schon ab einer Epoche von 4-5 in einem sehr niedrigen Loss-Bereich. \todo{Loss-curve Grafik einbinden?} Im Zusammenhang damit ist auch die Dauer insbesondere mit einer Epochendauer von ~3 Sekunde bei den besser performenden Architekturen enorm gering.
+\todo{soll das eher in die Results?}Allgemein lässt sich dabei beobachten, dass MLPs eine grundsätzlich gleichbleibende Stabilität der Performance innerhalb der Grid Search und explizit bei der Loss-Kurve des Trainings bieten, was darauf schließen lässt, dass diese Modelle eine relativ passende Kapazität im Bezug auf die Daten aufweisen. So sind viele der getesteten Modelle schon ab einer Epoche von 4-5 in einem sehr niedrigen Loss-Bereich. \todo{Loss-curve Grafik einbinden?} Im Zusammenhang damit ist auch die Dauer insbesondere mit einer Epochendauer von ~3 Sekunde bei den besser performenden Architekturen enorm gering.
 Durch geziehltes Finetuning konnte somit der MAE von 1.1 auf 0.88 reduziert werden.
 Dabei sieht die entstandene am besten performende Architektur mit Finetuning wie folgt aus:
 \begin{itemize}
@@ -372,8 +354,8 @@ Dabei sieht die entstandene am besten performende Architektur mit Finetuning wie
 \todo{Flatten am Anfang}
 
 \subsubsection*{1D-Convolutional Neural Networks (1D-ConvNets)}
-Für 1D-ConvNets sind insbesondere die Größe und Anordnung der \textcolor{gray}{Kernel/Filter} sowie deren Anzahl in den Convolutional Layern und dem darauf folgendem MLP von großer Bedeutung. 
-Während größere \textcolor{gray}{Kernel/Filter} und eine höhere Anzahl von Filtern zu einer komplexeren Modellarchitektur und möglicherweise zu einer besseren Erfassung räumlicher Merkmale führen können, haben sich trotzdem allgemein eher kleinere Kernelgrößen in den state of the art Modellen bewährt, welche wiederum ein detailierteres Verständnis für den input liefern können.
+Für 1D-ConvNets sind insbesondere die Größe und Anordnung der ilter sowie deren Anzahl in den Convolutional Layern und dem darauf folgendem MLP von großer Bedeutung. 
+Während größere Filter und eine höhere Anzahl von Filtern zu einer komplexeren Modellarchitektur und möglicherweise zu einer besseren Erfassung räumlicher Merkmale führen können, haben sich trotzdem allgemein eher kleinere Filterrößen in den state of the art Modellen bewährt, welche wiederum ein detailierteres Verständnis für den input liefern können.
 Somit wurden zunächst Modelle mit Kernels der Größe 3 und 5 getestet, welche aber im Vergleich zu den danach getesteten Architekturen mit Kernelgrößen bis zu 10 deutlich schlechter abschnitten. Das ist mit der schon erwähnten besseren Erfassung von räumlichen Merkmalen zu begründen, da ein Datenpunkte immer der Durchschnittswert eines Monats ist und Vorhersagen über viele Jahre nicht mehr den Verlauf von Temperaturen über wenige Monate sondern z.B. eines ganzen Jahres vorraussetzen.
 Ein weiterer noch viel größerer Faktor bei den 1D-ConvNets Architekturen war der Layer zwischen den Convolution Layers und dem \textcolor{gray}{Dense/}MLP-Teil, welcher zum Beispiel ein 1D global average pooling oder ein Flatten sein konnte. Dabei schnitt das 1D global average pooling deutlich schlechter ab, sodass viele Modelle einen MAE von ~30 hatten und der beste erreichte MAE ~4.5 war, wohingegen durch ein Flatten Layer MAEs von unter 1 erreicht werden konnten. Dies lässt darauf schließen, dass ein 1D global average pooling einen signifikanten Anteil an Informationen verloren gehen lässt. Wieder im Vergleich dazu bietet Flatten durch ein simples aneinanderreihen von Zeilen der letzten Featuremaps den vollen Informationsumfang, sodass der folgende \textcolor{gray}{Dense/}MLP-Teil mit den extrahierten Features besser weiterarbeiten kann.
 \todo{soll das eher in die Results?} Analog zu den MLPs waren auch die 1D-ConvsNets nach dem Umstieg auf Flatten sehr konsistent stabil im Training und wiesen mit einer Epochendauer von ~3 Sekunden ein schnelles Training auf. \todo{es gab modelle mit bestimmten punkt, wo performance signifikant besser wurde (auch siehe LSTM)}
@@ -395,7 +377,7 @@ Die am besten abschneidende Architektur mit Finetuning sieht wie folgt aus:
 \subsubsection*{LSTMs (Long Short-Term Memory Networks)}
 Bei den LSTMs hingegen ist ein zentraler Parameter die Anzahl der Memory Units. Durch gezielte Anpassung dieser Anzahl kann die Netzwerkleistung verbessert und die Fähigkeit zur Erfassung von langfristigen Abhängigkeiten gesteuert werden. Nach den LSTM Layern folgt wieder ein \textcolor{gray}{Dene/}MLP-Teil. \todo{warum auch hier wieder MLP-Teil?}
 In dem Experimenten wurde festgestellt, dass ... .
-Auch hier sind wieder Grenzen innerhalb der Gridsearch auffindbar, ab denen die Netzwerke mit deutlichem Abstand bessere Weight-Updates vornehmen und nach nur wenigen Epochen ein besseres Optimum erreichen. Diese grenzen lassen sich besonders bei einer Learningrate von 0.01 erkennen, wobei es bei einigen Architekturen ab einer noch geringeren Learningrate wieder zu ähnlich starken Steigungen des MAEs kommen kann. Dabei ist dieses Verhalten fast komplett unabhängig von der Batchsize und lässt sich teilweise dadurch begründe, dass es bei größeren Learningrates (hier z.B. auch betrachtet: 0.02, 0.03, 0.04, 0.05) ein hin und her springen in den Tälern der \textcolor{gray}{"Loss-Landschaft"} gibt, wodurch das lokale Minimum nie präzise genug erreicht werden kann.
+Auch hier sind wieder Grenzen innerhalb der Grid Search auffindbar, ab denen die Netzwerke mit deutlichem Abstand bessere Weight-Updates vornehmen und nach nur wenigen Epochen ein besseres Optimum erreichen. Diese grenzen lassen sich besonders bei einer Learningrate von 0.01 erkennen, wobei es bei einigen Architekturen ab einer noch geringeren Learningrate wieder zu ähnlich starken Steigungen des MAEs kommen kann. Dabei ist dieses Verhalten fast komplett unabhängig von der Batchsize und lässt sich teilweise dadurch begründe, dass es bei größeren Learningrates (hier z.B. auch betrachtet: 0.02, 0.03, 0.04, 0.05) ein hin und her springen in den Tälern der \textcolor{gray}{"Loss-Landschaft"} gibt, wodurch das lokale Minimum nie präzise genug erreicht werden kann.
 Eine weitere Auffälligkeit war die Dauer des Trainings, bei dem die am besten performenden Architekturen pro Epoche um die 25 Sekunden brauchten was besonder im Vergleich zu MLPs und 1D-ConvsNets mit ~3 Sekunden deutlich länger ist. \todo{Vergleich hier nicht rein?}
 Die am besten abschneidende Architektur mit Finetuning sieht wie folgt aus:
 \begin{itemize}
@@ -424,10 +406,66 @@ Die am besten abschneidende Architektur mit Finetuning sieht wie folgt aus:
 \end{itemize}
 
 \section{Results}
-\todo[size=\small]{TODO}
 
 \subsection{Architekturvergleich}
-Die Leistung der Architekturen wurde sowohl qualitativ als auch quantitativ bewertet. Aktivierungsfunktionen wie Selu und Relu wurden für MLP analysiert. Bei 1D Conv Net wurde die Auswirkung von Global Average Pooling und Flatten vor den Dense Layern untersucht. LSTM und Transformer wurden auf ihre spezifischen Eigenschaften und Fehlerquellen analysiert. Der Vergleich erfolgte durch Bewertung der qualitativen Anpassung und quantitativen Metriken wie dem Mean Absolute Error (MAE).
+\textcolor{gray}{Die Leistung der Architekturen wurde sowohl qualitativ als auch quantitativ bewertet.} 
+
+\subsubsection{Trainingsdauer}
+Auch im Bezug auf die Trainingsdauer lassen sich Unterschiede zwischen den verschiedenen Architekturen feststellen. 
+Dies ist vorallem anhand der Komplexität der Modelle und den benötigten Berechnungen geschuldet, welche mehr oder weniger häufig und parallel ablaufen müssen.
+So brauchten 1D-ConvNets als auch MLPs im Schnitt nur etwa 3 Sekunden pro Epoche wohingegen LSTMs als auch Transformer gerne mal 25 Sekunden brauchen.
+Im Zusammenhang mit bis zu 50 Epochen, in denen Netzwerke trainiert wurden machen sich somit deutliche Differenzen sichtbar.
+
+\subsubsection{Parameteranzahl}
+\begin{table}
+  \caption{Netzwerk Architekturen}
+  \label{tab:freq}
+  \begin{tabular}{ccl}
+    \toprule
+    Netzwerk&Anzahl Parameter&Anzahl Layern\\
+    \midrule
+    MLP & TODO: & meisten Parameter aufgrund von dense layern\\
+    CONV 1D & TODO: & geringere Anzahl durch feature extraction convolution layer vor den dense layern\\
+    LSTM & TODO: & TODO:\\
+    Transformer & TODO: & (zweit) meisten Parameter aufgrund von mehreren inneren MLPs\\
+  \bottomrule
+\end{tabular}
+\end{table}
+\todo{Werte eintragen, falls solch eine Tabelle sinnvoll erscheint}
+
+In Anbetracht der verschiedenen Netzwerkarchitekturen und deren vergleichbaren Performance ergibt auch eine Analyse der Parameteeranzahl Sinn.
+Wie in der \textcolor{gray}{zuvor / nachfolgenden} Tabelle zu sehen besitzen die besten Modelle von MLP am meisten Parameter gefolgt von ... und .... Die 1D-ConsNets haben die geringste Anzahl an Parametern. \todo{Textvorlage, aktuell gibt es noch nicht alle Daten (siehe Python script)}
+Das die MLPs die meisten Parameter besitzen liegt daran, dass hier mit Dense-Layern gearbeitet wird, bei denen jedes Neuron mit jedem Neuron des Folgelayers verbunden ist. Somit gibt es zum Beispiel $Neuronen_{Layer-i} \cdot Neuronen_{Layer-i+1}$ viele Weights zwischen zwei Layern. Zwar besitzen auch die anderen drei Modelle Dense-Layer, diese Umfassen aber nur einen Teil der Modelle und ergänzen die jeweiligen Funktionen nur.
+Weiter geht es mit den ... .
+
+\subsubsection{Performance und Stabilität im Training}
+Auch wenn schlussendlich die besten Modelle der vier Architekturen ähnlich gut performen gibt es trotzdem Unterschiede in dem Verlauf und der Anpassung der Modelle an die Daten. Wie schon zuvor erwähnt haben die MLP als auch die \todo{Welches Modell noch gleich?} schon bei einer geringen Anzahl von Epochen direkt gute Ergebnisse mit MAEs im niedrigen einstelligen Bereich geliefert, während bei ... und den Transformern ein längeres Training (30-40 Epochen) zusammen mit einer großen Auswahl an Architekturen notwendig war, befor es zu zufriedenstellenden MAEs kam.
+\todo{Anfälligkeit an Dataaugmentation nennen fals vorhanden waren}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\todo{Auf  Analyse und Deutung spezialisieren, die allgemeine Nennung erfolgt am Anfang der Trainings Procedure}
+Außerdem wurde beim Training der Netzwerke Early Stopping angewendet, bei dem die Metrik val\_loss in Kombination mit einer modelabhängigen Patience betrachtet wurde. \todo{Early stopping}
+
+Zusätzlich wurde eine adaptive Learningrate definiert, welche in Abhängigkeit von der Epoche entweder bei \textcolor{darkgray}{$epoche < 10$} den gegeben Learningrate Wert besitzt oder im \textcolor{darkgray}{$epoche \geq 10$} Fall \textcolor{darkgray}{learningrate = learningrate $\cdot e^{-0.1}$} setzt. Dies ermöglicht ein bei größeren Epochen präziseres Lernen.
+
+Die verwendeten Optimizer waren Adam als auch SGD, wobei Adam in den meisten Fällen eine bessere Performance lieferte und somit bei dem größten Teil aller Modelle und vorallem bei den besten Modellen verwendet wurde.
+
+Bei den Aktivierungsfunktionen wurden sowohl Selu \todo{Formel} als auch ReLu ($f(h)=max(h,0)$) verwendet, dabei gab es eine mit ReLu durchschnittlich bessere Performance \todo{Faktor/Wert vorhanden?}. Allgemein lässt sich dazu sagen, dass sowohl Selu als auch ReLu die Linearität innerhalb des Netzwerkes brechen und somit zu einer höheren Kapazität und Komplexität des Netzwerkes beitragen, weshalb im Weiteren keine anderen Aktivierungsfunktionen betrachtet wurden.
+\todo{Optimizer}
+
+\todo{Verhältnis Batchsize und Learningrate}
+Zu Overfitting kam es bei diesem Datensatz in keinem Mal. Dies ist in der schieren Größen des Datensatzes zu begründen, in dem es ausreichend natürliche Varianz an Daten gibt, welche durch Augmentation nur noch mehr verstärkt wird.
+Auf Normalisierung wurde hingegen bewusst verzichtet, da dies bei solch einem begrenzt kleinen Wertebereich keine spürbaren Verbesserungen mit sich bringen sollte und die Interpretierbarkeit schwächen könnte. So umfasst der Datensatz Temperaturdaten von 40 bis -40 .
+
+Des Weiteren gab es keine Analysen im großem Umfang zu variablen Input-Sequenzen, da die gewählten Skalen angepasst an den Datensatz zur zuverlässigen Vorhersagen von Temperaturdaten in einer Jahres-Skala dienen sollten und eine Input-Sequenz von zum Beispiel 8 bis 64 in diesem Kontext wenig Sinn ergeben würde.
+
+\todo{Sollen die Architekturen mit den Hyperparametern in eine Tabelle??}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Aktivierungsfunktionen wie Selu und Relu wurden für MLP analysiert. 
+Bei 1D-ConvNets wurde die Auswirkung von Global Average Pooling und Flatten vor den Dense Layern untersucht. 
+LSTM und Transformer wurden auf ihre spezifischen Eigenschaften und Fehlerquellen analysiert. 
+Der Vergleich erfolgte durch Bewertung der qualitativen Anpassung und quantitativen Metriken wie dem Mean Absolute Error (MAE).
 \todo{mehr explizit schreiben}
 
 \todo{siehe Auswertung (Präsentation)} Die am besten abgeschnittenen Netzwerkarchitekturen waren mit Abstand MLPs und 1D-ConvNets, was sich anhand einer Auswertung gut erkennen lässt, bei der die besten 88 in diesem Projekt betrachteten Modelle ausschließlich MLPs und 1D-ConvsNets waren. Erst das Modell aus Platz 89. war ein LSTM.
@@ -625,6 +663,8 @@ dui. Etiam sagittis eleifend elementum.
 Nam interdum magna at lectus dignissim, ac dignissim lorem
 rhoncus. Maecenas eu arcu ac neque placerat aliquam. Nunc pulvinar
 massa et mattis lacinia.
+
+% \end{multicols}
 
 \end{document}
 \endinput
