@@ -432,37 +432,40 @@ Im Zusammenhang mit bis zu 50 Epochen, in denen Netzwerke trainiert wurden mache
 \end{tabular}
 \end{table}
 \todo{Werte eintragen, falls solch eine Tabelle sinnvoll erscheint}
-
 In Anbetracht der verschiedenen Netzwerkarchitekturen und deren vergleichbaren Performance ergibt auch eine Analyse der Parameteeranzahl Sinn.
 Wie in der \textcolor{gray}{zuvor / nachfolgenden} Tabelle zu sehen besitzen die besten Modelle von MLP am meisten Parameter gefolgt von ... und .... Die 1D-ConsNets haben die geringste Anzahl an Parametern. \todo{Textvorlage, aktuell gibt es noch nicht alle Daten (siehe Python script)}
 Das die MLPs die meisten Parameter besitzen liegt daran, dass hier mit Dense-Layern gearbeitet wird, bei denen jedes Neuron mit jedem Neuron des Folgelayers verbunden ist. Somit gibt es zum Beispiel $Neuronen_{Layer-i} \cdot Neuronen_{Layer-i+1}$ viele Weights zwischen zwei Layern. Zwar besitzen auch die anderen drei Modelle Dense-Layer, diese Umfassen aber nur einen Teil der Modelle und ergänzen die jeweiligen Funktionen nur.
 Weiter geht es mit den ... .
 
 \subsubsection{Performance und Stabilität im Training}
-Auch wenn schlussendlich die besten Modelle der vier Architekturen ähnlich gut performen gibt es trotzdem Unterschiede in dem Verlauf und der Anpassung der Modelle an die Daten. Wie schon zuvor erwähnt haben die MLP als auch die \todo{Welches Modell noch gleich?} schon bei einer geringen Anzahl von Epochen direkt gute Ergebnisse mit MAEs im niedrigen einstelligen Bereich geliefert, während bei ... und den Transformern ein längeres Training (30-40 Epochen) zusammen mit einer großen Auswahl an Architekturen notwendig war, befor es zu zufriedenstellenden MAEs kam.
+Auch wenn schlussendlich die besten Modelle der vier Architekturen ähnlich gut performen gibt es trotzdem Unterschiede in dem Verlauf und der Anpassung der Modelle an die Daten. Wie schon zuvor erwähnt haben die MLP als auch die ... \todo{Welches Modell noch gleich?} schon bei einer geringen Anzahl von Epochen direkt gute Ergebnisse mit MAEs im niedrigen einstelligen Bereich geliefert, während bei ... und den Transformern ein längeres Training (30-40 Epochen) zusammen mit einer großen Auswahl an Architekturen notwendig war, befor es zu zufriedenstellenden MAEs kam.
 \todo{Anfälligkeit an Dataaugmentation nennen fals vorhanden waren}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Parameter Analyse}
 \todo{Auf  Analyse und Deutung spezialisieren, die allgemeine Nennung erfolgt am Anfang der Trainings Procedure}
-Außerdem wurde beim Training der Netzwerke Early Stopping angewendet, bei dem die Metrik val\_loss in Kombination mit einer modelabhängigen Patience betrachtet wurde. \todo{Early stopping}
 
-Zusätzlich wurde eine adaptive Learningrate definiert, welche in Abhängigkeit von der Epoche entweder bei \textcolor{darkgray}{$epoche < 10$} den gegeben Learningrate Wert besitzt oder im \textcolor{darkgray}{$epoche \geq 10$} Fall \textcolor{darkgray}{learningrate = learningrate $\cdot e^{-0.1}$} setzt. Dies ermöglicht ein bei größeren Epochen präziseres Lernen.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Early stopping & Modelsaving}
+Durch die erwähnte Verwendung von Early stopping mit einer Patience von 10 wurde das Training der Modelle um einiges verkürtzt. So brauchten zum Beispiel MLPs bei der Grid Search nicht mehr 50 oder 100 Epochen durchlaufen werden, sondern es reichten schon ... \todo{Wert eintragen / reproduzieren} Epochen aus, bevor das jeweilige Modell sein Optimum ausreichend erreicht hatte. In Kombination dazu lohnt es sich zudem, mittels einer eigenen oder der von Tensorflow vordefinierten Methode nur die Modelle mit den besten Ergebnissen abzuspeichern, sodass es innerhalb der hier definierten Patience von 10 nicht zum Speichern von schlechteren Konfigurationen kommt (innerhalb von \texttt{tf.keras.callbacks.ModelCheckpoint} $\rightarrow$  \texttt{save\_best\_only=True}).
 
+\subsubsection{Optimizer \& adaptive Learningrate}
 Die verwendeten Optimizer waren Adam als auch SGD, wobei Adam in den meisten Fällen eine bessere Performance lieferte und somit bei dem größten Teil aller Modelle und vorallem bei den besten Modellen verwendet wurde.
+Zusätzlich wurde eine adaptive Learningrate definiert, welche in Abhängigkeit von der Epoche eine abgeänderte Learningrate setzt. Dabei wurde zu Beginn auf die vom Adam Optimizer intern genutzte adaptive Learningrate zurückgegriffen, bis im weiteren Verlauf eine eigens definierte adaptive Learningrate verwendet wurde. Dabei konnten aber keine signifikanten Performanceunterschiede festgestellt werden. \todo{soll das so rein?}
 
-Bei den Aktivierungsfunktionen wurden sowohl Selu \todo{Formel} als auch ReLu ($f(h)=max(h,0)$) verwendet, dabei gab es eine mit ReLu durchschnittlich bessere Performance \todo{Faktor/Wert vorhanden?}. Allgemein lässt sich dazu sagen, dass sowohl Selu als auch ReLu die Linearität innerhalb des Netzwerkes brechen und somit zu einer höheren Kapazität und Komplexität des Netzwerkes beitragen, weshalb im Weiteren keine anderen Aktivierungsfunktionen betrachtet wurden.
-\todo{Optimizer}
-
+\subsubsection{Aktivierungsfunktionen}
+Bei den Aktivierungsfunktionen wurden sowohl Selu \todo{Formel} als auch ReLu ($f(h)=max(h,0)$) verwendet, dabei gab es eine mit ReLu durchschnittlich bessere Performance \todo{Faktor/Wert vorhanden?}. Allgemein lässt sich dazu sagen, dass sowohl Selu als auch ReLu die Linearität innerhalb des Netzwerkes brechen und somit zu einer höheren Kapazität und Komplexität des Netzwerkes beitragen, weshalb im Weiteren keine weiteren Aktivierungsfunktionen mehr betrachtet wurden.
 \todo{Verhältnis Batchsize und Learningrate}
-Zu Overfitting kam es bei diesem Datensatz in keinem Mal. Dies ist in der schieren Größen des Datensatzes zu begründen, in dem es ausreichend natürliche Varianz an Daten gibt, welche durch Augmentation nur noch mehr verstärkt wird.
-Auf Normalisierung wurde hingegen bewusst verzichtet, da dies bei solch einem begrenzt kleinen Wertebereich keine spürbaren Verbesserungen mit sich bringen sollte und die Interpretierbarkeit schwächen könnte. So umfasst der Datensatz Temperaturdaten von 40 bis -40 .
 
-Des Weiteren gab es keine Analysen im großem Umfang zu variablen Input-Sequenzen, da die gewählten Skalen angepasst an den Datensatz zur zuverlässigen Vorhersagen von Temperaturdaten in einer Jahres-Skala dienen sollten und eine Input-Sequenz von zum Beispiel 8 bis 64 in diesem Kontext wenig Sinn ergeben würde.
+\subsubsection{Overfitting, Augmentation, Normalisierung} \todo{hier Overfitting, Augmentation, Normalisierung oder lieber Overfitting \& Augmentation \& Normalisierung}
+Das Phänomen des Overfittings trat in keiner Phase der Datenverarbeitung dieses Datensatzes auf. Diese Unanfälligkeit lässt sich auf die beträchtliche Größe des Datensatzes zurückführen, der bereits eine ausreichende natürliche Varianz aufweist. Durch die Anwendung von Datenaugmentierung wird diese Varianz zusätzlich verstärkt.
+Im Gegensatz dazu wurde bewusst auf die Normalisierung verzichtet. Bei einem derart begrenzten Wertebereich erschienen signifikante Verbesserungen durch Normalisierung unwahrscheinlich, während gleichzeitig die Interpretierbarkeit der Daten beeinträchtigt werden könnte. Der Datensatz umfasst dabei Temperaturdaten im Bereich von 40 bis -40 Grad Celsius.
+\subsubsection{Input-Sequenzen}
+Des Weiteren gab es keine umfänglichen Analysen zu variablen Input-Sequenzen, da die gewählten Skalen angepasst an den Datensatz zur zuverlässigen Vorhersagen von Temperaturdaten in einer Jahres-Skala dienen sollten und eine Input-Sequenz von zum Beispiel 8 bis 64 in diesem Kontext wenig Sinn zielführend wäre.
 
 \todo{Sollen die Architekturen mit den Hyperparametern in eine Tabelle??}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Aktivierungsfunktionen wie Selu und Relu wurden für MLP analysiert. 
 Bei 1D-ConvNets wurde die Auswirkung von Global Average Pooling und Flatten vor den Dense Layern untersucht. 
 LSTM und Transformer wurden auf ihre spezifischen Eigenschaften und Fehlerquellen analysiert. 
 Der Vergleich erfolgte durch Bewertung der qualitativen Anpassung und quantitativen Metriken wie dem Mean Absolute Error (MAE).
