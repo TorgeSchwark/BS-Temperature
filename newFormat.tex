@@ -117,7 +117,7 @@ Im Rahmen der Untersuchung wurden verschiedene Hyperparameter betrachtet und opt
 
 \subsection{Allgemeine Parameter / Settings}
 
-Da im Training als erstes eine Grid Search durchgeführt wurde und in dieser ausschließlich die Auswirkung der verschiedener Architekturen, Batch sizes und Learning rates auf den MAE untersucht wurden, mussten die restlichen Parameter zunächst festgelegt werden. Dabei wurde sich auf die bereits erwähnte Input- und Output-Länge, die Aufteilung des Datensatzes in 70 Prozent zum Trainieren und 30 Prozent zum Validieren und die Patience von 10 Epochen geeinigt. Durch die Patience wird sichergestellt, dass das Training erst nach 10 Epochen ohne eine Verbesserung des MAEs beendet wird. Des Weiteren wurden damit die Geschwindigkeit des Trainings vergleichbar bleibt die Steps/Epoche dynamisch an die Batch size angepasst, sodass unabhängig von der Batch Size, pro Epoche die gleiche Menge an Daten betrachtet werden. In der späteren Auswertung wird jedoch deutlich, dass selbst dieser Ansatz zur Vergleichbarkeit der Ergebnisse bei unterschiedlichen Batch-Größen nicht zwingend gerecht ist. Außerdem wurden Augmentation und Normalisierung in der Grid Search bisher noch nicht berücksichtigt.
+Da im Training als erstes eine Grid Search durchgeführt wurde und in dieser ausschließlich die Auswirkung der verschiedenen Architekturen, Batch sizes und Learning rates auf den MAE untersucht wurden, mussten die restlichen Parameter zunächst festgelegt werden. Dabei wurde sich auf die bereits erwähnte Input- und Output-Länge, die Aufteilung des Datensatzes in 70 Prozent zum Trainieren und 30 Prozent zum Validieren und die Patience von 10 Epochen geeinigt. Durch die Patience wird sichergestellt, dass das Training erst nach 10 Epochen ohne eine Verbesserung des MAEs beendet wird. Des Weiteren wurden damit die Geschwindigkeit des Trainings vergleichbar bleibt die Steps pro Epoche dynamisch an die Batch size angepasst, sodass unabhängig von der Batch Size, pro Epoche die gleiche Menge an Daten betrachtet werden. In der späteren Auswertung wird jedoch deutlich, dass selbst dieser Ansatz zur Vergleichbarkeit der Ergebnisse bei unterschiedlichen Batch-Größen nicht zwingend gerecht ist. Außerdem wurden Augmentation und Normalisierung in der Grid Search bisher noch nicht berücksichtigt.
 
 \subsection{Vergleichsmetrik}
 Als Vergleichswert für die Vorhersagegenauigkeit dient im Folgenden der MAE. Dieser wurde anstelle des MSE gewählt, da die Zufälligkeit von Temperaturdaten dazu führt, dass eine quadratische Berechnung des Fehlers weniger sinnvoll ist als ein Durchschnittswert. Der MAE stellt in diesem Kontext einen Wert für die durchschnittliche Abweichung in Grad Celsius dar.
@@ -155,7 +155,7 @@ So hat das erste LSTM 4 Layer mit jeweils 10 LSTM Units und 2 nachfolgende Dense
 
 \subsection{Fine Tuning}
 Nach der Grid Search wurde ein zusätzliches Fine Tuning für die drei Architekturen MLP, ConvNet und LSTM durchgeführt. Dabei wurden die Parameter der jeweils besten Neuronalen Netze der Grid Search weiter optimiert, und zusätzlich bisher unberücksichtigte Parameter eingestellt. Für die Data Augmentation schien das Hinzufügen eines Gaus verteilten Zufallsfaktors keinen Sinn zu ergeben, stattdessen wurde eine Gaus-Verteilte Skalierung um einen Faktor zwischen 0.5 und 2 und ebenfalls eine Gausverteilte Transformation um einen Faktor zwischen -10 und 10 vorgenommen. Somit konnten noch stärkere Temperatur Extrema, Stätigere oder noch Variierendere Temperaturen trainiert werden.
-Aufgrund des Zeitaufwandes wurde für die Transformer keine Grid Search durchgeführt. Das Finden einer möglichst performanten Architektur wurde hier ausschließlich durch menschliche Einstellungen bestimmt.  
+Aufgrund des Zeitaufwandes wurde für die Transformer keine Grid Search durchgeführt. Das Finden einer möglichst performanten Architektur wurde hier größtenteils durch menschliche Einstellungen bestimmt.  
 
 
 \section{Ergebisse}
@@ -169,12 +169,12 @@ Für alle MLPs sahen die Ergebnisse der Grid Search ähnlich aus. Hier beispielh
     \label{fig:sub4}
     \caption{Grid Search MLP3}
 \end{figure}
-Der Fehler(MAE) war für alle drei Architekturen und jede gewählte Einstellung sehr niedrig. für die MLPs wurde dabei ein minimaler Fehler von 0.88 mit dem MLP2 das den folgendem Aufbau hatte, erreicht: 
+Der Fehler (MAE) war für alle drei Architekturen und jede gewählte Einstellung sehr niedrig. Für die MLPs wurde dabei ein minimaler Fehler von 0.88 mit dem MLP2 das den folgendem Aufbau hatte, erreicht: 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{./MLP2}
     \label{fig:sub5}
-    \caption{Aufbau MLP2}
+    \caption{Aufbau MLP2 (Anzahl Neuronen um den Faktor 100 runterskaliert)}
 \end{figure}
 Im Fine Tuning hat sich herausgestellt, das mit einer etwas kleineren Architektur, längerem Training und einer größeren Batch Size als aus der Grid Search hervorgegangen ist eine Performance von MAE = 0.836 erreicht werden konnte. Dabei hat die Augmentation eine weitere Verbesserung erbracht.
 Auch für die ConvNets waren die Ergebnisse äußerst Stabil. In dem Folgenden Diagramm ist der MAE beispielhaft für das ConvNet2 über verschiedene Batch Sizes und Learning Rate zu sehen:
@@ -184,8 +184,8 @@ Auch für die ConvNets waren die Ergebnisse äußerst Stabil. In dem Folgenden D
     \label{fig:sub6}
     \caption{Grid Search ConvNet2}
 \end{figure}
-Den niedrigsten MAE erreichte ConvNet1 dieser lag nach der Grid Search bei 0.86. Durch das Fine Tuning konnte die Genauigkeit auf 0.83 verbessert werden. dabei sorgten vor allem eine größere Batch Size eine angepasste Learning Rate, längeres Training als auch Augementation für noch bessere Ergebnisse.
-Das Traing für die LSTMs sah jedoch deutlich anders aus. Nicht alle Architekturen performten gut, viele Trainings endeten mit einem MAE von 5 oder höher. Wie in dem beispielhaften Diagramm für Das LSTM4 zu sehen ist brachten nur wenige Konfigurationen Erfolge:
+Den niedrigsten MAE erreichte ConvNet1, dieser lag nach der Grid Search bei 0.86. Durch das Fine Tuning konnte die Genauigkeit auf 0.83 verbessert werden. dabei sorgten vor allem eine größere Batch Size eine angepasste Learning Rate, längeres Training als auch Augementation für noch bessere Ergebnisse.
+Das Traing für die LSTMs sah jedoch deutlich anders aus. Nicht alle Architekturen performten gut, viele Trainings endeten mit einem MAE von 5 oder höher. Wie in dem beispielhaften Diagramm für das LSTM4 zu sehen ist, brachten nur wenige Konfigurationen Erfolge:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{./LSTM4}
@@ -198,14 +198,14 @@ Obwohl das beste LSTM(LSTM3) nach der Grid Search insgesamt das Netzwerk mit dem
 Auch im Bezug auf die Trainingsdauer und Vorhersagegeschwindigkeit lassen sich Unterschiede zwischen den verschiedenen Architekturen feststellen. 
 Dies ist vor allem anhand der Komplexität der Modelle und den benötigten Berechnungen geschuldet, welche mehr oder weniger häufig und parallel ablaufen können.
 So brauchten 1D-ConvNets als auch MLPs im Schnitt nur etwa 3 Sekunden pro Epoche die LSTMs und Transformer hingegen etwa 25 Sekunden.
-Im Zusammenhang mit bis zu 300 Epochen, über die manche Netzwerke trainiert wurden machen sich somit deutliche Differenzen sichtbar.
+Im Zusammenhang mit bis zu 300 Epochen, über die manche Netzwerke trainiert wurden, machten sich somit deutliche Differenzen sichtbar.
 
 \subsubsection{Parameteranzahl}
 
-In Anbetracht der verschiedenen Netzwerkarchitekturen und deren Performance ergibt auch eine Analyse der Parameteranzahl Sinn. Bei größerer Anzahl an Parametern steigt ebenfalls der benötigte Speicherplatz für das jeweilige Model. Für manche Anwendungen kann der Speicherplatz ein limitierender Faktor sein während die größten Architekturen bis zu 500 Megabyte Speicherplatz benötigt haben, brauchen die kleinsten lediglich wenige hundert Kilobytes. 
+In Anbetracht der verschiedenen Netzwerkarchitekturen und deren Performance ergibt auch eine Analyse der Parameteranzahl Sinn. Bei größerer Anzahl an Parametern steigt ebenfalls der benötigte Speicherplatz für das jeweilige Model. Für manche Anwendungen kann der Speicherplatz ein limitierender Faktor sein, während die größten Architekturen bis zu 500 Megabyte Speicherplatz benötigt haben, brauchen die kleinsten lediglich wenige hundert Kilobytes. 
 
-Wie in der nachfolgenden Tabelle zu sehen besitzen Modelle der ConvNets überraschenderweise die meisten Parameter. Im Training der ConvNets ist aufgefallen, das bei Verwendung eines Global Average Pooling nach den Convolutional Layern also einer Durschnittsbildung über die gesamten Werte der Jeweiligen Feature Maps zu viele Daten über die Zeitreihen Verloren gehen. Daher haben wir uns entschieden ein Flatening einzubauen also die gesamten Feature Maps beizubehalten und als Input für die Dense Layer zu benutzen. Diese Entscheidung hat dazu geführt, dass wir anstatt von etwa $800*20$ Daten auf 20 Durchschnitte abzubilden $800*20$ Outputs mit dem ersten Dense Layer verbunden haben, was bis zu etwa $800*50*400 = 16,000,000$ Verbindungen zwischen ConvNet und dem Dense Layer geführt hat. 
-Die LSTMs Weisen aufgrund der für die Inputs wiederverwendeten LSTM Einheiten vergleichsweise wenig Parameter auf. Die MLPs haben wie die ConvNets sehr viele Parameter da hier jedes Neuron aus jedem Layer mit der gesamten jeweiligen nächsten Layer verbunden ist.
+Wie in der nachfolgenden Tabelle zu sehen besitzen Modelle der ConvNets überraschenderweise die meisten Parameter. Im Training der ConvNets ist aufgefallen, das bei Verwendung eines Global Average Pooling nach den Convolutional Layern, also einer Durschnittsbildung über die gesamten Werte der jeweiligen Feature Maps, zu viele Daten über die Zeitreihen Verloren gehen. Daher haben wir uns entschieden ein Flatening einzubauen, also die gesamten Feature Maps beizubehalten und als Input für die Dense Layer zu benutzen. Diese Entscheidung hat dazu geführt, dass anstatt von etwa $800*20$ Daten auf 20 Durchschnitte abzubilden $800*20$ Outputs mit dem ersten Dense Layer verbunden wurden, was bis zu etwa $800*50*400 = 16,000,000$ Verbindungen zwischen ConvNet und dem Dense Layer führte. 
+Die LSTMs weisen aufgrund der für die Inputs wiederverwendeten LSTM Einheiten vergleichsweise wenig Parameter auf. Die MLPs haben wie die ConvNets sehr viele Parameter da hier jedes Neuron aus jedem Layer mit der gesamten jeweiligen nächsten Layer verbunden ist.
 \begin{table}[htp]
     \centering
     \begin{tabular}{|c|c|c|c|c|}
@@ -225,14 +225,14 @@ Die LSTMs Weisen aufgrund der für die Inputs wiederverwendeten LSTM Einheiten v
 
 
 \subsubsection{Performance und Stabilität im Training}
-Auch wenn schlussendlich die besten Modelle der vier Architekturen ähnlich gut performen gibt es trotzdem Unterschiede in dem Verlauf und der Anpassung der Modelle an die Daten. Wie schon zuvor erwähnt haben die MLPs als auch die ConvNets schon bei einer geringen Anzahl von Epochen gute Ergebnisse, mit MAEs im niedrigen einstelligen Bereich geliefert, während bei den LSTMs und den Transformern ein längeres Training (30-40 Epochen) zusammen mit einer genauen Auswahl der Architektur notwendig war, bevor es zu zufriedenstellenden Ergebnissen kam.
+Auch wenn schlussendlich die besten Modelle der vier Architekturen ähnlich gut performen, gibt es trotzdem Unterschiede in dem Verlauf und der Anpassung der Modelle an die Daten. Wie schon zuvor erwähnt, erzielen die MLPs als auch die ConvNets schon bei einer geringen Anzahl von Epochen gute Ergebnisse, mit MAEs im niedrigen einstelligen Bereich, während bei den LSTMs und den Transformern ein längeres Training (30-40 Epochen) zusammen mit einer genauen Auswahl der Architektur notwendig war, bevor es zu zufriedenstellenden Ergebnissen kam.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{./loss2}
     \label{fig:sub7}
     \caption{Loss Curve ConvNet}
 \end{figure}
-Hier einmal eine Beispielhafte Loss Curve eines ConvNets. Wie man sehen kann läuft das Training hier sehr schnell und Stabil während kein Overfitting (ein Auswendig lernen der Trainingsdaten) geschieht.
+Hier einmal eine beispielhafte Loss Curve eines ConvNets. Wie man sehen kann läuft das Training hier sehr schnell und stabil, während kein Overfitting (ein Auswendig lernen der Trainingsdaten) geschieht.
 Hier zum Vergleich eine Loss Curve eines LSTMs.
 \begin{figure}[H]
     \centering
@@ -254,13 +254,13 @@ Die verwendeten Optimizer waren sowohl Adam als auch SGD. In den meisten Fällen
 Bei der Learning Rate hat sich für die ConvNets und die MLPs sehr kleine Werte durchgesetzt. Bis auf wenige fälle führte im Bereich der Grid Search eine kleinere Learning Rate zu einem geringerem Fehler. Noch kleinere Learning Rates haben jedoch meist zu schlechteren Vorhersagen geführt. Für den Transformer stellten sich deutlich größere Werte im Bereich von 0.0001 und für die LSTMs sogar von 0.01 als optimal heraus. 
 
 \subsubsection{Aktivierungsfunktionen}
-Bei den Aktivierungsfunktionen wurden sowohl Selu \} als auch ReLu ($f(h)=max(h,0)$) verwendet, dabei gab es eine mit ReLu durchschnittlich bessere Performance. Allgemein lässt sich sagen, dass sowohl Selu als auch ReLu die Linearität innerhalb des Netzwerkes brechen und somit zu einer höheren Kapazität und Komplexität des Netzwerkes beitragen.
+Bei den Aktivierungsfunktionen wurden sowohl Selu als auch ReLu ($f(h)=max(h,0)$) verwendet, dabei gab es eine mit ReLu durchschnittlich bessere Performance. Allgemein lässt sich sagen, dass sowohl Selu als auch ReLu die Linearität innerhalb des Netzwerkes brechen und somit zu einer höheren Kapazität und Komplexität des Netzwerkes beitragen.
 
 
 \subsubsection{Overfitting, Augmentation, Normalisierung} 
 Overfitting trat in keiner Phase des Trainings auf. Dies lässt sich auf die Größe des Datensatzes zurückführen, der bereits eine ausreichende natürliche Varianz aufweist. Durch die Anwendung von Data Augmentierung wird diese Varianz zusätzlich verstärkt.
 Im Gegensatz dazu wurde bewusst auf die Normalisierung verzichtet. Bei einem derart begrenzten Wertebereich erschienen signifikante Verbesserungen durch Normalisierung unwahrscheinlich, während gleichzeitig die Interpretierbarkeit der Daten beeinträchtigt würde. 
-Auf eine Input Normalisierung wurde bewusst verzichtet, da der Wertebereich von -40 bis 40 Grad Celsius keine sehr weite Spanne umfasst und somit keine besondere Performance Verbesserung zu erwarten war. Zudem geht durch die Normalisierung nicht nur der direkte Zusammenhang zwischen MAE und durchschnittlichem Fehler in Grad Celsius verloren sondern führt auch zu einer verschlechterten Vergleichbarkeit des MAEs.
+Auf eine Input Normalisierung wurde bewusst verzichtet, da der Wertebereich von -40 bis 40 Grad Celsius keine sehr weite Spanne umfasst und somit keine besondere Performance Verbesserung zu erwarten war. Zudem geht durch die Normalisierung nicht nur der direkte Zusammenhang zwischen MAE und durchschnittlichem Fehler in Grad Celsius verloren, sondern führt auch zu einer verschlechterten Vergleichbarkeit des MAEs.
 
 
 \section{Anwendung}
@@ -272,17 +272,17 @@ Wie hier für die Stadt Aarhus in Denemark beispielhaft zu sehen.
     \label{fig:sub7}
     \caption{Beispielhafte Loss Kurve LSTM}
 \end{figure}
-Des Weiteren wurde für jede Stadt aus aus dem Datensatz eine Vorhersage mittels Rolling Prediction bis 2110 erstellt. Im Anschluss wurde um eine globale Klimatendenz zu ermitteln der Durchschnitt über die Messdaten und die Vorhersagen berechnet um in einem Graphen die Druschnittstemperatur von 1750 bis 2110 Festzuhalten:
+Des Weiteren wurde für jede Stadt aus aus dem Datensatz eine Vorhersage mittels Rolling Prediction bis 2110 erstellt. Im Anschluss wurde um eine globale Klimatendenz zu ermitteln der Durchschnitt über die Messdaten und die Vorhersagen berechnet, um in einem Graphen die Druschnittstemperatur von 1750 bis 2110 festzuhalten:
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{./Vorhersage groß}
     \label{fig:sub7}
     \caption{Beispielhafte Loss Kurve LSTM}
 \end{figure}
-Die Durchschnittstemperaturen von 1750 bis 1900 variieren stark, da viele Standorte erst später mit der Datenerfassung begonnen haben und der Datensatz dort zudem viele Lücken aufweist. Des Weiteren fällt auf, dass der Temperaturverlauf im vorhergesagten Zeitraum sehr linear ist. Dies ist darauf zurückzuführen, dass die neuronalen Netze die Abweichung minimieren, indem sie die wahrscheinlichsten Temperaturwerte vorhersagen. Obwohl im Graphen kein exponentielles oder quadratisches Wachstum erkennbar ist, zeigt der deutliche Trend dennoch beunruhigende Entwicklungen. Die vorhergesagten Daten deuten auf eine Erhöhung der Durchschnittstemperatur von 1900 bis 2100 um etwa 2.5 Grad Celsius hin. Dieser Wert deckt sich mit offiziellen Prognosen zur Erderwärmung für diesen Zeitraum.[1]
+Die Durchschnittstemperaturen von 1750 bis 1900 variieren stark, da viele Standorte erst später mit der Datenerfassung begonnen haben und der Datensatz dort zudem viele Lücken aufweist. Eine weitere Auffälligkeit ist, dass der Temperaturverlauf im vorhergesagten Zeitraum sehr linear ist. Dies ist darauf zurückzuführen, dass die neuronalen Netze die Abweichung minimieren, indem sie die wahrscheinlichsten Temperaturwerte vorhersagen. Obwohl im Graphen kein exponentielles oder quadratisches Wachstum erkennbar ist, zeigt der deutliche Trend dennoch beunruhigende Entwicklungen. Die vorhergesagten Daten deuten auf eine Erhöhung der Durchschnittstemperatur von 1900 bis 2100 um etwa 2.5 Grad Celsius hin. Dieser Wert deckt sich mit offiziellen Prognosen zur Erderwärmung für diesen Zeitraum.[1]
 
 \section{Faizit}
-Das Ziel die Menschliche Vorhersagegenauigkeit zu verbessern war ohne eine besonders gute Einstellung der Parameter möglich. Die beste 137 von insgesamt 200 Trainierten Netzen erreichten bessere Ergebnisse als wir. Die Besten mit einem Fehler von gerade einmal 45\% von unserer Uhrsprünglichen 1.9 Grad Abweichung.
+Das Ziel, die menschliche Vorhersagegenauigkeit zu verbessern, war ohne eine besonders gute Einstellung der Parameter möglich. Die besten 137 von insgesamt 200 trainierten Netzwerke erreichten bessere Ergebnisse als der Mensch. Die Besten mit einem Fehler von gerade einmal 45\% von der menschlichen Uhrsprünglichen 1.9 Grad Abweichung.
 Mit einem Fehler von gerade einmal 0.83 Grad Celsius sind die Vorhersagen für Temperaturen in der Vergangenheit bemerkenswert genau:
 \begin{figure}[H]
     \centering
