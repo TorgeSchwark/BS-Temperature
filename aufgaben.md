@@ -193,9 +193,41 @@ Paper: https://www.overleaf.com/project/656739453dc04ca9c1e95e41
 - Abschluss
 
 # Paper fast durch
+- Metadata Änderungen:
+  ```latex
+  \author{Torge Schwark}
+  \authornote{Both authors contributed equally to this research.}
+  \email{stu236894@mail.uni-kiel.de}
+  % \orcid{1234-5678-9012}
+  \author{Joschua Quotschalla}
+  \authornotemark[1]
+  \email{stu235352@mail.uni-kiel.de}
+  \affiliation{%
+    \institution{Institute of Computer Science, University of Kiel}
+    \streetaddress{Christian-Albrechts-Platz 4}
+    \city{Kiel}
+    \state{Schleswig-Holstein}
+    \country{Germany}
+    \postcode{24118}
+    ```
 - Fairness von dynamischer Batch size / steps Anpassung
   - falls noch drin, sollte irgendwo am Anfang was davon stehen, dass später in der Analyse darauf noch weiter eingegangen wird (sollte noch nicht passiert sein)
 - GPT Nutzung irgendwie angeben
   - Einleitung
-    - In dieser Arbeit wurde auf den Chatbot Chat-GPT und Chat GPT-4 zurückgegriffen und mit diesem unter anderen verstärkt die Einleitung formuliert als auch als Umformulierungstool für das Kapitel TODO: verwendet.
+    - In dieser Arbeit wurde auf den Chatbot Chat-GPT und Chat GPT-4 zurückgegriffen und mit diesem unter anderen verstärkt die Einleitung formuliert als auch als Umformulierungstool für das Kapitel TODO: verwendet. Bei allen angewendeten Stellen wurde nicht exakt der vom Chatbot generierte Text verwendet, sonder es wurden kleinere als auch größere händische Anpassungen vorgenommen.
+    - Prompt zur Umformulierung:
+      ```
+      Formuliere mir den folgenden paperausschnitt formaler um:
+      \subsubsection{Overfitting, Augmentation, Normalisierung}
+      Zu Overfitting kam es bei diesem Datensatz an keiner Stelle. Dies ist in der schieren Größen des Datensatzes zu begründen, in dem es ausreichend natürliche Varianz an Daten gibt, welche durch Augmentation nur noch mehr verstärkt wird.
+      Auf Normalisierung wurde hingegen bewusst verzichtet, da dies bei solch einem begrenzt kleinen Wertebereich keine spürbaren Verbesserungen mit sich bringen sollte und die Interpretierbarkeit schwächen könnte. So umfasst der Datensatz Temperaturdaten von 40 bis -40.
+      ```
+      Ergebnis:
+      ```
+      \subsubsection{Overfitting, Datenaugmentierung und Normalisierung}
+
+      Das Phänomen des Overfittings trat in keiner Phase der Datenverarbeitung dieses Datensatzes auf. Diese Unanfälligkeit lässt sich auf die beträchtliche Größe des Datensatzes zurückführen, der bereits eine ausreichende natürliche Varianz aufweist. Durch die Anwendung von Datenaugmentierung wird diese Varianz zusätzlich verstärkt.
+
+      Im Gegensatz dazu wurde bewusst auf die Normalisierung verzichtet. Bei einem derart begrenzten Wertebereich erschienen signifikante Verbesserungen durch Normalisierung unwahrscheinlich, während gleichzeitig die Interpretierbarkeit der Daten beeinträchtigt werden könnte. Der Datensatz umfasst Temperaturdaten im Bereich von 40 bis -40 Grad Celsius.
+      ```
 - Diagramme für die 2 Orte nochmal für bekannte Städte durchführen mit "BestNewNetwork" (also nicht mit dem Transformer)
