@@ -191,3 +191,11 @@ Paper: https://www.overleaf.com/project/656739453dc04ca9c1e95e41
           - Data Gabs 1830 -> auch sehr stark sichtbar in AVG-Temperatur plot
     - Aussagekraft
 - Abschluss
+
+# Paper fast durch
+- Fairness von dynamischer Batch size / steps Anpassung
+  - falls noch drin, sollte irgendwo am Anfang was davon stehen, dass später in der Analyse darauf noch weiter eingegangen wird (sollte noch nicht passiert sein)
+- GPT Nutzung irgendwie angeben
+  - Einleitung
+    - In dieser Arbeit wurde auf den Chatbot Chat-GPT und Chat GPT-4 zurückgegriffen und mit diesem unter anderen verstärkt die Einleitung formuliert als auch als Umformulierungstool für das Kapitel TODO: verwendet.
+- Diagramme für die 2 Orte nochmal für bekannte Städte durchführen mit "BestNewNetwork" (also nicht mit dem Transformer)
